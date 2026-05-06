@@ -1,0 +1,72 @@
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# --- 환경변수 / secrets ---
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# --- Python (backend/) ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.python-version
+
+# Test / lint / typing 캐시
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.tox/
+
+# --- Node / Next.js (frontend/) ---
+node_modules/
+.next/
+out/
+.turbo/
+.npm/
+.pnpm-store/
+*.tsbuildinfo
+.next-env.d.ts
+
+# --- 데이터 (RAG / 크롤링 — backend/data/) ---
+backend/data/chroma/
+backend/data/raw/
+backend/data/processed/
+
+# --- 로그 / 임시 산출물 ---
+*.log
+logs/
+.tmp/
+.cache/
+.langgraph_cache/
+
+# --- IDE ---
+.vscode/
+!.vscode/settings.example.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# --- LangSmith / LLM 추적 (선택) ---
+.langsmith/
+
+# --- 빌드 산출물 ---
+*.tar.gz
+*.zip
