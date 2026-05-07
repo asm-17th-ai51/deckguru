@@ -1,0 +1,422 @@
+# DeckGuru Backend
+
+TFT 덱 추천 AI 서비스의 FastAPI 게이트웨이.  
+Strategy Agent 호출 · 캐싱 · Rate Limit · 로깅을 담당합니다.
+
+---
+
+## 목차
+
+1. [아키텍처 개요](#아키텍처-개요)
+2. [디렉토리 구조](#디렉토리-구조)
+3. [로컬 개발 환경 설정](#로컬-개발-환경-설정)
+4. [환경 변수](#환경-변수)
+5. [API 엔드포인트](#api-엔드포인트)
+6. [요청 흐름](#요청-흐름)
+7. [캐시 구조](#캐시-구조)
+8. [테스트 실행](#테스트-실행)
+9. [팀원 연동 가이드](#팀원-연동-가이드)
+10. [Docker](#docker)
+
+---
+
+## 아키텍처 개요
+
+```
+Frontend (Next.js)
+    │ POST /api/recommend
+    ▼
+Backend (FastAPI, :8000)        ← 이 서비스
+    │ run_strategy_agent()
+    ▼
+Strategy Agent (LangGraph)      ← Agent-1 담당
+    │ RagService.search()
+    ▼
+RAG Service (ChromaDB)          ← Agent-2 담당
+```
+
+Backend는 **오케스트레이션을 하지 않습니다.**  
+`run_strategy_agent()` 한 번 호출 후 결과를 캐싱·반환하는 게 전부입니다.
+
+---
+
+## 디렉토리 구조
+
+```
+backend/
+├── app/
+│   ├── main.py                  # FastAPI 앱 조립, 미들웨어, 라우터 등록
+│   ├── settings.py              # pydantic-settings (.env 로드, 누락 시 startup 실패)
+│   ├── api/
+│   │   ├── recommend.py         # POST /api/recommend — 메인 추천 엔드포인트
+│   │   ├── health.py            # GET  /api/health
+│   │   ├── patch_info.py        # GET  /api/patch-info
+│   │   ├── feedback.py          # POST /api/feedback
+│   │   ├── examples.py          # GET  /api/example-questions
+│   │   └── internal.py          # GET  /api/_internal/cache-stats (관리자)
+│   ├── middleware/
+│   │   ├── request_id.py        # X-Request-ID 헤더 발급 (uuid4)
+│   │   └── logging_mw.py        # structlog JSON 로깅 (request_start / request_done)
+│   ├── schemas/
+│   │   ├── enums.py             # Tier, PlayStyle, Intent, Confidence 등
+│   │   ├── shared.py            # DeckRecommendation, Source, PlaybookStep 등
+│   │   └── api.py               # RecommendRequest, RecommendationResponse, FeedbackRequest
+│   └── services/
+│       ├── normalize.py         # normalize_question(), cache_key() — 캐시 키 생성
+│       ├── cache.py             # L1 LRU (in-memory) + L2 SQLite 캐시
+│       ├── feedback_store.py    # SQLite feedback 테이블 저장
+│       ├── limiter.py           # slowapi Limiter 싱글턴
+│       └── strategy_invoker.py  # ★ run_strategy_agent() — 현재 Mock, 교체 지점
+├── tests/
+│   ├── conftest.py              # AsyncClient fixture (임시 DB, Mock Agent)
+│   ├── fixtures/mock_responses/
+│   │   └── recommend_deck_gold_stable.json  # Mock 응답 샘플
+│   ├── test_recommend.py        # /api/recommend 통합 테스트
+│   ├── test_cache.py            # 캐시 키 정규화 단위 테스트
+│   └── test_health.py           # /api/health, /api/patch-info, /api/example-questions
+├── .env.example                 # 환경 변수 샘플
+├── pyproject.toml
+└── Dockerfile
+```
+
+---
+
+## 로컬 개발 환경 설정
+
+### 요구 사항
+
+- Python 3.11 이상
+- pip 또는 [uv](https://github.com/astral-sh/uv)
+
+### 설치
+
+```bash
+cd backend
+
+# pip 사용 시
+pip install fastapi uvicorn pydantic pydantic-settings structlog \
+            slowapi cachetools aiosqlite httpx pytest pytest-asyncio
+
+# uv 사용 시 (권장)
+uv sync
+```
+
+### 환경 변수 설정
+
+```bash
+cp .env.example .env
+# .env 파일 편집 — 최소한 PATCH_VERSION 확인
+```
+
+### 서버 실행
+
+```bash
+uvicorn app.main:app --reload --port 8000
+```
+
+실행 확인:
+
+```bash
+curl http://localhost:8000/api/health
+```
+
+### Swagger UI
+
+서버 실행 후 브라우저에서:
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+## 환경 변수
+
+`.env.example` 파일을 `.env`로 복사 후 편집합니다.
+
+| 변수 | 기본값 | 설명 |
+|------|--------|------|
+| `APP_ENV` | `local` | `local` / `staging` / `production` |
+| `PATCH_VERSION` | `17.2` | **현재 패치 버전** — RAG 검색 필터에 사용 |
+| `CHROMA_PATH` | `../data/rag/vectorstore/chroma` | ChromaDB 경로 (Agent-2 빌드 결과물) |
+| `LLM_API_KEY` | _(없음)_ | OpenAI API 키 (Agent-1 연동 후 필요) |
+| `LLM_MODEL` | `gpt-4o-mini` | 추천·메타 분석용 LLM 모델 |
+| `ADMIN_TOKEN` | `dev-admin` | `/api/_internal/cache-stats` 접근 토큰 |
+| `DEMO_MODE` | `false` | `true` 시 Rate Limit 완화 (100/min) |
+| `TAVILY_API_KEY` | _(없음)_ | Live Research용 (Agent-3 연동 후 필요) |
+| `LOG_LEVEL` | `INFO` | `DEBUG` / `INFO` / `WARNING` |
+
+---
+
+## API 엔드포인트
+
+전체 명세는 서버 실행 후 `/docs` 참조.
+
+### `POST /api/recommend` — 덱 추천 (메인)
+
+**Request:**
+```json
+{
+  "tier": "GOLD",
+  "play_style": "stable_top4",
+  "question": "현재 패치에서 골드가 티어 올리기 좋은 덱 추천해줘"
+}
+```
+
+`tier` 가능 값: `IRON` `BRONZE` `SILVER` `GOLD` `PLATINUM` `EMERALD` `DIAMOND` `MASTER+`  
+`play_style` 가능 값: `stable_top4` `high_risk_first` `easy_beginner` `flexible`  
+`question`: 1~500자 자유 입력
+
+**Response Headers:**
+```
+X-Request-ID: <uuid>
+X-Cache: HIT | MISS
+X-Patch-Version: 17.2
+```
+
+**Response Body:** `RecommendationResponse`
+```json
+{
+  "request_id": "...",
+  "patch_version": "17.2",
+  "intent": "recommend_deck",
+  "meta_summary": "현재 메타 요약...",
+  "decks": [
+    {
+      "name": "마스터 이 킨드레드",
+      "difficulty": "medium",
+      "core_units": ["마스터 이", "킨드레드", "..."],
+      "key_items": ["밤의 끝자락", "..."],
+      "augment_direction": "사냥꾼 상징 우선",
+      "playbook": [
+        {"phase": "early", "instruction": "..."},
+        {"phase": "mid",   "instruction": "..."},
+        {"phase": "late",  "instruction": "..."}
+      ],
+      "good_conditions": ["..."],
+      "avoid_conditions": ["..."],
+      "fallback_plan": "...",
+      "rationale": "..."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Lolchess 메타 덱 랭킹",
+      "url": "https://lolchess.gg/...",
+      "snippet": "...",
+      "source_kind": "meta_site"
+    }
+  ],
+  "confidence": "medium",
+  "warnings": [],
+  "generated_at": "2025-05-07T00:00:00Z",
+  "debug": {
+    "react_steps": 0,
+    "rag_avg_score": 0.72,
+    "tier2_triggered": false,
+    "node_latencies_ms": {}
+  }
+}
+```
+
+**에러 응답 형식:**
+```json
+{
+  "error": {
+    "code": "agent_timeout",
+    "message": "응답이 너무 오래 걸려요. 다시 시도하시거나 더 짧은 질문을 입력해주세요.",
+    "request_id": "..."
+  }
+}
+```
+
+| HTTP | code | 발생 조건 |
+|------|------|-----------|
+| 422 | `validation_error` | 필드 누락 또는 형식 오류 |
+| 429 | `rate_limited` | IP당 분당 5회 초과 |
+| 500 | `agent_internal` | Agent 내부 예외 |
+| 504 | `agent_timeout` | 25초 초과 |
+
+---
+
+### `GET /api/health`
+
+RAG 인덱스 상태 및 서버 업타임 반환.
+
+```json
+{
+  "status": "ok",
+  "patch_version": "17.2",
+  "rag_chunks": {
+    "units": 60, "traits": 24, "items": 28, "augments": 92,
+    "deck_templates": 64, "playbook": 0, "patch_summary": 199, "glossary": 0
+  },
+  "uptime_s": 3601
+}
+```
+
+`status`가 `degraded`이면 RAG 인덱스 중 일부가 비어 있는 상태입니다.
+
+---
+
+### `GET /api/patch-info`
+
+```json
+{
+  "patch_version": "17.2",
+  "last_updated": "2025-05-04T03:00:00+00:00",
+  "warnings": []
+}
+```
+
+---
+
+### `POST /api/feedback`
+
+```json
+{
+  "request_id": "X-Request-ID 헤더 값",
+  "rating": 4,
+  "comment": "덱 설명이 명확해요",
+  "deck_clicked": "마스터 이 킨드레드"
+}
+```
+
+---
+
+### `GET /api/example-questions`
+
+프론트엔드 입력창 힌트용 예시 4개 반환.
+
+---
+
+### `GET /api/_internal/cache-stats`
+
+관리자 전용. `X-Admin-Token` 헤더 필요.
+
+```bash
+curl http://localhost:8000/api/_internal/cache-stats \
+  -H "X-Admin-Token: dev-admin"
+```
+
+---
+
+## 요청 흐름
+
+```
+POST /api/recommend
+  1. RequestIdMiddleware   — uuid4 발급, X-Request-ID 헤더 설정
+  2. LoggingMiddleware     — request_start 로그 (structlog JSON)
+  3. Rate Limit            — IP당 5req/min (slowapi)
+  4. Pydantic 검증         — tier / play_style / question
+  5. cache_key 생성        — sha256(tier|style|normalize(q)|patch)
+  6. L1 LRU 조회           — hit → 즉시 반환 (X-Cache: HIT)
+  7. L2 SQLite 조회        — hit → L1 갱신 후 반환
+  8. Semaphore(8) 획득     — 동시 Agent 호출 8개 제한
+  9. run_strategy_agent()  — asyncio.wait_for(timeout=25s)
+ 10. L1 + L2 캐시 저장     — TTL 7일 (patch_version 키 포함)
+ 11. 응답 반환             — X-Cache: MISS
+ 12. LoggingMiddleware     — request_done 로그 (latency_ms, intent, cache)
+```
+
+---
+
+## 캐시 구조
+
+### 캐시 키 정규화
+
+동일한 의미의 질문이 같은 키로 매핑됩니다.
+
+```
+"골드 추천해줘?"  →  normalize  →  "골드 추천해줘"
+"골드  추천해줘!" →  normalize  →  "골드 추천해줘"
+
+cache_key = sha256("GOLD|stable_top4|골드 추천해줘|17.2")
+```
+
+### 레이어
+
+| 레이어 | 도구 | 크기 | TTL |
+|--------|------|------|-----|
+| L1 | `LRUCache` (in-memory) | 1000 항목 | 프로세스 생존 기간 |
+| L2 | SQLite (`deckguru.db`) | 무제한 | 7일 |
+
+패치 버전이 바뀌면 캐시 키가 달라져 자동으로 miss 처리됩니다.
+
+---
+
+## 테스트 실행
+
+```bash
+cd backend
+python -m pytest tests/ -v
+```
+
+| 테스트 파일 | 내용 |
+|-------------|------|
+| `test_cache.py` | `normalize_question()`, `cache_key()` 단위 테스트 |
+| `test_recommend.py` | `/api/recommend` 통합 테스트 (Mock Agent 사용) |
+| `test_health.py` | `/api/health`, `/api/patch-info`, `/api/example-questions` |
+
+테스트는 매 실행마다 임시 DB를 사용하므로 캐시 상태에 영향받지 않습니다.
+
+---
+
+## 팀원 연동 가이드
+
+### Agent-1 (Strategy Agent) → Backend
+
+`app/services/strategy_invoker.py`의 `run_strategy_agent()` 함수 내부만 교체하면 됩니다.
+
+```python
+# 현재 (Mock)
+async def run_strategy_agent(request_id, tier, play_style, question, *, patch_version, timeout_s=25.0):
+    data = json.loads(MOCK_PATH.read_text("utf-8"))
+    ...
+    return RecommendationResponse(**data)
+
+# 교체 후 (실제 Agent)
+async def run_strategy_agent(request_id, tier, play_style, question, *, patch_version, timeout_s=25.0):
+    from app.agents.strategy.graph import build_graph
+    graph = build_graph()
+    result = await graph.ainvoke(StrategyState(
+        request_id=request_id,
+        tier=tier,
+        play_style=play_style,
+        question=question,
+        patch_version=patch_version,
+    ))
+    return result.to_recommendation_response()
+```
+
+**반환 타입은 반드시 `RecommendationResponse`** (schemas/api.py 참조).
+
+---
+
+### Agent-2 (RAG) → Backend
+
+현재 `/api/health`는 `data/rag/processed/` 경로의 JSONL 파일 개수로 인덱스 상태를 확인합니다.  
+ChromaDB 빌드 완료 후 `CHROMA_PATH`를 `.env`에 설정하면 자동 연동됩니다.
+
+---
+
+### Frontend → Backend
+
+CORS는 `http://localhost:3000`이 허용돼 있습니다.  
+추가 도메인이 필요하면 `app/main.py`의 `allow_origins` 리스트에 추가해주세요.
+
+---
+
+## Docker
+
+```bash
+# 빌드
+docker build -t deckguru-backend .
+
+# 실행
+docker run -p 8000:8000 \
+  -e PATCH_VERSION=17.2 \
+  -e ADMIN_TOKEN=my-secret \
+  -v $(pwd)/../data:/app/../data \
+  deckguru-backend
+```
