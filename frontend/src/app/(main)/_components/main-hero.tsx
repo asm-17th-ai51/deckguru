@@ -14,6 +14,8 @@ export function MainHero() {
     tier,
     playStyle,
     isSubmitDisabled,
+    isSubmitting,
+    submitErrorMessage,
     setQuery,
     setTier,
     setPlayStyle,
@@ -33,6 +35,8 @@ export function MainHero() {
           tier={tier}
           playStyle={playStyle}
           isSubmitDisabled={isSubmitDisabled}
+          isSubmitting={isSubmitting}
+          submitErrorMessage={submitErrorMessage}
           onQueryChange={setQuery}
           onTierChange={setTier}
           onPlayStyleChange={setPlayStyle}

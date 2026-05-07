@@ -43,6 +43,8 @@ interface DeckRecommendationFormProps {
   tier: Tier | null;
   playStyle: PlayStyle | null;
   isSubmitDisabled: boolean;
+  isSubmitting: boolean;
+  submitErrorMessage: string | null;
   onQueryChange: (query: string) => void;
   onTierChange: (tier: Tier | null) => void;
   onPlayStyleChange: (playStyle: PlayStyle | null) => void;
@@ -55,6 +57,8 @@ export function DeckRecommendationForm({
   tier,
   playStyle,
   isSubmitDisabled,
+  isSubmitting,
+  submitErrorMessage,
   onQueryChange,
   onTierChange,
   onPlayStyleChange,
@@ -71,7 +75,7 @@ export function DeckRecommendationForm({
           onValueChange={(value) => onTierChange(value)}>
           <SelectTrigger
             type="button"
-            className="h-12 w-full border-4 px-3 text-xs"
+            className="h-12 w-full border-4 text-sm"
             aria-label="티어 선택">
             <SelectValue
               className={tier === null ? 'text-muted-foreground' : ''}>
@@ -95,7 +99,7 @@ export function DeckRecommendationForm({
           onValueChange={(value) => onPlayStyleChange(value)}>
           <SelectTrigger
             type="button"
-            className="h-12 w-full border-4 px-3 text-xs"
+            className="h-12 w-full border-4 text-sm"
             aria-label="플레이 스타일 선택">
             <SelectValue
               className={playStyle === null ? 'text-muted-foreground' : ''}>
@@ -125,6 +129,7 @@ export function DeckRecommendationForm({
           onChange={(event) => onQueryChange(event.target.value)}
           autoComplete="off"
           aria-label="덱 추천을 위한 플레이 스타일 검색어"
+          aria-invalid={submitErrorMessage !== null}
           required
         />
         <m.div
@@ -141,11 +146,19 @@ export function DeckRecommendationForm({
             type="submit"
             disabled={isSubmitDisabled}
             className="h-12 w-full px-5 font-galmuri11 text-sm font-bold"
+            aria-busy={isSubmitting}
             aria-label="덱 추천 검색하기">
-            <span>GURU!</span>
+            <span>{isSubmitting ? 'LOADING...' : 'GURU!'}</span>
           </Button>
         </m.div>
       </div>
+      {submitErrorMessage ? (
+        <p
+          role="alert"
+          className="text-center text-xs font-bold text-destructive sm:text-left">
+          {submitErrorMessage}
+        </p>
+      ) : null}
     </form>
   );
 }

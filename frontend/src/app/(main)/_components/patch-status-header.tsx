@@ -1,4 +1,6 @@
-import { getPatchInfo } from '@/api/get-patch-info/get';
+'use client';
+
+import { usePatchInfoQuery } from '@/api/get-patch-info/query';
 import { Badge } from '@/components/ui/badge';
 import type { PatchInfo } from '@/lib/schema';
 
@@ -18,17 +20,10 @@ const formatLastUpdated = (value: string) => {
   return date.toISOString().slice(0, 10);
 };
 
-const resolvePatchInfo = async () => {
-  try {
-    return await getPatchInfo();
-  } catch {
-    return FALLBACK_PATCH_INFO;
-  }
-};
-
-export async function PatchStatusHeader() {
-  const patchInfo = await resolvePatchInfo();
-  const hasWarnings = patchInfo.warnings.length > 0;
+export function PatchStatusHeader() {
+  const { data, isError } = usePatchInfoQuery();
+  const patchInfo = data ?? FALLBACK_PATCH_INFO;
+  const hasWarnings = data ? patchInfo.warnings.length > 0 : isError;
 
   return (
     <header className="absolute top-0 right-0 z-20 flex justify-end p-4 sm:p-6">
