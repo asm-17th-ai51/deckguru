@@ -1,5 +1,3 @@
-'use client';
-
 import { type SubmitEvent, useRef } from 'react';
 
 export function useDeckRecommendationForm() {
