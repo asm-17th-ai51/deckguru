@@ -20,10 +20,16 @@ export default function MainPage() {
     <main className="pixel-background relative isolate flex min-h-svh w-full flex-col items-center justify-center overflow-hidden p-6 px-5 sm:px-4">
       <div className="relative z-10 flex w-full max-w-3xl flex-col items-center gap-8">
         {/** 서비스 이름 */}
-        <div className="flex flex-col">
+        <m.div
+          className="flex cursor-default flex-col"
+          transition={{
+            duration: 0.12,
+            ease: 'easeOut',
+          }}
+          whileHover={{ y: -4, scale: 1.08 }}>
           <h1 className="text-xl">DECK</h1>
           <h1 className="text-xl">GURU</h1>
-        </div>
+        </m.div>
 
         <div className="flex w-full flex-col items-center justify-center gap-6">
           {/** 보조 문구 */}

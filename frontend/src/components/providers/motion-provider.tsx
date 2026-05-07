@@ -2,11 +2,13 @@
 
 import { type PropsWithChildren } from 'react';
 
-import { domAnimation, LazyMotion } from 'motion/react';
+import { LazyMotion } from 'motion/react';
+
+const loadFeatures = () => import('motion/react').then((m) => m.domAnimation);
 
 export function MotionProvider({ children }: PropsWithChildren) {
   return (
-    <LazyMotion strict features={domAnimation}>
+    <LazyMotion strict features={loadFeatures}>
       {children}
     </LazyMotion>
   );
