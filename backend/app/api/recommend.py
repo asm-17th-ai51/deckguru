@@ -45,7 +45,7 @@ async def recommend(request: Request, response: Response, body: RecommendRequest
     req_id = getattr(request.state, "request_id", "-")
     patch = settings.patch_version
 
-    key = cache_key(body.tier.value, body.play_style.value, body.question, patch)
+    key = cache_key(body.tier, body.play_style, body.question, patch)
 
     cached = await cache_service.get(key)
     if cached:
@@ -59,8 +59,8 @@ async def recommend(request: Request, response: Response, body: RecommendRequest
             result = await asyncio.wait_for(
                 run_strategy_agent(
                     req_id,
-                    body.tier.value,
-                    body.play_style.value,
+                    body.tier,
+                    body.play_style,
                     body.question,
                     patch_version=patch,
                     timeout_s=settings.agent_timeout_s,

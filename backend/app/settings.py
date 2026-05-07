@@ -4,13 +4,17 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     app_env: str = "local"
-    llm_provider: str = "openai"
-    llm_api_key: str = ""
-    llm_model: str = "gpt-4o-mini"
-    llm_model_small: str = "gpt-4o-mini"
+
+    # Upstage Solar (팀 합의 — D1)
+    upstage_api_key: str = ""
+    upstage_model_recommend: str = "solar-pro2"
+    upstage_model_meta: str = "solar-pro2"
+    upstage_model_intent: str = "solar-mini"
+
     embedding_model: str = "BAAI/bge-m3"
     chroma_path: Path = Path("../data/rag/vectorstore/chroma")
-    patch_version: str = "17.2"
+    patch_version: str = "14.9"
+    live_research_enabled: bool = True
     demo_mode: bool = False
     log_level: str = "INFO"
     admin_token: str = "dev-admin"

@@ -1,6 +1,6 @@
 {
   "request_id": "mock-00000000-0000-0000-0000-000000000001",
-  "patch_version": "17.2",
+  "patch_version": "14.9",
   "intent": "recommend_deck",
   "meta_summary": "17.2 패치 기준 골드 티어에서 안정적인 Top4를 노리기 좋은 덱 3개를 소개합니다. 현재 메타는 빠른 레벨업보다 재롤 전략이 강세이며, 3코스트 유닛 중심의 덱이 높은 Top4율을 보이고 있습니다.",
   "decks": [

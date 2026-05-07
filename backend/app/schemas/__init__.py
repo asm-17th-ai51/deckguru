@@ -1,36 +1,34 @@
 from app.schemas.api import (
+    DebugInfo,
     ErrorDetail,
     ErrorResponse,
     FeedbackRequest,
     RecommendationResponse,
     RecommendRequest,
 )
-from app.schemas.enums import (
+from app.schemas.shared import (
     Confidence,
     Difficulty,
+    DeckDraft,
+    DeckRecommendation,
+    IndexName,
     Intent,
     Phase,
     PlayStyle,
+    PlaybookStep,
+    RagChunk,
+    Source,
     SourceKind,
     Tier,
+    ToolName,
+    WebFact,
 )
-from app.schemas.shared import DebugInfo, DeckRecommendation, PlaybookStep, Source
 
 __all__ = [
-    "RecommendRequest",
-    "RecommendationResponse",
-    "FeedbackRequest",
-    "ErrorDetail",
-    "ErrorResponse",
-    "Tier",
-    "PlayStyle",
-    "Intent",
-    "Confidence",
-    "Phase",
-    "Difficulty",
-    "SourceKind",
-    "PlaybookStep",
-    "Source",
-    "DeckRecommendation",
-    "DebugInfo",
+    "RecommendRequest", "RecommendationResponse", "DebugInfo",
+    "FeedbackRequest", "ErrorDetail", "ErrorResponse",
+    "Tier", "PlayStyle", "Intent", "Phase", "Difficulty", "Confidence",
+    "IndexName", "ToolName", "SourceKind",
+    "Source", "RagChunk", "WebFact", "PlaybookStep",
+    "DeckRecommendation", "DeckDraft",
 ]
