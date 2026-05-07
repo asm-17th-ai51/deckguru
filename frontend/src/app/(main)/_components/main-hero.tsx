@@ -8,8 +8,18 @@ import { EXAMPLE_QUESTIONS } from '@/app/(main)/_constants/example-questions';
 import { useDeckRecommendationForm } from '@/app/(main)/_hooks/use-deck-recommendation-form';
 
 export function MainHero() {
-  const { inputRef, handleExampleQuestionClick, handleSubmit } =
-    useDeckRecommendationForm();
+  const {
+    inputRef,
+    query,
+    tier,
+    playStyle,
+    isSubmitDisabled,
+    setQuery,
+    setTier,
+    setPlayStyle,
+    handleExampleQuestionClick,
+    handleSubmit,
+  } = useDeckRecommendationForm();
 
   return (
     <div className="relative z-10 flex w-full max-w-3xl flex-col items-center gap-8">
@@ -17,7 +27,17 @@ export function MainHero() {
 
       <div className="flex w-full flex-col items-center justify-center gap-6">
         <HeroCopy />
-        <DeckRecommendationForm inputRef={inputRef} onSubmit={handleSubmit} />
+        <DeckRecommendationForm
+          inputRef={inputRef}
+          query={query}
+          tier={tier}
+          playStyle={playStyle}
+          isSubmitDisabled={isSubmitDisabled}
+          onQueryChange={setQuery}
+          onTierChange={setTier}
+          onPlayStyleChange={setPlayStyle}
+          onSubmit={handleSubmit}
+        />
         <ExampleQuestionChips
           questions={EXAMPLE_QUESTIONS}
           onQuestionClick={handleExampleQuestionClick}
