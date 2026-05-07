@@ -3,6 +3,7 @@
 import { useDeckRecommendationForm } from '@/app/(main)/_hooks/use-deck-recommendation-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { motion } from 'motion/react';
 
 export const EXAMPLE_QUESTIONS = [
   '지금 골드가 티어 올리기 좋은 덱 3개 추천해줘',
@@ -48,26 +49,56 @@ export default function MainPage() {
               aria-label="덱 추천을 위한 플레이 스타일 검색어"
               required
             />
-            <Button
-              type="submit"
-              className="h-12 w-full px-5 font-galmuri11 text-sm font-bold hover:scale-96 sm:w-auto"
-              aria-label="덱 추천 검색하기">
-              <span>GURU!</span>
-            </Button>
+            <motion.div
+              className="w-full sm:w-auto"
+              transition={{
+                duration: 0.12,
+                ease: 'easeOut',
+              }}
+              whileHover={{ x: 2, y: 1, scale: 0.98 }}
+              whileTap={{ x: 2, y: 3, scale: 0.96 }}>
+              <Button
+                type="submit"
+                className="h-12 w-full px-5 font-galmuri11 text-sm font-bold"
+                aria-label="덱 추천 검색하기">
+                <span>GURU!</span>
+              </Button>
+            </motion.div>
           </form>
 
           {/** 질문 예시 칩 */}
           <div className="flex flex-wrap items-center justify-center gap-2">
-            {EXAMPLE_QUESTIONS.map((question) => (
-              <Button
+            {EXAMPLE_QUESTIONS.map((question, index) => (
+              <motion.div
                 key={question}
-                type="button"
-                variant="secondary"
-                size="lg"
-                onClick={() => handleExampleQuestionClick(question)}
-                className="text-center hover:scale-96">
-                {question}
-              </Button>
+                initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  delay: index * 0.06,
+                  duration: 0.24,
+                  ease: 'easeOut',
+                }}
+                whileHover={{
+                  x: 2,
+                  y: 1,
+                  scale: 0.96,
+                  transition: { delay: 0, duration: 0.12, ease: 'easeOut' },
+                }}
+                whileTap={{
+                  x: 2,
+                  y: 3,
+                  scale: 0.96,
+                  transition: { delay: 0, duration: 0.12, ease: 'easeOut' },
+                }}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="lg"
+                  onClick={() => handleExampleQuestionClick(question)}
+                  className="text-center">
+                  {question}
+                </Button>
+              </motion.div>
             ))}
           </div>
         </div>
