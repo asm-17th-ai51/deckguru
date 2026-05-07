@@ -4,14 +4,14 @@
 .LSOverride
 ._*
 
-# --- 환경변수 / secrets ---
+# --- Environment / secrets ---
 .env
 .env.local
 .env.*.local
 *.pem
 *.key
 
-# --- Python (backend/) ---
+# --- Python ---
 __pycache__/
 *.py[cod]
 *$py.class
@@ -25,7 +25,7 @@ venv/
 env/
 .python-version
 
-# Test / lint / typing 캐시
+# Test / lint / typing cache
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
@@ -33,7 +33,7 @@ env/
 htmlcov/
 .tox/
 
-# --- Node / Next.js (frontend/) ---
+# --- Node / Next.js ---
 node_modules/
 .next/
 out/
@@ -43,12 +43,13 @@ out/
 *.tsbuildinfo
 .next-env.d.ts
 
-# --- 데이터 (RAG / 크롤링 — backend/data/) ---
+# --- Data (RAG / backend data) ---
 backend/data/chroma/
 backend/data/raw/
 backend/data/processed/
+data/rag/vectorstore/chroma/
 
-# --- 로그 / 임시 산출물 ---
+# --- Logs / temporary outputs ---
 *.log
 logs/
 .tmp/
@@ -64,9 +65,9 @@ logs/
 *~
 .DS_Store
 
-# --- LangSmith / LLM 추적 (선택) ---
+# --- LangSmith / LLM tracing ---
 .langsmith/
 
-# --- 빌드 산출물 ---
+# --- Build outputs ---
 *.tar.gz
 *.zip

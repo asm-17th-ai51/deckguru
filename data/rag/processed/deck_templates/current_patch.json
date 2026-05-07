@@ -1,0 +1,10 @@
+{
+  "current_patch": "17.2b",
+  "index": "deck_templates",
+  "record_count": 64,
+  "sources": [
+    "decks",
+    "meta"
+  ],
+  "jsonl_path": "17.2b.jsonl"
+}
