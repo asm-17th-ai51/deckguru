@@ -1,6 +1,7 @@
 'use client';
 
 import { useDeckRecommendationForm } from '@/app/(main)/_hooks/use-deck-recommendation-form';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { m } from 'motion/react';
@@ -18,6 +19,18 @@ export default function MainPage() {
 
   return (
     <main className="pixel-background relative isolate flex min-h-svh w-full flex-col items-center justify-center overflow-hidden p-6 px-5 sm:px-4">
+      <header className="absolute top-0 right-0 z-20 flex justify-end p-4 sm:p-6">
+        {/** 패치 배너 */}
+        <div className="flex flex-row gap-2">
+          <Badge variant="outline" className="h-auto border-2 px-3 py-2">
+            PATCH VERSION 14.9
+          </Badge>
+          <Badge variant="outline" className="h-auto border-2 px-3 py-2">
+            LAST UPDATED 2026-05-04
+          </Badge>
+        </div>
+      </header>
+
       <div className="relative z-10 flex w-full max-w-3xl flex-col items-center gap-8">
         {/** 서비스 이름 */}
         <m.div
