@@ -71,3 +71,6 @@ logs/
 # --- Build outputs ---
 *.tar.gz
 *.zip
+
+# --- Lazyweb 산출물 ---
+.lazyweb
