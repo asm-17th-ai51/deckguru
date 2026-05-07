@@ -1,7 +1,3 @@
-import { SparkleIcon } from '@phosphor-icons/react';
-
-import { MainSectionEyebrow } from './main-page-shared';
-
 export function HeroCopy() {
   return (
     <div className="flex max-w-2xl flex-col gap-2 text-left leading-relaxed lg:items-end lg:text-right">
