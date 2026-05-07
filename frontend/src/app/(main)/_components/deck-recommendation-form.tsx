@@ -10,7 +10,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import type { PlayStyle, Tier } from '@/lib/schema';
+import { CrosshairIcon, GameControllerIcon } from '@phosphor-icons/react';
 import { m } from 'motion/react';
+
+import { MAIN_PANEL_CLASS_NAME, MainSectionEyebrow } from './main-page-shared';
 
 const TIER_OPTIONS: Array<{ value: Tier; label: string }> = [
   { value: 'IRON', label: '아이언' },
@@ -66,99 +69,139 @@ export function DeckRecommendationForm({
 }: DeckRecommendationFormProps) {
   return (
     <form
-      className="mx-auto flex w-full max-w-2xl flex-col gap-2"
+      className={`${MAIN_PANEL_CLASS_NAME} mx-auto w-full max-w-3xl overflow-hidden`}
       onSubmit={onSubmit}>
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <Select<Tier>
-          name="tier"
-          value={tier}
-          onValueChange={(value) => onTierChange(value)}>
-          <SelectTrigger
-            type="button"
-            className="h-12 w-full border-4 text-sm"
-            aria-label="티어 선택">
-            <SelectValue
-              className={tier === null ? 'text-muted-foreground' : ''}>
-              {(value) => getTierLabel(value as Tier | null)}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent align="start">
-            {TIER_OPTIONS.map((option) => (
-              <SelectItem
-                key={option.value}
-                value={option.value}
-                label={option.label}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select<PlayStyle>
-          name="play_style"
-          value={playStyle}
-          onValueChange={(value) => onPlayStyleChange(value)}>
-          <SelectTrigger
-            type="button"
-            className="h-12 w-full border-4 text-sm"
-            aria-label="플레이 스타일 선택">
-            <SelectValue
-              className={playStyle === null ? 'text-muted-foreground' : ''}>
-              {(value) => getPlayStyleLabel(value as PlayStyle | null)}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent align="start">
-            {PLAY_STYLE_OPTIONS.map((option) => (
-              <SelectItem
-                key={option.value}
-                value={option.value}
-                label={option.label}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="flex flex-col gap-3 border-b-4 border-border bg-muted/20 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <MainSectionEyebrow icon={CrosshairIcon}>추천 조건</MainSectionEyebrow>
+        <span className="w-fit border-2 border-primary/70 bg-primary/15 px-2 py-1 font-galmuri11 text-[10px] font-bold text-primary">
+          PATCH-ADAPTIVE
+        </span>
       </div>
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-        <Input
-          ref={inputRef}
-          id="deck-recommendation-query"
-          type="search"
-          placeholder="어떤 덱으로 플레이하고 싶으신가요?"
-          className="h-12 border-4 bg-background/95"
-          value={query}
-          onChange={(event) => onQueryChange(event.target.value)}
-          autoComplete="off"
-          aria-label="덱 추천을 위한 플레이 스타일 검색어"
-          aria-invalid={submitErrorMessage !== null}
-          required
-        />
-        <m.div
-          className="w-full sm:w-auto"
-          transition={{
-            duration: 0.12,
-            ease: 'easeOut',
-          }}
-          whileHover={
-            isSubmitDisabled ? undefined : { x: 2, y: 1, scale: 0.98 }
-          }
-          whileTap={isSubmitDisabled ? undefined : { x: 2, y: 3, scale: 0.96 }}>
-          <Button
-            type="submit"
-            disabled={isSubmitDisabled}
-            className="h-12 w-full px-5 font-galmuri11 text-sm font-bold"
-            aria-busy={isSubmitting}
-            aria-label="덱 추천 검색하기">
-            <span>{isSubmitting ? 'LOADING...' : 'GURU!'}</span>
-          </Button>
-        </m.div>
+      <div className="flex flex-col gap-4 p-5 sm:p-6">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="flex min-w-0 flex-col gap-2">
+            <label
+              className="font-galmuri11 text-[10px] font-bold text-muted-foreground"
+              htmlFor="deck-recommendation-tier">
+              티어
+            </label>
+            <Select<Tier>
+              name="tier"
+              value={tier}
+              onValueChange={(value) => onTierChange(value)}>
+              <SelectTrigger
+                id="deck-recommendation-tier"
+                type="button"
+                className="h-12 w-full border-2 bg-background/80 font-galmuri11 text-sm"
+                aria-label="티어 선택">
+                <SelectValue
+                  className={tier === null ? 'text-muted-foreground' : ''}>
+                  {(value) => getTierLabel(value as Tier | null)}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent align="start" className="border-2 border-border">
+                {TIER_OPTIONS.map((option) => (
+                  <SelectItem
+                    key={option.value}
+                    value={option.value}
+                    label={option.label}
+                    className="font-galmuri11">
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex min-w-0 flex-col gap-2">
+            <label
+              className="font-galmuri11 text-[10px] font-bold text-muted-foreground"
+              htmlFor="deck-recommendation-play-style">
+              플레이 스타일
+            </label>
+            <Select<PlayStyle>
+              name="play_style"
+              value={playStyle}
+              onValueChange={(value) => onPlayStyleChange(value)}>
+              <SelectTrigger
+                id="deck-recommendation-play-style"
+                type="button"
+                className="h-12 w-full border-2 bg-background/80 font-galmuri11 text-sm"
+                aria-label="플레이 스타일 선택">
+                <SelectValue
+                  className={playStyle === null ? 'text-muted-foreground' : ''}>
+                  {(value) => getPlayStyleLabel(value as PlayStyle | null)}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent align="start" className="border-2 border-border">
+                {PLAY_STYLE_OPTIONS.map((option) => (
+                  <SelectItem
+                    key={option.value}
+                    value={option.value}
+                    label={option.label}
+                    className="font-galmuri11">
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label
+            className="font-galmuri11 text-[10px] font-bold text-muted-foreground"
+            htmlFor="deck-recommendation-query">
+            요청
+          </label>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Input
+              ref={inputRef}
+              id="deck-recommendation-query"
+              type="search"
+              placeholder="어떤 덱으로 플레이하고 싶으신가요?"
+              className="h-12 border-2 bg-background/80 font-galmuri11 text-sm"
+              value={query}
+              onChange={(event) => onQueryChange(event.target.value)}
+              autoComplete="off"
+              aria-label="덱 추천을 위한 플레이 스타일 검색어"
+              aria-invalid={submitErrorMessage !== null}
+              required
+            />
+            <m.div
+              className="w-full sm:w-auto"
+              transition={{
+                duration: 0.12,
+                ease: 'easeOut',
+              }}
+              whileHover={
+                isSubmitDisabled ? undefined : { x: 2, y: 1, scale: 0.98 }
+              }
+              whileTap={
+                isSubmitDisabled ? undefined : { x: 2, y: 3, scale: 0.96 }
+              }>
+              <Button
+                type="submit"
+                disabled={isSubmitDisabled}
+                className="h-12 w-full gap-2 border-2 border-primary px-5 font-galmuri11 text-sm font-bold shadow-[4px_4px_0_0_rgb(0_0_0/0.45)] sm:w-auto"
+                aria-busy={isSubmitting}
+                aria-label="덱 추천 검색하기">
+                <GameControllerIcon
+                  aria-hidden
+                  className="size-4"
+                  weight="bold"
+                />
+                <span>{isSubmitting ? 'LOADING...' : 'GURU!'}</span>
+              </Button>
+            </m.div>
+          </div>
+        </div>
+        {submitErrorMessage ? (
+          <p
+            role="alert"
+            className="border-2 border-destructive/60 bg-destructive/10 px-3 py-2 text-center text-xs font-bold text-destructive sm:text-left">
+            {submitErrorMessage}
+          </p>
+        ) : null}
       </div>
-      {submitErrorMessage ? (
-        <p
-          role="alert"
-          className="text-center text-xs font-bold text-destructive sm:text-left">
-          {submitErrorMessage}
-        </p>
-      ) : null}
     </form>
   );
 }

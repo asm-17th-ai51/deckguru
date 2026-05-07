@@ -3,7 +3,7 @@ import { PatchStatusHeader } from '@/app/(main)/_components/patch-status-header'
 
 export default function MainPage() {
   return (
-    <main className="pixel-background relative isolate flex min-h-svh w-full flex-col items-center justify-center overflow-hidden p-6 px-5 sm:px-4">
+    <main className="pixel-background relative isolate flex min-h-dvh w-full flex-col items-center justify-center overflow-x-hidden px-4 py-6 text-foreground sm:px-6 lg:px-8">
       <PatchStatusHeader />
       <MainHero />
     </main>

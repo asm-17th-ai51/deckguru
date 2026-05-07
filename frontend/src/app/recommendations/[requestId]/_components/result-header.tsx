@@ -14,7 +14,7 @@ export function ResultHeader({
       <div className="flex flex-col gap-3">
         <Badge
           variant="outline"
-          className="h-auto max-w-full border-2 border-primary/70 text-xs text-primary">
+          className="h-auto max-w-full border-2 border-primary/70 px-3 py-2 text-[10px] text-primary backdrop-blur">
           REQUEST {recommendation.request_id}
         </Badge>
         <div className="flex flex-col gap-2">

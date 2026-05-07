@@ -24,11 +24,13 @@ export function MainHero() {
   } = useDeckRecommendationForm();
 
   return (
-    <div className="relative z-10 flex w-full max-w-3xl flex-col items-center gap-8">
-      <BrandMark />
-
-      <div className="flex w-full flex-col items-center justify-center gap-6">
+    <section className="relative z-10 mx-auto flex w-full max-w-3xl flex-col gap-6 pt-24 pb-10 sm:pt-20 lg:pt-16">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <BrandMark />
         <HeroCopy />
+      </div>
+
+      <div className="mx-auto flex w-full max-w-3xl flex-col items-center justify-center gap-5 lg:mx-0">
         <DeckRecommendationForm
           inputRef={inputRef}
           query={query}
@@ -47,6 +49,6 @@ export function MainHero() {
           onQuestionClick={handleExampleQuestionClick}
         />
       </div>
-    </div>
+    </section>
   );
 }

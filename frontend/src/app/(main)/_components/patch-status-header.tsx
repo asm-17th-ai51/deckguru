@@ -26,19 +26,25 @@ export function PatchStatusHeader() {
   const hasWarnings = data ? patchInfo.warnings.length > 0 : isError;
 
   return (
-    <header className="absolute top-0 right-0 z-20 flex justify-end p-4 sm:p-6">
-      <div className="flex flex-row flex-wrap justify-end gap-2">
-        <Badge variant="outline" className="h-auto border-2 px-3 py-2">
-          PATCH VERSION {patchInfo.patch_version}
-        </Badge>
-        <Badge variant="outline" className="h-auto border-2 px-3 py-2">
-          LAST UPDATED {formatLastUpdated(patchInfo.last_updated)}
-        </Badge>
+    <header className="absolute inset-x-0 top-0 z-20 flex justify-center p-4 sm:justify-end sm:p-6">
+      <div className="grid max-w-full grid-cols-1 justify-items-center gap-2 sm:flex sm:flex-row sm:flex-wrap sm:justify-end">
         {hasWarnings ? (
-          <Badge variant="destructive" className="h-auto border-2 px-3 py-2">
+          <Badge
+            variant="destructive"
+            className="h-auto border-2 px-3 py-2 text-[10px]">
             DATA WARNING
           </Badge>
         ) : null}
+        <Badge
+          variant="outline"
+          className="h-auto border-2 px-3 py-2 text-[10px] backdrop-blur">
+          PATCH VERSION {patchInfo.patch_version}
+        </Badge>
+        <Badge
+          variant="outline"
+          className="h-auto border-2 px-3 py-2 text-[10px] backdrop-blur">
+          LAST UPDATED {formatLastUpdated(patchInfo.last_updated)}
+        </Badge>
       </div>
     </header>
   );

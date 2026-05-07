@@ -29,7 +29,7 @@ export function MetaBrief({
       aria-labelledby="meta-brief-title">
       <div className="grid gap-0 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,0.65fr)]">
         <div className="flex flex-col gap-4 p-5 sm:p-6">
-          <SectionEyebrow icon={SparkleIcon}>META BRIEF</SectionEyebrow>
+          <SectionEyebrow icon={SparkleIcon}>메타 요약</SectionEyebrow>
           <div className="flex flex-col gap-3">
             <h2
               id="meta-brief-title"
