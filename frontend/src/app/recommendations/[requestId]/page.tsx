@@ -1,4 +1,4 @@
-import { RecommendationResultView } from '@/app/recommendations/[requestId]/_components/recommendation-result-view';
+import { RecommendationResultClient } from '@/app/recommendations/[requestId]/_components/recommendation-result-client';
 
 interface RecommendationResultPageProps {
   params: Promise<{
@@ -11,5 +11,5 @@ export default async function RecommendationResultPage({
 }: RecommendationResultPageProps) {
   const { requestId } = await params;
 
-  return <RecommendationResultView requestId={requestId} />;
+  return <RecommendationResultClient requestId={requestId} />;
 }
