@@ -1,6 +1,6 @@
 export const API_URL = {
-  RECOMMEND: '/recommend',
-  PATCH_INFO: '/patch-info',
-  EXAMPLE_QUESTIONS: '/example-questions',
-  FEEDBACK: '/feedback'
+  RECOMMEND: '/api/recommend',
+  PATCH_INFO: '/api/patch-info',
+  EXAMPLE_QUESTIONS: '/api/example-questions',
+  FEEDBACK: '/api/feedback',
 } as const;
