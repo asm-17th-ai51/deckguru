@@ -1,6 +1,7 @@
 import './globals.css';
 
 import { galmuri9, galmuri11 } from '@/assets/fonts/font';
+import { MotionProvider } from '@/components/providers/motion-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import type { Metadata } from 'next';
 
@@ -18,7 +19,9 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <body
         className={`${galmuri11.variable} ${galmuri9.variable} antialiased`}>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <MotionProvider>{children}</MotionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -3,7 +3,7 @@
 import { useDeckRecommendationForm } from '@/app/(main)/_hooks/use-deck-recommendation-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 export const EXAMPLE_QUESTIONS = [
   '지금 골드가 티어 올리기 좋은 덱 3개 추천해줘',
@@ -49,7 +49,7 @@ export default function MainPage() {
               aria-label="덱 추천을 위한 플레이 스타일 검색어"
               required
             />
-            <motion.div
+            <m.div
               className="w-full sm:w-auto"
               transition={{
                 duration: 0.12,
@@ -63,13 +63,13 @@ export default function MainPage() {
                 aria-label="덱 추천 검색하기">
                 <span>GURU!</span>
               </Button>
-            </motion.div>
+            </m.div>
           </form>
 
           {/** 질문 예시 칩 */}
           <div className="flex flex-wrap items-center justify-center gap-2">
             {EXAMPLE_QUESTIONS.map((question, index) => (
-              <motion.div
+              <m.div
                 key={question}
                 initial={{ opacity: 0, y: 6, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -98,7 +98,7 @@ export default function MainPage() {
                   className="text-center">
                   {question}
                 </Button>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
