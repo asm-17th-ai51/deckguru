@@ -2,6 +2,7 @@ import './globals.css';
 
 import { galmuri9, galmuri11 } from '@/assets/fonts/font';
 import { MotionProvider } from '@/components/providers/motion-provider';
+import { QueryProvider } from '@/components/providers/query-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import type { Metadata } from 'next';
 
@@ -20,7 +21,9 @@ export default function RootLayout({
       <body
         className={`${galmuri11.variable} ${galmuri9.variable} antialiased`}>
         <ThemeProvider>
-          <MotionProvider>{children}</MotionProvider>
+          <QueryProvider>
+            <MotionProvider>{children}</MotionProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
