@@ -6,11 +6,8 @@
 
 from __future__ import annotations
 
-import os
-
 import pytest
 
-from app.agents.strategy import nodes
 from app.schemas.shared import DeckDraft, DeckRecommendation, PlaybookStep
 
 
