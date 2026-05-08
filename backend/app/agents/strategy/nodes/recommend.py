@@ -12,7 +12,7 @@ import logging
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
 
-from app.agents.strategy.llm import StrategyLLMError, call_structured
+from app.agents.strategy.llm import call_structured
 from app.agents.strategy.prompts import load_text
 from app.agents.strategy.state import StrategyState
 from app.schemas.shared import DeckDraft, DeckRecommendation, RagChunk, WebFact

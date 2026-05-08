@@ -1,7 +1,12 @@
-"""live_research — 02-spec §3.4.
+"""Strategy Agent 내부의 live_research 노드.
 
-Agent-3의 sub-graph(`run_live_research`)를 호출하고 결과를 state에 병합.
-타임아웃 15s. 초과 시 부분 결과 + warning.
+이 파일은 `backend/app/research`의 실제 Live Research 구현을 StrategyState에
+연결하는 어댑터다.
+
+역할:
+- StrategyState에서 question/keywords/patch_version을 꺼내 Research API에 넘긴다.
+- ResearchResult의 web_facts/sources/research_steps를 StrategyState에 병합한다.
+- 15초를 넘기면 추천 전체를 실패시키지 않고 `research_truncated` warning만 남긴다.
 """
 
 from __future__ import annotations
@@ -16,8 +21,11 @@ logger = logging.getLogger(__name__)
 
 
 async def live_research(state: StrategyState) -> dict:
+    """Live Research 결과를 StrategyState에 병합한다."""
     state.need_live = True
     try:
+        # Research API 내부에도 timeout_s가 있지만, Strategy graph 차원에서도
+        # asyncio.wait_for로 한 번 더 감싸 전체 agent timeout을 보호한다.
         result = await asyncio.wait_for(
             run_live_research(
                 request_id=state.request_id,
@@ -34,6 +42,8 @@ async def live_research(state: StrategyState) -> dict:
         state.warnings.append("research_truncated")
         return state.model_dump()
 
+    # web_facts는 이후 analyze_meta/recommend prompt의 live evidence로 쓰이고,
+    # sources는 최종 RecommendationResponse.sources에 그대로 노출된다.
     state.web_facts = result.web_facts
     state.sources.extend(result.sources)
     state.research_steps = result.research_steps
