@@ -1,8 +1,8 @@
 """Live Research의 ReAct 실행 루프.
 
 이 모듈은 "어떤 도구를 부를지 정하고(plan), 실제로 부르고(act), 결과를
-관찰로 저장하고(observe), 충분한지 판단한 뒤(reflect), 마지막에 fact를
-추출(extract)"하는 전체 흐름을 담당한다.
+관찰로 저장하고(observe), 마지막에 fact를 추출(extract)"하는 전체 흐름을
+담당한다.
 
 LangGraph 객체를 직접 쓰지는 않지만, spec의 ReAct sub-graph 책임을 같은
 단계 구조로 구현한다. 외부 검색 결과는 시점에 따라 달라질 수 있으므로
@@ -20,7 +20,6 @@ import httpx
 from app.research.cache import get_cached_json, set_cached_json
 from app.research.nodes.extract_facts import extract_facts, fallback_extract
 from app.research.nodes.plan import fallback_plan, plan_next_action
-from app.research.nodes.reflect import fallback_reflect, reflect_research
 from app.research.state import (
     Observation,
     PageContent,
@@ -28,12 +27,10 @@ from app.research.state import (
     ReActStep,
     ResearchState,
     SearchResult,
-    Transcript,
 )
 from app.research.tools.base import ResearchToolError
 from app.research.tools.fetch_page import fetch_page
 from app.research.tools.web_search import web_search
-from app.research.tools.youtube_transcript import youtube_transcript
 from app.research.whitelist import domain_from_url
 
 
@@ -57,8 +54,6 @@ def _tool_timeout(tool: str) -> float:
     """
     if tool == "fetch_page":
         return 8.5
-    if tool == "youtube_transcript":
-        return 6.5
     return 5.5
 
 
@@ -87,10 +82,6 @@ def _normalize_plan(plan: PlanDecision, state: ResearchState) -> PlanDecision:
         plan.tool_input = {"query": query[:300], "k": min(max(k, 1), 8)}
     elif plan.tool == "fetch_page":
         plan.tool_input = {"url": str(plan.tool_input.get("url") or "").strip()}
-    elif plan.tool == "youtube_transcript":
-        plan.tool_input = {
-            "video_id": str(plan.tool_input.get("video_id") or "").strip()
-        }
     return plan
 
 
@@ -140,18 +131,6 @@ def _page_observation(page: PageContent) -> Observation:
     )
 
 
-def _transcript_observation(transcript: Transcript) -> Observation:
-    """Transcript를 ReAct 공통 관찰 모델로 변환한다."""
-    return Observation(
-        tool="youtube_transcript",
-        url=transcript.source_url,
-        title=transcript.title or transcript.video_id,
-        text=transcript.text,
-        fetched_at=transcript.fetched_at,
-        raw=transcript.model_dump(mode="json"),
-    )
-
-
 async def _act_plan(
     state: ResearchState,
     plan: PlanDecision,
@@ -190,17 +169,6 @@ async def _act_plan(
             page = PageContent.model_validate(cached)
             return [_page_observation(page)], (
                 f"Fetched {len(page.text)} chars from {page.title or page.url}"
-            )
-
-        if tool == "youtube_transcript":
-            if cached is None:
-                # transcript 도구는 영상 ID 정규화와 채널 whitelist 검사를 수행한다.
-                transcript = await youtube_transcript(str(tool_input["video_id"]))
-                cached = transcript.model_dump(mode="json")
-                await set_cached_json(tool, tool_input, cached)
-            transcript = Transcript.model_validate(cached)
-            return [_transcript_observation(transcript)], (
-                f"Fetched transcript {transcript.video_id} ({transcript.language})"
             )
 
     except (ResearchToolError, httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
@@ -270,21 +238,6 @@ async def run_research_loop(
 
         if not observations and step_no >= 2:
             # 두 번째 step 이후에도 관찰이 없으면 같은 실패를 반복할 가능성이 높다.
-            break
-
-        try:
-            # 3. reflect: 지금까지의 관찰로 충분한지 판단한다.
-            reflection = await _with_deadline(
-                reflect_research(state),
-                deadline=deadline,
-                cap=_timeout_cap("RESEARCH_REFLECT_TIMEOUT_S", 6.0),
-            )
-        except asyncio.TimeoutError:
-            # reflect도 보조 LLM 판단이므로 느리면 규칙 기반 판단으로 대체한다.
-            state.warnings.append("research_reflect_timeout_fallback")
-            reflection = fallback_reflect(state)
-
-        if reflection.enough:
             break
 
     if time.monotonic() >= deadline:

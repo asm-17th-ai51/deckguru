@@ -5,7 +5,7 @@ Strategy Agent 연결부가 모두 같은 Pydantic 모델을 사용해야 하므
 형태를 한 곳에 모아 둔다.
 
 흐름 요약:
-1. 도구는 `SearchResult`, `PageContent`, `Transcript` 같은 원시 결과를 만든다.
+1. 도구는 `SearchResult`, `PageContent` 같은 원시 결과를 만든다.
 2. graph는 원시 결과를 공통 형태인 `Observation`으로 누적한다.
 3. extract_facts는 `Observation`에서 `WebFact`를 뽑는다.
 4. api는 최종적으로 `ResearchResult`를 Strategy Agent에 반환한다.
@@ -47,17 +47,6 @@ class PageContent(BaseModel):
     title: str | None = None
     text: str
     published_at: str | None = None
-    fetched_at: str = Field(default_factory=utc_now_iso)
-
-
-class Transcript(BaseModel):
-    """유튜브 자막 합본 결과."""
-
-    video_id: str
-    text: str
-    language: str
-    title: str | None = None
-    source_url: HttpUrl | None = None
     fetched_at: str = Field(default_factory=utc_now_iso)
 
 

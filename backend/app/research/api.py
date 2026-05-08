@@ -77,7 +77,7 @@ async def run_live_research(
     )
 
     try:
-        # 실제 ReAct 루프. 검색/페이지/자막 도구 호출과 fact 추출이 여기서 일어난다.
+        # 실제 ReAct 루프. 검색/페이지 도구 호출과 fact 추출이 여기서 일어난다.
         state = await run_research_loop(
             state,
             max_steps=max_steps,

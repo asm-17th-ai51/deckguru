@@ -173,8 +173,6 @@ async def is_allowed_url(url: str, *, check_robots: bool = True) -> bool:
 def source_kind_for_url(url: str) -> SourceKind:
     """URL 도메인을 응답 Source의 source_kind로 분류한다."""
     domain = domain_from_url(url)
-    if "youtube.com" in domain or "youtu.be" in domain:
-        return "youtube"
     if "leagueoflegends.com" in domain:
         return "patch_note_official"
     if domain in {"lolchess.gg", "tactics.tools", "metatft.com"}:

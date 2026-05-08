@@ -6,7 +6,7 @@
 
 핵심 안전장치:
 - fact의 source_url은 반드시 실제 Observation 또는 검색 결과 URL이어야 한다.
-- whitelist 밖 URL은 버린다. 단, youtube_transcript 도구 결과는 별도 허용한다.
+- whitelist 밖 URL은 버린다.
 - 단일 출처만 있을 때 confidence는 최대 0.7로 제한한다.
 """
 
@@ -21,18 +21,32 @@ from pydantic import ValidationError
 
 from app.agents.strategy.llm import StrategyLLMError, call_structured
 from app.research.state import FactExtractionOut, ResearchState
-from app.research.whitelist import is_allowed_url_by_whitelist, source_kind_for_url
+from app.research.whitelist import is_allowed_url_by_whitelist
 from app.schemas.shared import WebFact
 
 
-SYSTEM_PROMPT = """Extract facts from the observations that help answer the user's
-TFT question.
+SYSTEM_PROMPT = """You are a fact extractor for Teamfight Tactics (TFT, also known as 롤토체스/롤체).
+Your job is to extract accurate, source-backed facts from web observations to answer the user's TFT question.
 
-Rules:
-- Each fact must be 1-2 sentences.
-- Every fact must include a short direct quote copied from the observation.
-- Use only the current patch_version when the patch is explicit.
-- Do not invent numbers, rankings, or deck names.
+## TFT Domain Context
+TFT is an auto-battler game by Riot Games. Key concepts include:
+- **챔피언/유닛(Champions/Units)**: Characters placed on the board. Each has a cost tier (1~5), traits, and abilities.
+- **특성/시너지(Traits/Synergies)**: Bonuses activated when enough units sharing a trait are fielded.
+- **아이템(Items)**: Equipment crafted from component combinations, equipped to champions.
+- **증강(Augments)**: Powerful bonuses chosen during a game that modify playstyle.
+- **덱/조합(Comps/Compositions)**: Specific team builds combining units, traits, items, and augments.
+- **메타(Meta)**: The current strongest strategies and compositions in the game.
+- **패치(Patch)**: Game updates that change champion stats, traits, items, and balance.
+- **티어 리스트(Tier List)**: Rankings of comps/units/augments by strength (S > A > B > C > D).
+
+## Extraction Rules
+- Each fact must be 1-2 sentences and directly relevant to the user's question.
+- Every fact MUST include a short direct quote (exact text) copied from the observation — do NOT paraphrase.
+- Only use information explicitly present in the observations. Do NOT generate or infer data that is not in the provided text.
+- Use only the current patch_version when the patch is explicitly mentioned.
+- Do NOT invent numbers, win rates, pick rates, rankings, champion names, item names, or deck compositions.
+- If the observation text is ambiguous or unclear, extract only the parts you are confident about.
+- Prefer facts from official sources (patch notes, meta sites) over community posts.
 - Return structured output only."""
 
 # 명시적 패치 번호가 들어간 문장/URL을 검사하기 위한 정규식.
@@ -180,7 +194,8 @@ def _fact_from_text(
     confidence = 0.65
     if patch_version in best:
         confidence += 0.1
-    if source_kind_for_url(source_url) == "patch_note_official":
+    parsed_domain = urlparse(source_url).netloc.lower()
+    if "teamfighttactics.leagueoflegends.com" in parsed_domain:
         confidence += 0.1
     if domain:
         # fallback confidence는 과신하지 않는다. 여러 출처 합의 없이 추출한
@@ -209,7 +224,7 @@ def _fallback_extract(state: ResearchState) -> list[WebFact]:
 
     for obs in state.raw_observations:
         if obs.url:
-            # fetch_page/youtube_transcript처럼 URL이 있는 Observation은 검색 snippet보다
+            # fetch_page처럼 URL이 있는 Observation은 검색 snippet보다
             # 신뢰도가 높으므로 먼저 fact 후보로 본다.
             fact = _fact_from_text(
                 source_url=str(obs.url),
@@ -273,8 +288,7 @@ def _sanitize_facts(state: ResearchState, facts: list[WebFact]) -> list[WebFact]
     seen: set[tuple[str, str]] = set()
     for fact in facts:
         url = str(fact.source_url).rstrip("/")
-        is_youtube = source_kind_for_url(url) == "youtube"
-        if url not in valid_urls or not (is_allowed_url_by_whitelist(url) or is_youtube):
+        if url not in valid_urls or not is_allowed_url_by_whitelist(url):
             # LLM이 관찰하지 않은 URL을 만들거나 whitelist 밖 URL을 내면 제거한다.
             continue
         context = " ".join([url, fact.source_title or "", fact.text, fact.quote])

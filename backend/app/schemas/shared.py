@@ -41,10 +41,10 @@ IndexName = Literal[
     "deck_templates", "playbook", "patch_summary", "glossary",
 ]
 
-ToolName = Literal["web_search", "fetch_page", "youtube_transcript"]
+ToolName = Literal["web_search", "fetch_page"]
 
 SourceKind = Literal[
-    "patch_note_official", "meta_site", "community_post", "youtube",
+    "patch_note_official", "meta_site", "community_post",
 ]
 
 

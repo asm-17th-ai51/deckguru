@@ -20,7 +20,6 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 from app.agents.strategy.llm import StrategyLLMError, call_structured
 from app.research.state import PlanDecision, ResearchState
-from app.research.tools.youtube_transcript import extract_video_id
 from app.research.whitelist import is_allowed_url_by_whitelist
 
 
@@ -58,7 +57,6 @@ Choose exactly one tool call that can collect current, source-backed facts.
 Available tools:
 - web_search(query: str, k: int = 5)
 - fetch_page(url: str)
-- youtube_transcript(video_id: str)
 
 Rules:
 - Prefer official patch notes or whitelisted meta sites.
@@ -132,8 +130,6 @@ def _first_allowed_question_url(state: ResearchState) -> str | None:
     """사용자 질문에 직접 포함된 URL 중 우선 처리할 URL을 찾는다."""
     for match in URL_RE.findall(state.question):
         url = match.rstrip(".,")
-        if extract_video_id(url) and url not in _visited_urls(state):
-            return url
         if is_allowed_url_by_whitelist(url) and url not in _visited_urls(state):
             return url
     return None
@@ -157,13 +153,6 @@ def _fallback_plan(state: ResearchState) -> PlanDecision:
     """LLM plan이 실패했을 때 쓰는 deterministic planner."""
     question_url = _first_allowed_question_url(state)
     if question_url:
-        video_id = extract_video_id(question_url)
-        if video_id:
-            return PlanDecision(
-                thought="Question includes a YouTube URL; inspect its transcript.",
-                tool="youtube_transcript",
-                tool_input={"video_id": video_id},
-            )
         return PlanDecision(
             thought="Question includes a whitelisted URL; fetch it directly.",
             tool="fetch_page",
@@ -173,13 +162,6 @@ def _fallback_plan(state: ResearchState) -> PlanDecision:
     for url in _search_result_urls(state):
         # 검색으로 URL을 찾았다면 다음 step은 본문 fetch가 우선이다. snippet만으로
         # fact를 만들 수도 있지만, 본문까지 읽은 fact가 grounding에 더 유리하다.
-        video_id = extract_video_id(url)
-        if video_id:
-            return PlanDecision(
-                thought="Search found a YouTube result; inspect transcript.",
-                tool="youtube_transcript",
-                tool_input={"video_id": video_id},
-            )
         return PlanDecision(
             thought="Fetch the strongest whitelisted search result.",
             tool="fetch_page",
@@ -253,10 +235,6 @@ async def plan_next_action(state: ResearchState) -> PlanDecision:
     if result.tool == "fetch_page":
         url = str(result.tool_input.get("url") or "")
         if not url or not is_allowed_url_by_whitelist(url):
-            return _fallback_plan(state)
-    elif result.tool == "youtube_transcript":
-        video_id = str(result.tool_input.get("video_id") or "")
-        if not extract_video_id(video_id):
             return _fallback_plan(state)
     elif result.tool == "web_search":
         query = str(result.tool_input.get("query") or "").strip()
