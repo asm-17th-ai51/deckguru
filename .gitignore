@@ -56,6 +56,11 @@ logs/
 .cache/
 .langgraph_cache/
 
+# --- SQLite runtime DB ---
+*.db
+*.db-shm
+*.db-wal
+
 # --- IDE ---
 .vscode/
 !.vscode/settings.example.json

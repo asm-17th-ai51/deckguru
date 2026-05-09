@@ -101,8 +101,7 @@ class DeckRecommendation(BaseModel):
     rationale: str = Field(max_length=300)
 
 
-# DeckDraft — analyze_meta 출력 (검증 전 후보).
-# 실제 sayouts는 02-spec §3.5에서 사용.
+# DeckDraft — analyze_meta 출력 (검증 전 후보)
 
 class DeckDraft(BaseModel):
     name: str
@@ -116,19 +115,7 @@ class DeckDraft(BaseModel):
 
 
 __all__ = [
-    "Tier",
-    "PlayStyle",
-    "Intent",
-    "Phase",
-    "Difficulty",
-    "Confidence",
-    "IndexName",
-    "ToolName",
-    "SourceKind",
-    "Source",
-    "RagChunk",
-    "WebFact",
-    "PlaybookStep",
-    "DeckRecommendation",
-    "DeckDraft",
+    "Tier", "PlayStyle", "Intent", "Phase", "Difficulty", "Confidence",
+    "IndexName", "ToolName", "SourceKind",
+    "Source", "RagChunk", "WebFact", "PlaybookStep", "DeckRecommendation", "DeckDraft",
 ]

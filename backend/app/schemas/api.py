@@ -58,9 +58,23 @@ class FeedbackRequest(BaseModel):
     deck_clicked: str | None = None
 
 
+# 에러 응답
+
+class ErrorDetail(BaseModel):
+    code: str
+    message: str
+    request_id: str | None = None
+
+
+class ErrorResponse(BaseModel):
+    error: ErrorDetail
+
+
 __all__ = [
     "RecommendRequest",
     "RecommendationResponse",
     "DebugInfo",
     "FeedbackRequest",
+    "ErrorDetail",
+    "ErrorResponse",
 ]
