@@ -138,7 +138,7 @@ export const FeedbackResponseSchema = z.object({
 
 export const PatchInfoSchema = z.object({
   patch_version: z.string().regex(/^[0-9]+\.[0-9]+$/),
-  last_updated: z.string(),
+  last_updated: z.string().nullable().optional(),
   warnings: z.array(z.string()).default([]),
 });
 

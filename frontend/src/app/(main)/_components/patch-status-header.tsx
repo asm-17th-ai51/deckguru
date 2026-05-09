@@ -10,7 +10,11 @@ const FALLBACK_PATCH_INFO: PatchInfo = {
   warnings: ['patch_info_unavailable'],
 };
 
-const formatLastUpdated = (value: string) => {
+const formatLastUpdated = (value: string | null | undefined) => {
+  if (!value) {
+    return 'unknown';
+  }
+
   const date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {

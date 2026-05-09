@@ -6,17 +6,17 @@
 
 ## 기술 스택
 
-| 항목 | 버전 / 도구 | 설명 |
-|---|---|---|
-| Framework | `Next.js 16.1.7` | App Router 기반 애플리케이션 |
-| UI Runtime | `React 19.2.4` | Client Component, form state, provider 구성 |
-| Language | `TypeScript 5.9.3` | `strict` 모드와 `@/*` 경로 alias 사용 |
-| Styling | `Tailwind CSS 4.2.1` | `src/app/globals.css` 중심 전역 스타일 |
-| Data Fetching | `@tanstack/react-query 5.100.9` | 추천 요청 mutation, 결과 캐시, 패치 정보 query |
-| Validation | `zod 4.4.3` | API 요청과 응답 스키마 검증 |
-| UI Library | `@base-ui/react`, `shadcn`, `@phosphor-icons/react` | 공통 UI와 아이콘 |
-| Theme | `next-themes` | 라이트/다크 테마 provider |
-| Package Manager | `pnpm 10.28.2` | `frontend/pnpm-lock.yaml` 기준 |
+| 항목            | 버전 / 도구                                         | 설명                                           |
+| --------------- | --------------------------------------------------- | ---------------------------------------------- |
+| Framework       | `Next.js 16.1.7`                                    | App Router 기반 애플리케이션                   |
+| UI Runtime      | `React 19.2.4`                                      | Client Component, form state, provider 구성    |
+| Language        | `TypeScript 5.9.3`                                  | `strict` 모드와 `@/*` 경로 alias 사용          |
+| Styling         | `Tailwind CSS 4.2.1`                                | `src/app/globals.css` 중심 전역 스타일         |
+| Data Fetching   | `@tanstack/react-query 5.100.9`                     | 추천 요청 mutation, 결과 캐시, 패치 정보 query |
+| Validation      | `zod 4.4.3`                                         | API 요청과 응답 스키마 검증                    |
+| UI Library      | `@base-ui/react`, `shadcn`, `@phosphor-icons/react` | 공통 UI와 아이콘                               |
+| Theme           | `next-themes`                                       | 라이트/다크 테마 provider                      |
+| Package Manager | `pnpm 10.28.2`                                      | `frontend/pnpm-lock.yaml` 기준                 |
 
 ## 빠른 실행
 
@@ -27,6 +27,16 @@ pnpm dev
 ```
 
 개발 서버 기본 주소는 `http://localhost:3000`입니다.
+
+백엔드와 연결해서 실행하려면 백엔드를 `http://localhost:8000`에서 먼저 실행하고, `frontend/.env.local`에 다음 값을 둡니다.
+
+```bash
+NEXT_PUBLIC_USE_MOCK=false
+API_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_API_BASE_URL=
+```
+
+이 설정에서는 브라우저가 같은 origin의 `/api/*`로 요청하고, `next.config.mjs`의 rewrite가 백엔드 `/api/*`로 전달합니다.
 
 백엔드 없이 목 데이터로 실행하려면 `frontend/.env.local`에서 다음 값을 사용하세요.
 
@@ -88,52 +98,56 @@ frontend/
 
 API 경로 상수는 `src/api/api-url.ts`에 있습니다.
 
-| 기능 | 프론트엔드 endpoint | 구현 위치 |
-|---|---|---|
-| 덱 추천 요청 | `/api/recommend` | `src/api/post-recommend/` |
-| 패치 정보 조회 | `/api/patch-info` | `src/api/get-patch-info/` |
-| 예시 질문 조회 예정 | `/api/example-questions` | 상수만 정의됨 |
-| 피드백 전송 예정 | `/api/feedback` | 상수만 정의됨 |
+| 기능                | 프론트엔드 endpoint      | 구현 위치                 |
+| ------------------- | ------------------------ | ------------------------- |
+| 덱 추천 요청        | `/api/recommend`         | `src/api/post-recommend/` |
+| 패치 정보 조회      | `/api/patch-info`        | `src/api/get-patch-info/` |
+| 예시 질문 조회 예정 | `/api/example-questions` | 상수만 정의됨             |
+| 피드백 전송 예정    | `/api/feedback`          | 상수만 정의됨             |
 
 공통 요청 함수는 `src/lib/api-client.ts`에 있습니다. 요청 timeout은 30초입니다. 서버에서는 `API_BASE_URL`을 우선 사용하고, 없으면 `NEXT_PUBLIC_API_BASE_URL`을 사용합니다. 브라우저에서는 `NEXT_PUBLIC_API_BASE_URL`만 사용합니다.
+`NEXT_PUBLIC_API_BASE_URL`이 비어 있으면 같은 origin의 `/api/*`로 요청하며, `next.config.mjs`가 `API_BASE_URL` 또는 기본값 `http://localhost:8000`으로 프록시합니다.
 
 API 요청과 응답은 `src/lib/schema.ts`의 Zod 스키마로 검증합니다. 백엔드 응답 필드가 스키마와 다르면 프론트엔드에서 파싱 오류가 납니다.
 
 ## 환경변수
 
-| 변수 | 기본값 | 사용 위치 | 설명 |
-|---|---|---|---|
-| `NEXT_PUBLIC_USE_MOCK` | `false` | `src/constants/env.ts` | `true`이면 추천 요청과 패치 정보 조회가 `src/mocks/` 데이터를 반환합니다. |
-| `NEXT_PUBLIC_API_BASE_URL` | 빈 문자열 | `src/lib/api-client.ts` | 브라우저와 서버에서 사용할 공개 API base URL입니다. 값이 없으면 같은 origin의 `/api/*`로 요청합니다. |
-| `API_BASE_URL` | 빈 문자열 | `src/lib/api-client.ts` | 서버에서만 사용하는 API base URL입니다. 서버 실행 시 `NEXT_PUBLIC_API_BASE_URL`보다 우선합니다. |
-| `NEXT_PUBLIC_BASE_URL` | `http://localhost:3000` | `src/constants/app-path.ts` | 앱 base URL이 필요할 때 사용하는 공개 URL입니다. |
+| 변수                       | 기본값                  | 사용 위치                                  | 설명                                                                                                                        |
+| -------------------------- | ----------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_USE_MOCK`     | `false`                 | `src/constants/env.ts`                     | `true`이면 추천 요청과 패치 정보 조회가 `src/mocks/` 데이터를 반환합니다.                                                   |
+| `NEXT_PUBLIC_API_BASE_URL` | 빈 문자열               | `src/lib/api-client.ts`                    | 브라우저에서 직접 호출할 공개 API base URL입니다. 값이 없으면 같은 origin의 `/api/*`로 요청합니다.                          |
+| `API_BASE_URL`             | `http://localhost:8000` | `next.config.mjs`, `src/lib/api-client.ts` | Next.js rewrite와 서버 요청에서 사용하는 백엔드 API base URL입니다. 서버 실행 시 `NEXT_PUBLIC_API_BASE_URL`보다 우선합니다. |
+| `NEXT_PUBLIC_BASE_URL`     | `http://localhost:3000` | `src/constants/app-path.ts`                | 앱 base URL이 필요할 때 사용하는 공개 URL입니다.                                                                            |
 
 예시:
 
 ```bash
 # frontend/.env.local
-NEXT_PUBLIC_USE_MOCK=true
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_USE_MOCK=false
+API_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_API_BASE_URL=
 ```
+
+브라우저에서 백엔드를 직접 호출하고 싶다면 `NEXT_PUBLIC_API_BASE_URL=http://localhost:8000`으로 설정할 수 있습니다. 이 경우 백엔드 CORS 허용 origin에 현재 프론트엔드 주소가 포함되어 있어야 합니다.
 
 ## 목 데이터 사용 방법
 
 목 데이터는 `src/mocks/`에 있습니다.
 
-| 파일 | 용도 |
-|---|---|
-| `src/mocks/recommendation.ts` | 추천 결과 목 응답 3종 |
-| `src/mocks/patch-info.ts` | 현재 패치 정보 목 응답 |
+| 파일                          | 용도                   |
+| ----------------------------- | ---------------------- |
+| `src/mocks/recommendation.ts` | 추천 결과 목 응답 3종  |
+| `src/mocks/patch-info.ts`     | 현재 패치 정보 목 응답 |
 
 `NEXT_PUBLIC_USE_MOCK=true`이면 `postRecommend`와 `getPatchInfo`가 실제 API를 호출하지 않습니다.
 
 추천 응답은 질문 문자열에 따라 선택됩니다.
 
-| 질문 조건 | 반환 데이터 |
-|---|---|
-| `운영법` 포함 | `mockDeckPlaystyleResponse` |
-| `곡궁` 포함 또는 `BF` 포함 | `mockItemPivotResponse` |
-| 그 외 | `mockRecommendDeckResponse` |
+| 질문 조건                  | 반환 데이터                 |
+| -------------------------- | --------------------------- |
+| `운영법` 포함              | `mockDeckPlaystyleResponse` |
+| `곡궁` 포함 또는 `BF` 포함 | `mockItemPivotResponse`     |
+| 그 외                      | `mockRecommendDeckResponse` |
 
 목 데이터도 `src/lib/schema.ts`의 스키마를 통과해야 합니다. 목 응답을 수정할 때는 `patch_version`, `intent`, `decks`, `sources`, `generated_at` 같은 필수 필드를 유지하세요.
 

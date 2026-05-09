@@ -1,9 +1,19 @@
+import { ApiErrorResponseSchema } from '@/lib/schema';
+
 const API_BASE_URL =
   typeof window === 'undefined'
     ? process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL
     : process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const TIMEOUT_MS = 30 * 1000;
+
+const trimTrailingSlash = (value: string) => value.replace(/\/+$/, '');
+
+const normalizeEndpoint = (endpoint: string) =>
+  endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+
+const buildRequestUrl = (endpoint: string) =>
+  `${API_BASE_URL ? trimTrailingSlash(API_BASE_URL) : ''}${normalizeEndpoint(endpoint)}`;
 
 const parseResponseBody = <T>(text: string): T | null => {
   if (!text) {
@@ -17,6 +27,16 @@ const parseResponseBody = <T>(text: string): T | null => {
   }
 };
 
+const getErrorMessage = (data: unknown) => {
+  const parsed = ApiErrorResponseSchema.safeParse(data);
+
+  if (parsed.success) {
+    return parsed.data.error.message;
+  }
+
+  return '요청 처리 중 오류가 발생했습니다.';
+};
+
 const request = async <T>(
   endpoint: string,
   options: RequestInit,
@@ -25,7 +45,7 @@ const request = async <T>(
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    const res = await fetch(`${API_BASE_URL ?? ''}${endpoint}`, {
+    const res = await fetch(buildRequestUrl(endpoint), {
       headers: { 'Content-Type': 'application/json' },
       ...options,
       signal: controller.signal,
@@ -35,7 +55,7 @@ const request = async <T>(
     const data = parseResponseBody<T>(text);
 
     if (!res.ok) {
-      throw new Error('요청 처리 중 오류가 발생했습니다.');
+      throw new Error(getErrorMessage(data));
     }
 
     return data as T;
