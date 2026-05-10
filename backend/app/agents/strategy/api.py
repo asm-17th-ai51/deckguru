@@ -15,6 +15,7 @@ from app.agents.strategy.nodes.format_response import format_response
 from app.agents.strategy.state import StrategyState
 from app.schemas.api import RecommendationResponse
 from app.schemas.shared import PlayStyle, Tier
+from app.settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ async def run_strategy_agent(
     patch_version: str | None = None,
     timeout_s: float = 25.0,
 ) -> RecommendationResponse:
-    patch_version = patch_version or os.getenv("PATCH_VERSION", "14.9")
+    patch_version = patch_version or os.getenv("PATCH_VERSION", settings.patch_version)
 
     initial = StrategyState(
         request_id=request_id,

@@ -14,6 +14,7 @@ fallback 전략:
 from __future__ import annotations
 
 import json
+import os
 import re
 
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -189,6 +190,15 @@ def fallback_plan(state: ResearchState) -> PlanDecision:
     return _fallback_plan(state)
 
 
+def _llm_planner_enabled() -> bool:
+    """LLM planner는 명시적으로 켰을 때만 사용한다.
+
+    Live Research의 핵심은 외부 출처 확인이다. 기본 경로에서는 제한된 요청
+    예산을 structured planning LLM보다 검색/fetch에 우선 배정한다.
+    """
+    return os.getenv("RESEARCH_LLM_PLANNER_ENABLED", "false").lower() == "true"
+
+
 def _state_summary(state: ResearchState) -> str:
     """LLM planner에 넘길 최소 상태 요약.
 
@@ -217,6 +227,9 @@ def _state_summary(state: ResearchState) -> str:
 
 
 async def plan_next_action(state: ResearchState) -> PlanDecision:
+    if not _llm_planner_enabled():
+        return _fallback_plan(state)
+
     try:
         result = await call_structured(
             role="research",

@@ -6,7 +6,7 @@
 역할:
 - StrategyState에서 question/keywords/patch_version을 꺼내 Research API에 넘긴다.
 - ResearchResult의 web_facts/sources/research_steps를 StrategyState에 병합한다.
-- 15초를 넘기면 추천 전체를 실패시키지 않고 `research_truncated` warning만 남긴다.
+- 설정된 예산을 넘기면 추천 전체를 실패시키지 않고 `research_truncated` warning만 남긴다.
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ import logging
 
 from app.agents.strategy.state import StrategyState
 from app.research.api import run_live_research
+from app.settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,8 @@ logger = logging.getLogger(__name__)
 async def live_research(state: StrategyState) -> dict:
     """Live Research 결과를 StrategyState에 병합한다."""
     state.need_live = True
+    timeout_s = max(0.5, settings.live_research_timeout_s)
+    max_steps = max(1, min(settings.live_research_max_steps, 5))
     try:
         # Research API 내부에도 timeout_s가 있지만, Strategy graph 차원에서도
         # asyncio.wait_for로 한 번 더 감싸 전체 agent timeout을 보호한다.
@@ -32,10 +35,10 @@ async def live_research(state: StrategyState) -> dict:
                 question=state.question,
                 extracted_keywords=state.extracted_keywords,
                 patch_version=state.patch_version,
-                max_steps=5,
-                timeout_s=15.0,
+                max_steps=max_steps,
+                timeout_s=timeout_s,
             ),
-            timeout=15.0,
+            timeout=timeout_s,
         )
     except asyncio.TimeoutError:
         logger.warning("live_research timeout")

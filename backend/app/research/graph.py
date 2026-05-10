@@ -53,8 +53,8 @@ def _tool_timeout(tool: str) -> float:
     더 작은 값이 사용된다.
     """
     if tool == "fetch_page":
-        return 8.5
-    return 5.5
+        return 6.0
+    return 3.5
 
 
 def _remaining(deadline: float, cap: float) -> float:

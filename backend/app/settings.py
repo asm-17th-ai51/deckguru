@@ -2,6 +2,9 @@ from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+BACKEND_ROOT = Path(__file__).resolve().parents[1]
+
+
 class Settings(BaseSettings):
     app_env: str = "local"
 
@@ -13,14 +16,18 @@ class Settings(BaseSettings):
 
     embedding_model: str = "BAAI/bge-m3"
     chroma_path: Path = Path("../data/rag/vectorstore/chroma")
-    patch_version: str = "14.9"
+    rag_min_score: float = 0.05
+    patch_version: str = "17.2"
     live_research_enabled: bool = True
+    live_research_timeout_s: float = 12.0
+    live_research_max_steps: int = 2
     demo_mode: bool = False
+    mock_strategy_agent: bool = False
     log_level: str = "INFO"
     admin_token: str = "dev-admin"
     tavily_api_key: str = ""
 
-    agent_timeout_s: float = 25.0
+    agent_timeout_s: float = 40.0
     semaphore_limit: int = 8
     rate_limit_per_min: int = 5
     rate_limit_per_hour: int = 60
@@ -29,7 +36,7 @@ class Settings(BaseSettings):
 
     sqlite_path: Path = Path("./deckguru.db")
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=BACKEND_ROOT / ".env", extra="ignore")
 
     @property
     def effective_rate_limit(self) -> str:

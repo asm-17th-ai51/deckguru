@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 
 from app.agents.strategy.state import StrategyState
-from app.rag.service import RagService, default_rag_service
+from app.rag.service import RagService, get_rag_service
 from app.schemas.shared import IndexName, RagChunk
 
 logger = logging.getLogger(__name__)
@@ -63,13 +63,14 @@ def _avg_top3(chunks: list[RagChunk]) -> float:
 async def rag_retrieve(
     state: StrategyState,
     *,
-    rag: RagService = default_rag_service,
+    rag: RagService | None = None,
 ) -> dict:
     plan = _build_plan(state)
     if not plan:
         return state.model_dump()
 
-    chunks = rag.multi_search(plan, patch_version=state.patch_version)
+    active_rag = rag or get_rag_service()
+    chunks = active_rag.multi_search(plan, patch_version=state.patch_version)
     state.rag_chunks = chunks
     state.rag_avg_score = _avg_top3(chunks)
 

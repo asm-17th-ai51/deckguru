@@ -4,10 +4,15 @@ import structlog
 from fastapi import APIRouter, HTTPException, Request, Response
 
 from app.schemas.api import ErrorDetail, RecommendationResponse, RecommendRequest
+from app.rag.service import RagUnavailableError
 from app.services.cache import cache_service
 from app.services.limiter import limiter
 from app.services.normalize import cache_key
-from app.services.strategy_invoker import run_strategy_agent
+from app.services.strategy_invoker import (
+    RecommendationFailed,
+    RecommendationTimeout,
+    run_strategy_agent,
+)
 from app.settings import settings
 
 logger = structlog.get_logger()
@@ -18,6 +23,7 @@ agent_semaphore = asyncio.Semaphore(settings.semaphore_limit)
 _ERROR_MESSAGES = {
     "agent_timeout": "응답이 너무 오래 걸려요. 다시 시도하시거나 더 짧은 질문을 입력해주세요.",
     "agent_failed": "AI 응답 생성에 실패했어요. 잠시 후 다시 시도해주세요.",
+    "rag_unavailable": "추천 근거 데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요.",
     "agent_internal": "서버 내부 오류가 발생했어요. 잠시 후 다시 시도해주세요.",
 }
 
@@ -36,6 +42,7 @@ _ERROR_MESSAGES = {
 """,
     responses={
         429: {"description": "Rate limit 초과"},
+        502: {"description": "Agent 또는 RAG 처리 실패"},
         504: {"description": "Agent 응답 시간 초과 (25s)"},
         500: {"description": "서버 내부 오류"},
     },
@@ -67,7 +74,7 @@ async def recommend(request: Request, response: Response, body: RecommendRequest
                 ),
                 timeout=settings.agent_timeout_s,
             )
-        except asyncio.TimeoutError:
+        except (asyncio.TimeoutError, RecommendationTimeout):
             raise HTTPException(
                 status_code=504,
                 detail=ErrorDetail(
@@ -76,8 +83,28 @@ async def recommend(request: Request, response: Response, body: RecommendRequest
                     request_id=req_id,
                 ).model_dump(),
             )
+        except RecommendationFailed as exc:
+            logger.warning("agent_failed", request_id=req_id, error=str(exc))
+            raise HTTPException(
+                status_code=502,
+                detail=ErrorDetail(
+                    code="agent_failed",
+                    message=_ERROR_MESSAGES["agent_failed"],
+                    request_id=req_id,
+                ).model_dump(),
+            )
+        except RagUnavailableError as exc:
+            logger.warning("rag_unavailable", request_id=req_id, error=str(exc))
+            raise HTTPException(
+                status_code=502,
+                detail=ErrorDetail(
+                    code="rag_unavailable",
+                    message=_ERROR_MESSAGES["rag_unavailable"],
+                    request_id=req_id,
+                ).model_dump(),
+            )
         except Exception as exc:
-            logger.error("agent_error", request_id=req_id, error=str(exc))
+            logger.error("agent_error", request_id=req_id, error=str(exc), exc_info=True)
             raise HTTPException(
                 status_code=500,
                 detail=ErrorDetail(

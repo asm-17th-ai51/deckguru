@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from urllib.parse import unquote, urlparse
 
@@ -272,6 +273,15 @@ def fallback_extract(state: ResearchState) -> list[WebFact]:
     return _fallback_extract(state)
 
 
+def _llm_extractor_enabled() -> bool:
+    """LLM extractor는 명시적으로 켰을 때만 사용한다.
+
+    기본 Live Research는 관찰한 웹 문서와 검색 snippet에서 deterministic fact를
+    추출해 요청 시간을 예측 가능하게 유지한다.
+    """
+    return os.getenv("RESEARCH_LLM_EXTRACT_ENABLED", "false").lower() == "true"
+
+
 def _cap_single_source_confidence(facts: list[WebFact]) -> list[WebFact]:
     """출처가 하나뿐이면 confidence를 제한한다."""
     distinct_sources = {str(f.source_url).rstrip("/") for f in facts}
@@ -310,6 +320,8 @@ async def extract_facts(state: ResearchState) -> list[WebFact]:
     """누적 Observation에서 최종 WebFact 목록을 추출한다."""
     if not state.raw_observations:
         return []
+    if not _llm_extractor_enabled():
+        return _fallback_extract(state)
 
     try:
         # LLM extractor는 quote/source를 함께 반환하도록 schema로 강제한다.

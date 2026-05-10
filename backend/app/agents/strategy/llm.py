@@ -20,6 +20,8 @@ from langchain_core.messages import BaseMessage
 from langchain_upstage import ChatUpstage
 from pydantic import BaseModel, ValidationError
 
+from app.settings import settings
+
 logger = logging.getLogger(__name__)
 
 T = TypeVar("T", bound=BaseModel)
@@ -31,12 +33,19 @@ class StrategyLLMError(RuntimeError):
 
 def _model_for(role: str) -> str:
     env_key = f"UPSTAGE_MODEL_{role.upper()}"
-    default = "solar-pro2" if role in ("recommend", "meta") else "solar-mini"
-    return os.getenv(env_key, default)
+    if model := os.getenv(env_key):
+        return model
+    if role == "recommend":
+        return settings.upstage_model_recommend
+    if role == "meta":
+        return settings.upstage_model_meta
+    if role == "intent":
+        return settings.upstage_model_intent
+    return "solar-mini"
 
 
 def _build_chat(role: str) -> ChatUpstage:
-    api_key = os.getenv("UPSTAGE_API_KEY")
+    api_key = os.getenv("UPSTAGE_API_KEY") or settings.upstage_api_key
     if not api_key:
         raise StrategyLLMError("UPSTAGE_API_KEY not set")
     return ChatUpstage(

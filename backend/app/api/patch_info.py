@@ -1,9 +1,9 @@
 import json
 from datetime import datetime, timezone
-from pathlib import Path
 
 from fastapi import APIRouter
 
+from app.rag.chroma_service import resolve_chroma_path
 from app.settings import settings
 
 router = APIRouter()
@@ -15,7 +15,7 @@ _PATCH_MANIFEST_CANDIDATES = [
 
 
 def _load_last_updated() -> datetime | None:
-    processed_dir = Path(settings.chroma_path).parent.parent / "processed"
+    processed_dir = resolve_chroma_path(settings.chroma_path).parent.parent / "processed"
     for candidate in _PATCH_MANIFEST_CANDIDATES:
         manifest = processed_dir / candidate
         if manifest.exists():

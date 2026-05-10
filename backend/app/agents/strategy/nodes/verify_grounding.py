@@ -14,7 +14,7 @@ import logging
 import re
 
 from app.agents.strategy.state import StrategyState
-from app.rag.service import RagService, default_rag_service
+from app.rag.service import RagService, get_rag_service
 from app.schemas.shared import DeckRecommendation, RagChunk, WebFact
 
 logger = logging.getLogger(__name__)
@@ -89,14 +89,37 @@ def _filter_deck(
     return deck
 
 
+def _fallback_whitelist_from_chunks(
+    rag_chunks: list[RagChunk],
+) -> tuple[set[str], set[str]]:
+    units: set[str] = set()
+    items: set[str] = set()
+    for chunk in rag_chunks:
+        if chunk.index != "deck_templates":
+            continue
+        core_units = chunk.metadata.get("core_units")
+        key_items = chunk.metadata.get("key_items")
+        if isinstance(core_units, list):
+            units.update(str(unit) for unit in core_units if unit)
+        if isinstance(key_items, list):
+            items.update(str(item) for item in key_items if item)
+    return units, items
+
+
 def verify_grounding(
     state: StrategyState,
     *,
-    rag: RagService = default_rag_service,
+    rag: RagService | None = None,
 ) -> dict:
-    whitelist = rag.get_whitelist(state.patch_version)
+    active_rag = rag or get_rag_service()
+    whitelist = active_rag.get_whitelist(state.patch_version)
     units_wl: set[str] = whitelist.get("units", set())
     items_wl: set[str] = whitelist.get("items", set())
+    fallback_units, fallback_items = _fallback_whitelist_from_chunks(state.rag_chunks)
+    if not units_wl:
+        units_wl = fallback_units
+    if not items_wl:
+        items_wl = fallback_items
 
     sources_blob = _all_quotes(state.rag_chunks, state.web_facts, state.patch_version)
 
