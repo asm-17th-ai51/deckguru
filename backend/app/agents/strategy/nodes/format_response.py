@@ -8,10 +8,16 @@ intent=other 단축 경로에서도 단일 진입점 보장.
 from __future__ import annotations
 
 import os
+import time
 from datetime import datetime, timezone
 
+import structlog
+
 from app.agents.strategy.state import StrategyState
+from app.observability import elapsed_ms
 from app.schemas.api import DebugInfo, RecommendationResponse
+
+logger = structlog.get_logger()
 
 OTHER_MESSAGE = (
     "이 질문은 DeckGuru의 지원 범위(덱 추천 / 운영법 / 아이템 피벗 / 패치 요약) 밖이에요. "
@@ -75,4 +81,16 @@ async def format_response_node(state: StrategyState) -> dict:
 
     여기서는 state를 그대로 반환 (graph 종단). 실제 변환은 format_response().
     """
+    started = time.perf_counter()
+    state.node_latencies_ms["format_response"] = elapsed_ms(started)
+    logger.info(
+        "response_ready",
+        request_id=state.request_id,
+        stage="response",
+        intent=state.intent or "other",
+        decks=len(state.final_decks) if state.intent != "other" else 0,
+        confidence=state.confidence if state.final_decks else "low",
+        warnings=len(state.warnings),
+        latency_ms=state.node_latencies_ms["format_response"],
+    )
     return state.model_dump()

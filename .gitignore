@@ -79,3 +79,6 @@ logs/
 
 # --- Lazyweb 산출물 ---
 .lazyweb
+
+# --- Model ---
+models/

@@ -10,14 +10,17 @@
 
 from __future__ import annotations
 
-import logging
 import re
+import time
+
+import structlog
 
 from app.agents.strategy.state import StrategyState
-from app.rag.service import RagService, default_rag_service
+from app.observability import elapsed_ms
+from app.rag.service import RagService, get_rag_service
 from app.schemas.shared import DeckRecommendation, RagChunk, WebFact
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 FORBIDDEN_RE = re.compile(
     r"(1\s*등\s*보장|승률\s*100\s*%?|무조건|확실히|반드시\s*1\s*등)"
@@ -89,14 +92,46 @@ def _filter_deck(
     return deck
 
 
+def _fallback_whitelist_from_chunks(
+    rag_chunks: list[RagChunk],
+) -> tuple[set[str], set[str]]:
+    units: set[str] = set()
+    items: set[str] = set()
+    for chunk in rag_chunks:
+        if chunk.index != "deck_templates":
+            continue
+        core_units = chunk.metadata.get("core_units")
+        key_items = chunk.metadata.get("key_items")
+        if isinstance(core_units, list):
+            units.update(str(unit) for unit in core_units if unit)
+        if isinstance(key_items, list):
+            items.update(str(item) for item in key_items if item)
+    return units, items
+
+
 def verify_grounding(
     state: StrategyState,
     *,
-    rag: RagService = default_rag_service,
+    rag: RagService | None = None,
 ) -> dict:
-    whitelist = rag.get_whitelist(state.patch_version)
+    started = time.perf_counter()
+    before_count = len(state.final_decks)
+    logger.info(
+        "grounding_start",
+        request_id=state.request_id,
+        stage="grounding",
+        decks=before_count,
+        patch_version=state.patch_version,
+    )
+    active_rag = rag or get_rag_service()
+    whitelist = active_rag.get_whitelist(state.patch_version)
     units_wl: set[str] = whitelist.get("units", set())
     items_wl: set[str] = whitelist.get("items", set())
+    fallback_units, fallback_items = _fallback_whitelist_from_chunks(state.rag_chunks)
+    if not units_wl:
+        units_wl = fallback_units
+    if not items_wl:
+        items_wl = fallback_items
 
     sources_blob = _all_quotes(state.rag_chunks, state.web_facts, state.patch_version)
 
@@ -130,10 +165,17 @@ def verify_grounding(
     if len(state.sources) == 1:
         state.warnings.append("single_source")
 
-    logger.debug(
-        "verify_grounding kept=%d/%d confidence=%s",
-        len(filtered),
-        len(filtered) + sum(1 for w in state.warnings if w.startswith("deck_filtered_")),
-        state.confidence,
+    state.node_latencies_ms["verify_grounding"] = elapsed_ms(started)
+    logger.info(
+        "grounding_done",
+        request_id=state.request_id,
+        stage="grounding",
+        kept=len(filtered),
+        filtered=before_count - len(filtered),
+        confidence=state.confidence,
+        units_whitelist=len(units_wl),
+        items_whitelist=len(items_wl),
+        warnings=len(state.warnings),
+        latency_ms=state.node_latencies_ms["verify_grounding"],
     )
     return state.model_dump()

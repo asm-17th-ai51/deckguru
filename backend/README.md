@@ -66,11 +66,14 @@ backend/
 │       ├── cache.py             # L1 LRU (in-memory) + L2 SQLite 캐시
 │       ├── feedback_store.py    # SQLite feedback 테이블 저장
 │       ├── limiter.py           # slowapi Limiter 싱글턴
-│       └── strategy_invoker.py  # ★ run_strategy_agent() — 현재 Mock, 교체 지점
+│       └── strategy_invoker.py  # run_strategy_agent() — Strategy Agent 호출 경계
+├── scripts/
+│   ├── build_rag.py             # processed JSONL → ChromaDB 빌드/갱신
+│   └── manual_live_research.py  # Live Research 수동 점검
 ├── tests/
-│   ├── conftest.py              # AsyncClient fixture (임시 DB, Mock Agent)
+│   ├── conftest.py              # AsyncClient fixture (임시 DB, Agent monkeypatch)
 │   ├── fixtures/mock_responses/
-│   │   └── recommend_deck_gold_stable.json  # Mock 응답 샘플
+│   │   └── recommend_deck_gold_stable.json  # 명시적 mock fixture
 │   ├── test_recommend.py        # /api/recommend 통합 테스트
 │   ├── test_cache.py            # 캐시 키 정규화 단위 테스트
 │   └── test_health.py           # /api/health, /api/patch-info, /api/example-questions
@@ -94,8 +97,7 @@ backend/
 cd backend
 
 # pip 사용 시
-pip install fastapi uvicorn pydantic pydantic-settings structlog \
-            slowapi cachetools aiosqlite httpx pytest pytest-asyncio
+pip install -e ".[backend,dev,rag]"
 
 # uv 사용 시 (권장)
 uv sync
@@ -106,6 +108,36 @@ uv sync
 ```bash
 cp .env.example .env
 # .env 파일 편집 — 최소한 PATCH_VERSION 확인
+```
+
+### RAG 인덱스 빌드
+
+`/api/recommend` 기본 경로는 Chroma-backed RAG를 사용합니다. 로컬 Chroma 산출물이 없으면 `/api/recommend`는 `502 rag_unavailable`을 반환할 수 있습니다.
+
+처음 로컬에서 빌드할 때는 BGE-M3 임베딩 모델이 필요합니다. 네트워크가 불안정하면 모델을 먼저 로컬 디렉토리에 내려받은 뒤 `EMBEDDING_MODEL`로 경로를 지정합니다.
+
+```bash
+cd /Users/dongwoo/Projects/deckguru/backend
+.venv/bin/python -m pip install -e ".[backend,dev,rag]"
+
+mkdir -p ../models
+.venv/bin/hf download BAAI/bge-m3 --local-dir ../models/bge-m3
+```
+
+다운로드 후에는 전체 모델 디렉토리를 `EMBEDDING_MODEL`에 지정하고 Chroma 인덱스를 빌드합니다.
+
+```bash
+cd /Users/dongwoo/Projects/deckguru
+EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3 \
+  backend/.venv/bin/python -m backend.scripts.build_rag build --patch 17.2
+```
+
+빌드가 끝나면 backend를 같은 모델 경로로 실행합니다.
+
+```bash
+cd /Users/dongwoo/Projects/deckguru/backend
+EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3 \
+  uvicorn app.main:app --reload --port 8000
 ```
 
 ### 서버 실행
@@ -139,12 +171,25 @@ http://localhost:8000/docs
 | `APP_ENV` | `local` | `local` / `staging` / `production` |
 | `PATCH_VERSION` | `17.2` | **현재 패치 버전** — RAG 검색 필터에 사용 |
 | `CHROMA_PATH` | `../data/rag/vectorstore/chroma` | ChromaDB 경로 (Agent-2 빌드 결과물) |
-| `LLM_API_KEY` | _(없음)_ | OpenAI API 키 (Agent-1 연동 후 필요) |
-| `LLM_MODEL` | `gpt-4o-mini` | 추천·메타 분석용 LLM 모델 |
+| `EMBEDDING_MODEL` | `BAAI/bge-m3` | BGE-M3 모델명 또는 로컬 모델 디렉토리 |
+| `RAG_MIN_SCORE` | `0.05` | RAG chunk 유사도 최소 점수 |
+| `UPSTAGE_API_KEY` | _(없음)_ | Strategy Agent LLM 호출에 필요한 Upstage API 키 |
+| `UPSTAGE_MODEL_RECOMMEND` | `solar-pro2` | 추천 생성 모델 |
+| `UPSTAGE_MODEL_META` | `solar-pro2` | 메타 요약 모델 |
+| `UPSTAGE_MODEL_INTENT` | `solar-mini` | 의도 분류 모델 |
+| `LIVE_RESEARCH_ENABLED` | `true` | 최신성 보강용 Live Research 사용 여부 |
+| `LIVE_RESEARCH_TIMEOUT_S` | `12` | Live Research가 검색/fetch까지 수행할 수 있도록 배정한 초 단위 예산 |
+| `LIVE_RESEARCH_MAX_STEPS` | `2` | Live Research에서 실행할 최대 검색/페이지 확인 단계 수 |
+| `RESEARCH_LLM_PLANNER_ENABLED` | `false` | `true` 시 검색 계획을 LLM structured output으로 생성 |
+| `RESEARCH_LLM_EXTRACT_ENABLED` | `false` | `true` 시 fact 추출을 LLM structured output으로 생성 |
+| `AGENT_TIMEOUT_S` | `40` | `/api/recommend` 전체 Strategy Agent timeout |
 | `ADMIN_TOKEN` | `dev-admin` | `/api/_internal/cache-stats` 접근 토큰 |
 | `DEMO_MODE` | `false` | `true` 시 Rate Limit 완화 (100/min) |
-| `TAVILY_API_KEY` | _(없음)_ | Live Research용 (Agent-3 연동 후 필요) |
+| `MOCK_STRATEGY_AGENT` | `false` | `true`일 때만 fixture 기반 추천 응답 사용 |
+| `TAVILY_API_KEY` | _(없음)_ | Live Research용 API 키 |
 | `LOG_LEVEL` | `INFO` | `DEBUG` / `INFO` / `WARNING` |
+| `APP_LOG_FORMAT` | `console` | `console`이면 로컬 개발용 pretty 로그, `json`이면 JSON 로그 |
+| `APP_LOG_COLORS` | `true` | 콘솔 로그 ANSI color 사용 여부 |
 
 ---
 
@@ -234,21 +279,23 @@ X-Patch-Version: 17.2
 |------|------|-----------|
 | 422 | `validation_error` | 필드 누락 또는 형식 오류 |
 | 429 | `rate_limited` | IP당 분당 5회 초과 |
-| 500 | `agent_internal` | Agent 내부 예외 |
+| 502 | `agent_failed` | LLM structured output/schema 실패 |
+| 502 | `rag_unavailable` | ChromaDB 미설치, collection 없음, query 실패 |
 | 504 | `agent_timeout` | 25초 초과 |
+| 500 | `agent_internal` | 예상하지 못한 내부 예외 |
 
 ---
 
 ### `GET /api/health`
 
-RAG 인덱스 상태 및 서버 업타임 반환.
+Chroma RAG collection 상태 및 서버 업타임 반환.
 
 ```json
 {
-  "status": "ok",
+  "status": "degraded",
   "patch_version": "17.2",
   "rag_chunks": {
-    "units": 60, "traits": 24, "items": 28, "augments": 92,
+    "units": 0, "traits": 0, "items": 0, "augments": 0,
     "deck_templates": 64, "playbook": 0, "patch_summary": 199, "glossary": 0
   },
   "uptime_s": 3601
@@ -264,7 +311,7 @@ RAG 인덱스 상태 및 서버 업타임 반환.
 ```json
 {
   "patch_version": "17.2",
-  "last_updated": "2025-05-04T03:00:00+00:00",
+  "last_updated": "2026-05-06T17:25:14+00:00",
   "warnings": []
 }
 ```
@@ -306,17 +353,23 @@ curl http://localhost:8000/api/_internal/cache-stats \
 ```
 POST /api/recommend
   1. RequestIdMiddleware   — uuid4 발급, X-Request-ID 헤더 설정
-  2. LoggingMiddleware     — request_start 로그 (structlog JSON)
+  2. LoggingMiddleware     — request_start 로그 (structlog console/json)
   3. Rate Limit            — IP당 5req/min (slowapi)
   4. Pydantic 검증         — tier / play_style / question
-  5. cache_key 생성        — sha256(tier|style|normalize(q)|patch)
-  6. L1 LRU 조회           — hit → 즉시 반환 (X-Cache: HIT)
-  7. L2 SQLite 조회        — hit → L1 갱신 후 반환
-  8. Semaphore(8) 획득     — 동시 Agent 호출 8개 제한
-  9. run_strategy_agent()  — asyncio.wait_for(timeout=25s)
- 10. L1 + L2 캐시 저장     — TTL 7일 (patch_version 키 포함)
- 11. 응답 반환             — X-Cache: MISS
- 12. LoggingMiddleware     — request_done 로그 (latency_ms, intent, cache)
+  5. cache_lookup          — tier / play_style / patch / question preview 로그
+  6. cache_hit             — hit → 즉시 반환 (X-Cache: HIT)
+  7. cache_miss            — miss → Semaphore(8) 획득 후 Strategy Agent 시작
+  8. Strategy Agent        — intent → RAG → live route → meta → recommend → grounding 로그
+  9. RAG                   — query plan, collection별 search hit/score/latency 로그
+ 10. Live Research         — 실행 시 step plan/observe/extract 로그
+ 11. cache_store           — L1 + L2 캐시 저장 (TTL 7일, patch_version 키 포함)
+ 12. request_done          — status_code / latency_ms / cache 로그
+```
+
+로컬에서 Uvicorn access log가 너무 시끄러우면 다음처럼 끄고 앱 flow 로그만 볼 수 있습니다.
+
+```bash
+uvicorn app.main:app --reload --port 8000 --no-access-log
 ```
 
 ---
@@ -395,8 +448,19 @@ async def run_strategy_agent(request_id, tier, play_style, question, *, patch_ve
 
 ### Agent-2 (RAG) → Backend
 
-현재 `/api/health`는 `data/rag/processed/` 경로의 JSONL 파일 개수로 인덱스 상태를 확인합니다.  
-ChromaDB 빌드 완료 후 `CHROMA_PATH`를 `.env`에 설정하면 자동 연동됩니다.
+`backend/scripts/build_rag.py`가 `data/rag/processed/`의 JSONL을 ChromaDB collection으로 빌드합니다. 현재 1차 빌드 대상은 `patch_summary`, `deck_templates`입니다.
+
+```bash
+EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3 \
+  backend/.venv/bin/python -m backend.scripts.build_rag build --patch 17.2
+
+EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3 \
+  backend/.venv/bin/python -m backend.scripts.build_rag refresh --index deck_templates --patch 17.2
+
+backend/.venv/bin/python -m backend.scripts.build_rag whitelist --patch 17.2 --out /tmp/whitelist.json
+```
+
+ChromaDB 빌드 완료 후 `CHROMA_PATH`를 `.env`에 설정하면 `/api/recommend`와 `/api/health`가 같은 collection을 참조합니다.
 
 ---
 

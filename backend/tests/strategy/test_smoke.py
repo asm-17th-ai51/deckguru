@@ -47,6 +47,27 @@ async def test_other_intent_short_circuits(mock_llm):
     assert response.confidence == "low"
 
 
+async def test_rule_fallback_overrides_false_other(monkeypatch, mock_llm):
+    from app.agents.strategy.nodes import analyze_intent as ai_mod
+    from app.agents.strategy.nodes.analyze_intent import IntentOut
+
+    async def fake_other(role, schema, messages, retries=1):
+        return IntentOut(intent="other", extracted_keywords=[])
+
+    monkeypatch.setattr(ai_mod, "call_structured", fake_other)
+
+    response = await run_strategy_agent(
+        request_id="test-rule-fallback",
+        tier="GOLD",
+        play_style="stable_top4",
+        question="오늘 기준 17.2 패치에서 최근 뜨는 덱 알려줘",
+        patch_version="17.2",
+    )
+
+    assert response.intent == "recommend_deck"
+    assert "지원 범위" not in response.meta_summary
+
+
 async def test_grounding_filters_unknown_units(mock_llm, monkeypatch):
     """recommend가 화이트리스트 외 unit을 뱉어도 verify_grounding이 제거."""
     from app.agents.strategy.nodes import recommend as rc_mod
@@ -84,6 +105,55 @@ async def test_grounding_filters_unknown_units(mock_llm, monkeypatch):
     assert response.confidence == "low"
     assert any(w.startswith("deck_filtered_") or w == "all_decks_filtered"
                for w in response.warnings)
+
+
+async def test_grounding_uses_deck_template_whitelist_when_unit_indexes_are_empty(mock_llm):
+    from app.agents.strategy.nodes.verify_grounding import verify_grounding
+    from app.agents.strategy.state import StrategyState
+    from app.rag.testing import InMemoryStubRagService
+    from app.schemas.shared import DeckRecommendation, PlaybookStep, RagChunk
+
+    state = StrategyState(
+        request_id="test-fallback",
+        patch_version="17.2",
+        tier="GOLD",
+        play_style="stable_top4",
+        question="추천해줘",
+        rag_chunks=[
+            RagChunk(
+                id="deck_template_demo",
+                index="deck_templates",
+                text="덱: 마스터 이 킨드레드",
+                metadata={
+                    "core_units": ["마스터 이", "킨드레드", "탐 켄치"],
+                    "key_items": ["구인수의 격노검"],
+                },
+                score=0.8,
+            )
+        ],
+        final_decks=[
+            DeckRecommendation(
+                name="마스터 이 킨드레드",
+                difficulty="medium",
+                core_units=["마스터 이", "킨드레드", "탐 켄치"],
+                key_items=["구인수의 격노검"],
+                augment_direction="공격 속도 계열",
+                playbook=[PlaybookStep(phase="early", instruction="강한 기물로 연승")],
+                good_conditions=["곡궁 시작"],
+                avoid_conditions=[],
+                fallback_plan="AD 캐리로 전환",
+                rationale="17.2 기준 안정적인 덱",
+            )
+        ],
+    )
+
+    class EmptyWhitelistRag(InMemoryStubRagService):
+        def get_whitelist(self, patch_version):
+            return {"units": set(), "items": set(), "traits": set(), "augments": set()}
+
+    out = verify_grounding(state, rag=EmptyWhitelistRag())
+    assert len(out["final_decks"]) == 1
+    assert "all_decks_filtered" not in out["warnings"]
 
 
 async def test_determinism(mock_llm):

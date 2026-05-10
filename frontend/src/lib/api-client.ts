@@ -5,7 +5,7 @@ const API_BASE_URL =
     ? process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL
     : process.env.NEXT_PUBLIC_API_BASE_URL;
 
-const TIMEOUT_MS = 30 * 1000;
+const TIMEOUT_MS = 45 * 1000;
 
 const trimTrailingSlash = (value: string) => value.replace(/\/+$/, '');
 

@@ -16,15 +16,38 @@ from app.services.feedback_store import feedback_store
 from app.services.limiter import limiter
 from app.settings import settings
 
-structlog.configure(
-    wrapper_class=structlog.make_filtering_bound_logger(
-        logging.getLevelName(settings.log_level)
-    ),
-    processors=[
-        structlog.processors.TimeStamper(fmt="iso"),
-        structlog.processors.JSONRenderer(),
-    ],
-)
+
+def _log_level() -> int:
+    level = logging.getLevelName(settings.log_level.upper())
+    return level if isinstance(level, int) else logging.INFO
+
+
+def _configure_logging() -> None:
+    log_format = settings.app_log_format.lower()
+    timestamp_format = "iso" if log_format == "json" else "%H:%M:%S"
+    processors = [
+        structlog.contextvars.merge_contextvars,
+        structlog.processors.add_log_level,
+        structlog.processors.TimeStamper(fmt=timestamp_format),
+        structlog.processors.StackInfoRenderer(),
+    ]
+    renderer = (
+        structlog.processors.JSONRenderer()
+        if log_format == "json"
+        else structlog.dev.ConsoleRenderer(colors=settings.app_log_colors)
+    )
+    if log_format == "json":
+        processors.append(structlog.processors.format_exc_info)
+    processors.append(renderer)
+
+    logging.basicConfig(format="%(message)s", level=_log_level())
+    structlog.configure(
+        wrapper_class=structlog.make_filtering_bound_logger(_log_level()),
+        processors=processors,
+    )
+
+
+_configure_logging()
 
 
 @asynccontextmanager

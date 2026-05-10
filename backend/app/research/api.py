@@ -18,11 +18,16 @@ from __future__ import annotations
 import os
 import time
 
+import structlog
+
+from app.observability import elapsed_ms
 from app.research.graph import run_research_loop
 from app.research.promotion_queue import enqueue_facts
 from app.research.state import ResearchResult, ResearchState
 from app.research.whitelist import domain_from_url, source_kind_for_url
 from app.schemas.shared import Source, WebFact
+
+logger = structlog.get_logger()
 
 
 def _sources_from_facts(facts: list[WebFact]) -> list[Source]:
@@ -66,7 +71,21 @@ async def run_live_research(
 ) -> ResearchResult:
     """최대 `timeout_s` 안에서 Live Research를 실행하고 결과를 반환한다."""
     started = time.perf_counter()
+    logger.info(
+        "research_api_start",
+        request_id=request_id,
+        stage="research",
+        max_steps=max_steps,
+        timeout_s=timeout_s,
+        patch_version=patch_version,
+    )
     if os.getenv("LIVE_RESEARCH_ENABLED", "true").lower() != "true":
+        logger.info(
+            "research_api_skip",
+            request_id=request_id,
+            stage="research",
+            reason="disabled_by_env",
+        )
         return ResearchResult(warnings=["live_research_disabled_by_env"])
 
     state = ResearchState(
@@ -86,6 +105,12 @@ async def run_live_research(
     except Exception as exc:
         # Strategy Agent까지 예외를 전파하면 전체 추천이 실패한다.
         # Live Research는 보조 신호이므로 경고만 남기고 RAG-only 경로를 살린다.
+        logger.warning(
+            "research_api_failed",
+            request_id=request_id,
+            stage="research",
+            error=str(exc),
+        )
         state.errors.append(f"live_research_failed: {exc}")
 
     state.sources = _sources_from_facts(state.extracted_facts)
@@ -104,7 +129,7 @@ async def run_live_research(
         state.warnings.append(f"promotion_queue_failed: {exc}")
 
     warnings = list(dict.fromkeys([*state.warnings, *state.errors]))
-    return ResearchResult(
+    result = ResearchResult(
         web_facts=state.extracted_facts,
         sources=state.sources,
         research_steps=len(state.react_log),
@@ -113,6 +138,18 @@ async def run_live_research(
         latency_ms=int((time.perf_counter() - started) * 1000),
         warnings=warnings,
     )
+    logger.info(
+        "research_api_done",
+        request_id=request_id,
+        stage="research",
+        web_facts=len(result.web_facts),
+        sources=len(result.sources),
+        steps=result.research_steps,
+        truncated=result.truncated,
+        warnings=len(result.warnings),
+        latency_ms=elapsed_ms(started),
+    )
+    return result
 
 
 __all__ = ["ResearchResult", "run_live_research"]

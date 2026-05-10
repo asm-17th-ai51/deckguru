@@ -1,5 +1,3 @@
-import pytest
-
 from app.services.normalize import cache_key, normalize_question
 
 

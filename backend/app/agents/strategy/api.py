@@ -6,17 +6,21 @@
 from __future__ import annotations
 
 import asyncio
-import logging
 import os
+import time
+
+import structlog
 
 from app.agents.strategy.graph import COMPILED_GRAPH
 from app.agents.strategy.llm import StrategyLLMError
 from app.agents.strategy.nodes.format_response import format_response
 from app.agents.strategy.state import StrategyState
+from app.observability import elapsed_ms, preview
 from app.schemas.api import RecommendationResponse
 from app.schemas.shared import PlayStyle, Tier
+from app.settings import settings
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 
 class RecommendationTimeout(TimeoutError):
@@ -39,7 +43,8 @@ async def run_strategy_agent(
     patch_version: str | None = None,
     timeout_s: float = 25.0,
 ) -> RecommendationResponse:
-    patch_version = patch_version or os.getenv("PATCH_VERSION", "14.9")
+    patch_version = patch_version or os.getenv("PATCH_VERSION", settings.patch_version)
+    started = time.perf_counter()
 
     initial = StrategyState(
         request_id=request_id,
@@ -47,6 +52,15 @@ async def run_strategy_agent(
         tier=tier,
         play_style=play_style,
         question=question,
+    )
+    logger.info(
+        "strategy_start",
+        request_id=request_id,
+        stage="strategy",
+        patch_version=patch_version,
+        tier=tier,
+        play_style=play_style,
+        question=preview(question),
     )
 
     try:
@@ -56,18 +70,44 @@ async def run_strategy_agent(
             timeout=timeout_s,
         )
     except asyncio.TimeoutError as exc:
-        logger.error("strategy_agent_timeout request_id=%s", request_id)
+        logger.error(
+            "strategy_timeout",
+            request_id=request_id,
+            stage="strategy",
+            timeout_s=timeout_s,
+            latency_ms=elapsed_ms(started),
+        )
         raise RecommendationTimeout(
             f"strategy agent exceeded {timeout_s}s"
         ) from exc
     except StrategyLLMError as exc:
         # recommend / analyze_meta / analyze_intent 의 최종 실패가 여기로 전파됨.
         # analyze_intent 는 자체 fallback이 있으니 여기로 오는 건 사실상 recommend 의 schema fail.
-        logger.error("strategy_agent_llm_failed request_id=%s err=%s", request_id, exc)
+        logger.error(
+            "strategy_llm_failed",
+            request_id=request_id,
+            stage="strategy",
+            latency_ms=elapsed_ms(started),
+            error=str(exc),
+        )
         raise RecommendationFailed(str(exc)) from exc
 
     final_state = StrategyState.model_validate(raw)
-    return format_response(final_state)
+    response = format_response(final_state)
+    logger.info(
+        "strategy_done",
+        request_id=request_id,
+        stage="strategy",
+        intent=response.intent,
+        rag_chunks=len(final_state.rag_chunks),
+        rag_avg_score=round(final_state.rag_avg_score, 3),
+        web_facts=len(final_state.web_facts),
+        decks=len(response.decks),
+        confidence=response.confidence,
+        warnings=len(response.warnings),
+        latency_ms=elapsed_ms(started),
+    )
+    return response
 
 
 __all__ = ["run_strategy_agent", "RecommendationTimeout", "RecommendationFailed"]

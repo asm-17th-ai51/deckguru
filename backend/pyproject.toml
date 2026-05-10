@@ -34,7 +34,8 @@ backend = [
     "aiosqlite>=0.20",
 ]
 rag = [
-    "chromadb>=0.5",
+    "chromadb>=1.0.0,<2.0.0",
+    "sentence-transformers>=5.0,<6.0",
 ]
 
 [tool.setuptools.packages.find]
