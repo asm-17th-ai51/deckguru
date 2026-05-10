@@ -21,14 +21,23 @@ pytestmark = pytest.mark.asyncio
 
 async def test_run_live_research_collects_facts_with_fallback_tools(monkeypatch, tmp_path):
     """LLM/API 키 없이도 검색 -> fetch -> fact 추출이 끝까지 이어지는지 검증."""
+    from app.agents.strategy import llm as llm_mod
     import app.research.graph as graph_mod
+    import app.research.nodes.extract_facts as extract_mod
+    import app.research.nodes.plan as plan_mod
 
     # 테스트는 실제 backend/data를 오염시키지 않도록 캐시와 promotion queue를
     # pytest tmp_path 아래로 격리한다.
     monkeypatch.setenv("LIVE_RESEARCH_ENABLED", "true")
     monkeypatch.delenv("UPSTAGE_API_KEY", raising=False)
+    monkeypatch.delenv("RESEARCH_LLM_PLANNER_ENABLED", raising=False)
+    monkeypatch.delenv("RESEARCH_LLM_EXTRACT_ENABLED", raising=False)
+    monkeypatch.setattr(llm_mod.settings, "upstage_api_key", "")
     monkeypatch.setenv("RESEARCH_CACHE_PATH", str(tmp_path / "cache.sqlite3"))
     monkeypatch.setenv("PROMOTION_QUEUE_PATH", str(tmp_path / "promotion_queue.jsonl"))
+
+    async def fail_if_llm_called(*args, **kwargs):
+        raise AssertionError("fallback live research should not call the research LLM")
 
     source_url = (
         "https://teamfighttactics.leagueoflegends.com/en-us/news/game-updates/"
@@ -61,6 +70,9 @@ async def test_run_live_research_collects_facts_with_fallback_tools(monkeypatch,
 
     monkeypatch.setattr(graph_mod, "web_search", fake_search)
     monkeypatch.setattr(graph_mod, "fetch_page", fake_fetch)
+    monkeypatch.setattr(llm_mod, "call_structured", fail_if_llm_called)
+    monkeypatch.setattr(plan_mod, "call_structured", fail_if_llm_called)
+    monkeypatch.setattr(extract_mod, "call_structured", fail_if_llm_called)
 
     result = await run_live_research(
         "research-test-1",

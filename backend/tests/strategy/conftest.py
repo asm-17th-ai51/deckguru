@@ -16,6 +16,13 @@ def _isolate_env(monkeypatch):
     monkeypatch.setenv("PATCH_VERSION", "14.9")
     monkeypatch.setenv("LIVE_RESEARCH_ENABLED", "false")
     monkeypatch.setenv("DEMO_MODE", "false")
+    from app.agents.strategy.nodes import rag_retrieve as rr_mod
+    from app.agents.strategy.nodes import verify_grounding as vg_mod
+    from app.rag.testing import InMemoryStubRagService
+
+    stub = InMemoryStubRagService()
+    monkeypatch.setattr(rr_mod, "get_rag_service", lambda: stub)
+    monkeypatch.setattr(vg_mod, "get_rag_service", lambda: stub)
 
 
 def _intent_stub(question: str):

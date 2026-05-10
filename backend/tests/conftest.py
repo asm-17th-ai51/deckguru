@@ -1,9 +1,7 @@
 import json
-import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 
@@ -35,9 +33,11 @@ async def client(monkeypatch, tmp_path):
 
     from app.services import cache as cache_mod
     from app.services import feedback_store as fb_mod
+    from app.services.limiter import limiter
 
     cache_mod.cache_service = cache_mod.CacheService()
     fb_mod.feedback_store = fb_mod.FeedbackStore()
+    limiter.reset()
 
     await cache_mod.cache_service.init_db()
     await fb_mod.feedback_store.init_db()
