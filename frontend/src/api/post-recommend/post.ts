@@ -15,6 +15,13 @@ import {
   mockRecommendDeckResponse,
 } from '@/mocks/recommendation';
 
+const RECOMMENDATION_LOADING_PREVIEW_DELAY_MS = 5_000;
+
+const waitForRecommendationLoadingPreview = () =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, RECOMMENDATION_LOADING_PREVIEW_DELAY_MS);
+  });
+
 const selectMockRecommendation = (question: string) => {
   if (question.includes('운영법')) {
     return mockDeckPlaystyleResponse;
@@ -31,17 +38,29 @@ export const postRecommend = async (
   input: PostRecommendRequest,
 ): Promise<PostRecommendResponse> => {
   const parsedInput = RecommendRequestSchema.parse(input);
+  const loadingPreviewDelay = waitForRecommendationLoadingPreview();
 
   if (USE_MOCK) {
-    return RecommendationResponseSchema.parse(
+    const response = RecommendationResponseSchema.parse(
       selectMockRecommendation(parsedInput.question),
     );
+
+    await loadingPreviewDelay;
+
+    return response;
   }
 
-  const response = await apiClient.post<unknown>(
-    API_URL.RECOMMEND,
-    parsedInput,
-  );
+  let response: unknown;
+
+  try {
+    response = await apiClient.post<unknown>(API_URL.RECOMMEND, parsedInput);
+  } catch (error) {
+    await loadingPreviewDelay;
+
+    throw error;
+  }
+
+  await loadingPreviewDelay;
 
   return RecommendationResponseSchema.parse(response);
 };

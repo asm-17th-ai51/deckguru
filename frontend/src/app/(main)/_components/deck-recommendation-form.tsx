@@ -1,5 +1,6 @@
 import type { RefObject, SubmitEvent } from 'react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -70,12 +71,13 @@ export function DeckRecommendationForm({
   return (
     <form
       className={`${MAIN_PANEL_CLASS_NAME} mx-auto w-full max-w-3xl overflow-hidden`}
+      aria-busy={isSubmitting}
       onSubmit={onSubmit}>
       <div className="flex flex-col gap-3 border-b-4 border-border bg-muted/20 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <MainSectionEyebrow icon={CrosshairIcon}>추천 조건</MainSectionEyebrow>
-        <span className="w-fit border-2 border-primary/70 bg-primary/15 px-2 py-1 font-galmuri11 text-[10px] font-bold text-primary">
+        <Badge className="h-9 w-fit border-2 border-primary/70 bg-primary/15 font-galmuri11 text-[10px] font-bold text-primary">
           PATCH-ADAPTIVE
-        </span>
+        </Badge>
       </div>
       <div className="flex flex-col gap-4 p-5 sm:p-6">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -88,11 +90,12 @@ export function DeckRecommendationForm({
             <Select<Tier>
               name="tier"
               value={tier}
+              disabled={isSubmitting}
               onValueChange={(value) => onTierChange(value)}>
               <SelectTrigger
                 id="deck-recommendation-tier"
                 type="button"
-                className="h-12 w-full border-2 bg-background/80 font-galmuri11 text-sm"
+                className="h-11 w-full border-2 bg-background/80 font-galmuri11 text-sm"
                 aria-label="티어 선택">
                 <SelectValue
                   className={tier === null ? 'text-muted-foreground' : ''}>
@@ -121,11 +124,12 @@ export function DeckRecommendationForm({
             <Select<PlayStyle>
               name="play_style"
               value={playStyle}
+              disabled={isSubmitting}
               onValueChange={(value) => onPlayStyleChange(value)}>
               <SelectTrigger
                 id="deck-recommendation-play-style"
                 type="button"
-                className="h-12 w-full border-2 bg-background/80 font-galmuri11 text-sm"
+                className="h-11 w-full border-2 bg-background/80 font-galmuri11 text-sm"
                 aria-label="플레이 스타일 선택">
                 <SelectValue
                   className={playStyle === null ? 'text-muted-foreground' : ''}>
@@ -158,9 +162,10 @@ export function DeckRecommendationForm({
               id="deck-recommendation-query"
               type="search"
               placeholder="어떤 덱으로 플레이하고 싶으신가요?"
-              className="h-12 border-2 bg-background/80 font-galmuri11 text-sm"
+              className="h-11 border-2 bg-background/80 font-galmuri11 text-sm"
               value={query}
               onChange={(event) => onQueryChange(event.target.value)}
+              disabled={isSubmitting}
               autoComplete="off"
               aria-label="덱 추천을 위한 플레이 스타일 검색어"
               aria-invalid={submitErrorMessage !== null}
@@ -180,16 +185,12 @@ export function DeckRecommendationForm({
               }>
               <Button
                 type="submit"
-                disabled={isSubmitDisabled}
-                className="h-12 w-full gap-2 border-2 border-primary px-5 font-galmuri11 text-sm font-bold shadow-[4px_4px_0_0_rgb(0_0_0/0.45)] sm:w-auto"
+                disabled={isSubmitDisabled || isSubmitting}
+                className="h-11 w-full gap-2 border-2 border-primary px-5 font-galmuri11 text-sm font-bold shadow-[4px_4px_0_0_rgb(0_0_0/0.45)] sm:w-auto"
                 aria-busy={isSubmitting}
                 aria-label="덱 추천 검색하기">
-                <GameControllerIcon
-                  aria-hidden
-                  className="size-4"
-                  weight="bold"
-                />
-                <span>{isSubmitting ? 'LOADING...' : 'GURU!'}</span>
+                <GameControllerIcon aria-hidden weight="bold" />
+                <span>GURU!</span>
               </Button>
             </m.div>
           </div>

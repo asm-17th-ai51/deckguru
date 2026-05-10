@@ -15,8 +15,8 @@ export function RecommendationResultView({
   recommendation,
 }: RecommendationResultViewProps) {
   return (
-    <main className="pixel-background relative isolate min-h-dvh w-full overflow-x-hidden px-4 py-6 text-foreground sm:px-6 lg:px-8">
-      <section className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-6 pb-12">
+    <main className="pixel-background relative isolate min-h-dvh w-full overflow-x-hidden px-4 py-6 text-foreground sm:px-8">
+      <section className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-6">
         <ResultHeader recommendation={recommendation} />
         <MetaBrief recommendation={recommendation} />
         <RecommendationDecksSection decks={recommendation.decks} />
