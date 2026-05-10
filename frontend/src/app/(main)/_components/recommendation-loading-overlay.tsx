@@ -1,5 +1,7 @@
 'use client';
 
+import { createPortal } from 'react-dom';
+
 import { m } from 'motion/react';
 
 const loadingSteps = [
@@ -9,7 +11,13 @@ const loadingSteps = [
 ] as const;
 
 export function RecommendationLoadingOverlay() {
-  return (
+  const portalRoot = typeof document === 'undefined' ? null : document.body;
+
+  if (!portalRoot) {
+    return null;
+  }
+
+  return createPortal(
     <m.div
       role="status"
       aria-live="polite"
@@ -70,6 +78,7 @@ export function RecommendationLoadingOverlay() {
           </ul>
         </div>
       </m.div>
-    </m.div>
+    </m.div>,
+    portalRoot,
   );
 }

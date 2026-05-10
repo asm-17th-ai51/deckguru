@@ -22,16 +22,22 @@ export function useDeckRecommendationForm() {
   const [query, setQuery] = useState('');
   const [tier, setTier] = useState<Tier | null>(null);
   const [playStyle, setPlayStyle] = useState<PlayStyle | null>(null);
+  const [isNavigatingToResult, setIsNavigatingToResult] = useState(false);
   const recommendationMutation = usePostRecommendMutation({
     onSuccess: (response) => {
+      setIsNavigatingToResult(true);
       router.push(APP_PATH.RECOMMENDATION_RESULT(response.request_id));
     },
+    onError: () => {
+      setIsNavigatingToResult(false);
+    },
   });
+  const isSubmitting = recommendationMutation.isPending || isNavigatingToResult;
   const isSubmitDisabled =
     query.trim().length === 0 ||
     tier === null ||
     playStyle === null ||
-    recommendationMutation.isPending;
+    isSubmitting;
   const submitErrorMessage = recommendationMutation.isError
     ? getSubmitErrorMessage(recommendationMutation.error)
     : null;
@@ -51,12 +57,7 @@ export function useDeckRecommendationForm() {
 
     const trimmedQuery = query.trim();
 
-    if (
-      !trimmedQuery ||
-      tier === null ||
-      playStyle === null ||
-      recommendationMutation.isPending
-    ) {
+    if (!trimmedQuery || tier === null || playStyle === null || isSubmitting) {
       return;
     }
 
@@ -73,7 +74,7 @@ export function useDeckRecommendationForm() {
     tier,
     playStyle,
     isSubmitDisabled,
-    isSubmitting: recommendationMutation.isPending,
+    isSubmitting,
     submitErrorMessage,
     setQuery,
     setTier,
