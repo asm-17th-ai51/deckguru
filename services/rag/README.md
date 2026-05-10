@@ -28,7 +28,7 @@ services/rag/
     storage/
 ```
 
-Canonical spec: `03-agent-rag-spec.md`, `07-data-contracts.md`
+Canonical spec: `../../docs/specs/03-agent-rag-spec.md`, `../../docs/specs/07-data-contracts.md`
 
 ## ChromaDB
 
