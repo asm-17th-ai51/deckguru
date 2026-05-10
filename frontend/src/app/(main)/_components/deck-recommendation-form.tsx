@@ -198,7 +198,7 @@ export function DeckRecommendationForm({
         {submitErrorMessage ? (
           <p
             role="alert"
-            className="border-2 border-destructive/60 bg-destructive/10 px-3 py-2 text-center text-xs font-bold text-destructive sm:text-left">
+            className="border-2 h-11 inline-flex items-center border-destructive/60 bg-destructive/10 px-3 py-2 text-center text-sm font-bold text-destructive sm:text-left">
             {submitErrorMessage}
           </p>
         ) : null}
