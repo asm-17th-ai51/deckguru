@@ -4,6 +4,7 @@ import { BrandMark } from '@/app/(main)/_components/brand-mark';
 import { DeckRecommendationForm } from '@/app/(main)/_components/deck-recommendation-form';
 import { ExampleQuestionChips } from '@/app/(main)/_components/example-question-chips';
 import { HeroCopy } from '@/app/(main)/_components/hero-copy';
+import { RecommendationLoadingOverlay } from '@/app/(main)/_components/recommendation-loading-overlay';
 import { EXAMPLE_QUESTIONS } from '@/app/(main)/_constants/example-questions';
 import { useDeckRecommendationForm } from '@/app/(main)/_hooks/use-deck-recommendation-form';
 
@@ -24,8 +25,9 @@ export function MainHero() {
   } = useDeckRecommendationForm();
 
   return (
-    <section className="relative z-10 mx-auto flex w-full max-w-3xl flex-col gap-6 pt-24 pb-10 sm:pt-20 lg:pt-16">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+    <section className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center gap-6 p-4 pb-8 sm:-mt-16 sm:px-6 sm:py-0">
+      {isSubmitting ? <RecommendationLoadingOverlay /> : null}
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <BrandMark />
         <HeroCopy />
       </div>
@@ -46,6 +48,7 @@ export function MainHero() {
         />
         <ExampleQuestionChips
           questions={EXAMPLE_QUESTIONS}
+          isDisabled={isSubmitting}
           onQuestionClick={handleExampleQuestionClick}
         />
       </div>

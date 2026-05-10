@@ -188,7 +188,7 @@ function ChipList({
         <li key={item}>
           <Badge
             variant="outline"
-            className={`h-auto max-w-full border-2 px-2.5 py-1.5 text-xs leading-5 break-keep whitespace-normal ${
+            className={`h-9 max-w-full border-2 px-2.5 py-1.5 text-xs leading-5 break-keep whitespace-normal ${
               tone === 'primary'
                 ? 'border-primary/70 bg-primary/15 text-primary'
                 : 'border-border bg-muted/40 text-foreground'
@@ -212,7 +212,7 @@ function PhaseStep({
   const Icon = config.icon;
 
   return (
-    <div className="min-w-0 bg-muted/25 px-3 py-2.5">
+    <div className="min-w-0 bg-muted/25 px-3 py-2.5 border-l-4">
       <div className="mb-2 flex items-center gap-1.5 font-galmuri11 text-[10px] font-bold">
         <Icon
           aria-hidden
