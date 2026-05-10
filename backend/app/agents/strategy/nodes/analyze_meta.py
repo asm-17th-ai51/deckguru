@@ -7,17 +7,19 @@ LLM(T=0, structured)로 메타 한 단락 요약 + 후보 덱(≤5) 추출.
 from __future__ import annotations
 
 import json
-import logging
+import time
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
+import structlog
 
 from app.agents.strategy.llm import StrategyLLMError, call_structured
 from app.agents.strategy.prompts import load_text
 from app.agents.strategy.state import StrategyState
+from app.observability import elapsed_ms
 from app.schemas.shared import DeckDraft, RagChunk, WebFact
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 
 class MetaOut(BaseModel):
@@ -44,9 +46,25 @@ def _serialize_web_facts(facts: list[WebFact]) -> str:
 
 
 async def analyze_meta(state: StrategyState) -> dict:
+    started = time.perf_counter()
     if state.intent in (None, "other"):
+        state.node_latencies_ms["analyze_meta"] = elapsed_ms(started)
+        logger.info(
+            "meta_skip",
+            request_id=state.request_id,
+            stage="meta",
+            reason="unsupported_intent",
+            latency_ms=state.node_latencies_ms["analyze_meta"],
+        )
         return state.model_dump()
 
+    logger.info(
+        "meta_start",
+        request_id=state.request_id,
+        stage="meta",
+        rag_chunks=len(state.rag_chunks),
+        web_facts=len(state.web_facts),
+    )
     system = load_text("meta").format(patch_version=state.patch_version)
     human = (
         f"[rag_chunks]\n{_serialize_chunks(state.rag_chunks)}\n\n"
@@ -65,8 +83,22 @@ async def analyze_meta(state: StrategyState) -> dict:
         state.meta_summary = result.meta_summary
         state.candidate_decks = result.candidate_decks
     except StrategyLLMError as exc:
-        logger.warning("analyze_meta failed: %s", exc)
+        logger.warning(
+            "meta_failed",
+            request_id=state.request_id,
+            stage="meta",
+            error=str(exc),
+        )
         state.errors.append(f"analyze_meta_failed: {exc}")
         # meta 없이도 recommend가 RAG/web만으로 fallback 가능 — 빈 값 유지
 
+    state.node_latencies_ms["analyze_meta"] = elapsed_ms(started)
+    logger.info(
+        "meta_done",
+        request_id=state.request_id,
+        stage="meta",
+        candidates=len(state.candidate_decks),
+        has_summary=bool(state.meta_summary),
+        latency_ms=state.node_latencies_ms["analyze_meta"],
+    )
     return state.model_dump()

@@ -188,6 +188,8 @@ http://localhost:8000/docs
 | `MOCK_STRATEGY_AGENT` | `false` | `true`일 때만 fixture 기반 추천 응답 사용 |
 | `TAVILY_API_KEY` | _(없음)_ | Live Research용 API 키 |
 | `LOG_LEVEL` | `INFO` | `DEBUG` / `INFO` / `WARNING` |
+| `APP_LOG_FORMAT` | `console` | `console`이면 로컬 개발용 pretty 로그, `json`이면 JSON 로그 |
+| `APP_LOG_COLORS` | `true` | 콘솔 로그 ANSI color 사용 여부 |
 
 ---
 
@@ -351,17 +353,23 @@ curl http://localhost:8000/api/_internal/cache-stats \
 ```
 POST /api/recommend
   1. RequestIdMiddleware   — uuid4 발급, X-Request-ID 헤더 설정
-  2. LoggingMiddleware     — request_start 로그 (structlog JSON)
+  2. LoggingMiddleware     — request_start 로그 (structlog console/json)
   3. Rate Limit            — IP당 5req/min (slowapi)
   4. Pydantic 검증         — tier / play_style / question
-  5. cache_key 생성        — sha256(tier|style|normalize(q)|patch)
-  6. L1 LRU 조회           — hit → 즉시 반환 (X-Cache: HIT)
-  7. L2 SQLite 조회        — hit → L1 갱신 후 반환
-  8. Semaphore(8) 획득     — 동시 Agent 호출 8개 제한
-  9. run_strategy_agent()  — asyncio.wait_for(timeout=25s)
- 10. L1 + L2 캐시 저장     — TTL 7일 (patch_version 키 포함)
- 11. 응답 반환             — X-Cache: MISS
- 12. LoggingMiddleware     — request_done 로그 (latency_ms, intent, cache)
+  5. cache_lookup          — tier / play_style / patch / question preview 로그
+  6. cache_hit             — hit → 즉시 반환 (X-Cache: HIT)
+  7. cache_miss            — miss → Semaphore(8) 획득 후 Strategy Agent 시작
+  8. Strategy Agent        — intent → RAG → live route → meta → recommend → grounding 로그
+  9. RAG                   — query plan, collection별 search hit/score/latency 로그
+ 10. Live Research         — 실행 시 step plan/observe/extract 로그
+ 11. cache_store           — L1 + L2 캐시 저장 (TTL 7일, patch_version 키 포함)
+ 12. request_done          — status_code / latency_ms / cache 로그
+```
+
+로컬에서 Uvicorn access log가 너무 시끄러우면 다음처럼 끄고 앱 flow 로그만 볼 수 있습니다.
+
+```bash
+uvicorn app.main:app --reload --port 8000 --no-access-log
 ```
 
 ---

@@ -8,10 +8,15 @@ from collections import OrderedDict
 from pathlib import Path
 from typing import Any
 
+import structlog
+
+from app.observability import elapsed_ms, preview
 from app.rag.filters import merge_where, patch_where
 from app.rag.service import RagUnavailableError
 from app.schemas.shared import IndexName, RagChunk
 from app.settings import settings
+
+logger = structlog.get_logger()
 
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
 
@@ -61,6 +66,12 @@ class BGEM3Embedding:
 
     def _load_model(self) -> Any:
         if self._model is None:
+            started = time.perf_counter()
+            logger.info(
+                "embedding_model_load_start",
+                stage="rag",
+                model=self.model_name,
+            )
             try:
                 from sentence_transformers import SentenceTransformer
             except ImportError as exc:
@@ -76,6 +87,12 @@ class BGEM3Embedding:
                     f"failed to load embedding model {self.model_name}. "
                     "Ensure the model exists in the local cache or network access is available."
                 ) from exc
+            logger.info(
+                "embedding_model_load_done",
+                stage="rag",
+                model=self.model_name,
+                latency_ms=elapsed_ms(started),
+            )
         return self._model
 
 
@@ -107,20 +124,52 @@ class ChromaRagService:
         patch_version: str,
         where: dict | None = None,
     ) -> list[RagChunk]:
-        collection = self._get_collection(index, missing_is_empty=False)
+        started = time.perf_counter()
+        logger.info(
+            "rag_search_start",
+            stage="rag",
+            index=index,
+            k=k,
+            patch_version=patch_version,
+            query=preview(query, limit=64),
+        )
         try:
+            collection = self._get_collection(index, missing_is_empty=False)
             result = collection.query(
                 query_embeddings=[self.embedder.embed(query)],
                 n_results=max(k * 5, k),
                 where=merge_where(where, patch_where(patch_version)),
                 include=["documents", "metadatas", "distances"],
             )
-        except RagUnavailableError:
+        except RagUnavailableError as exc:
+            logger.warning(
+                "rag_search_unavailable",
+                stage="rag",
+                index=index,
+                latency_ms=elapsed_ms(started),
+                error=str(exc),
+            )
             raise
         except Exception as exc:
+            logger.warning(
+                "rag_search_failed",
+                stage="rag",
+                index=index,
+                latency_ms=elapsed_ms(started),
+                error=str(exc),
+            )
             raise RagUnavailableError(f"failed to query RAG collection {index}") from exc
 
-        return self._format_query_result(index, result, k)
+        chunks = self._format_query_result(index, result, k)
+        logger.info(
+            "rag_search_done",
+            stage="rag",
+            index=index,
+            hits=len(chunks),
+            top_score=round(chunks[0].score, 3) if chunks else 0.0,
+            latency_ms=elapsed_ms(started),
+        )
+        return chunks
 
     def multi_search(
         self,
@@ -128,6 +177,13 @@ class ChromaRagService:
         *,
         patch_version: str,
     ) -> list[RagChunk]:
+        started = time.perf_counter()
+        logger.info(
+            "rag_multi_search_start",
+            stage="rag",
+            collections=[index for index, _, _ in plan],
+            patch_version=patch_version,
+        )
         deduped: dict[str, RagChunk] = {}
         succeeded = False
         errors: list[str] = []
@@ -144,18 +200,42 @@ class ChromaRagService:
                 if current is None or chunk.score > current.score:
                     deduped[chunk.id] = chunk
         if not succeeded and errors:
+            logger.warning(
+                "rag_multi_search_failed",
+                stage="rag",
+                errors=errors,
+                latency_ms=elapsed_ms(started),
+            )
             raise RagUnavailableError(
                 "all planned RAG collections are unavailable: " + "; ".join(errors)
             )
-        return sorted(deduped.values(), key=lambda chunk: chunk.score, reverse=True)
+        chunks = sorted(deduped.values(), key=lambda chunk: chunk.score, reverse=True)
+        logger.info(
+            "rag_multi_search_done",
+            stage="rag",
+            chunks=len(chunks),
+            errors=len(errors),
+            latency_ms=elapsed_ms(started),
+        )
+        return chunks
 
     def get_whitelist(self, patch_version: str) -> dict[str, set[str]]:
+        started = time.perf_counter()
         now = time.time()
         cached = self._whitelist_cache.get(patch_version)
         if cached and now - cached[0] < self.whitelist_ttl_s:
             self._whitelist_cache.move_to_end(patch_version)
-            return {key: set(values) for key, values in cached[1].items()}
+            whitelist = {key: set(values) for key, values in cached[1].items()}
+            logger.info(
+                "rag_whitelist_cache_hit",
+                stage="rag",
+                patch_version=patch_version,
+                counts={key: len(values) for key, values in whitelist.items()},
+                latency_ms=elapsed_ms(started),
+            )
+            return whitelist
 
+        logger.info("rag_whitelist_load_start", stage="rag", patch_version=patch_version)
         whitelist: dict[str, set[str]] = {}
         where = patch_where(patch_version)
         for index in WHITELIST_INDICES:
@@ -178,7 +258,15 @@ class ChromaRagService:
         self._whitelist_cache.move_to_end(patch_version)
         while len(self._whitelist_cache) > self.whitelist_max_size:
             self._whitelist_cache.popitem(last=False)
-        return {key: set(values) for key, values in whitelist.items()}
+        result = {key: set(values) for key, values in whitelist.items()}
+        logger.info(
+            "rag_whitelist_load_done",
+            stage="rag",
+            patch_version=patch_version,
+            counts={key: len(values) for key, values in result.items()},
+            latency_ms=elapsed_ms(started),
+        )
+        return result
 
     def _get_collection(self, index: IndexName, *, missing_is_empty: bool) -> Any | None:
         try:

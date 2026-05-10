@@ -10,14 +10,17 @@
 
 from __future__ import annotations
 
-import logging
 import re
+import time
+
+import structlog
 
 from app.agents.strategy.state import StrategyState
+from app.observability import elapsed_ms
 from app.rag.service import RagService, get_rag_service
 from app.schemas.shared import DeckRecommendation, RagChunk, WebFact
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 FORBIDDEN_RE = re.compile(
     r"(1\s*등\s*보장|승률\s*100\s*%?|무조건|확실히|반드시\s*1\s*등)"
@@ -111,6 +114,15 @@ def verify_grounding(
     *,
     rag: RagService | None = None,
 ) -> dict:
+    started = time.perf_counter()
+    before_count = len(state.final_decks)
+    logger.info(
+        "grounding_start",
+        request_id=state.request_id,
+        stage="grounding",
+        decks=before_count,
+        patch_version=state.patch_version,
+    )
     active_rag = rag or get_rag_service()
     whitelist = active_rag.get_whitelist(state.patch_version)
     units_wl: set[str] = whitelist.get("units", set())
@@ -153,10 +165,17 @@ def verify_grounding(
     if len(state.sources) == 1:
         state.warnings.append("single_source")
 
-    logger.debug(
-        "verify_grounding kept=%d/%d confidence=%s",
-        len(filtered),
-        len(filtered) + sum(1 for w in state.warnings if w.startswith("deck_filtered_")),
-        state.confidence,
+    state.node_latencies_ms["verify_grounding"] = elapsed_ms(started)
+    logger.info(
+        "grounding_done",
+        request_id=state.request_id,
+        stage="grounding",
+        kept=len(filtered),
+        filtered=before_count - len(filtered),
+        confidence=state.confidence,
+        units_whitelist=len(units_wl),
+        items_whitelist=len(items_wl),
+        warnings=len(state.warnings),
+        latency_ms=state.node_latencies_ms["verify_grounding"],
     )
     return state.model_dump()

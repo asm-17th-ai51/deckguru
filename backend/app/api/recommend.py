@@ -1,10 +1,12 @@
 import asyncio
+import time
 
 import structlog
 from fastapi import APIRouter, HTTPException, Request, Response
 
-from app.schemas.api import ErrorDetail, RecommendationResponse, RecommendRequest
+from app.observability import elapsed_ms, preview
 from app.rag.service import RagUnavailableError
+from app.schemas.api import ErrorDetail, RecommendationResponse, RecommendRequest
 from app.services.cache import cache_service
 from app.services.limiter import limiter
 from app.services.normalize import cache_key
@@ -53,15 +55,38 @@ async def recommend(request: Request, response: Response, body: RecommendRequest
     patch = settings.patch_version
 
     key = cache_key(body.tier, body.play_style, body.question, patch)
+    logger.info(
+        "cache_lookup",
+        request_id=req_id,
+        stage="api",
+        tier=body.tier,
+        play_style=body.play_style,
+        patch_version=patch,
+        question=preview(body.question),
+    )
 
     cached = await cache_service.get(key)
     if cached:
         response.headers["X-Cache"] = "HIT"
         response.headers["X-Patch-Version"] = patch
-        logger.info("cache_hit", request_id=req_id, tier=body.tier, intent=cached.get("intent"))
+        logger.info(
+            "cache_hit",
+            request_id=req_id,
+            stage="api",
+            tier=body.tier,
+            intent=cached.get("intent"),
+        )
         return RecommendationResponse(**cached)
 
+    logger.info("cache_miss", request_id=req_id, stage="api")
     async with agent_semaphore:
+        logger.info(
+            "strategy_agent_start",
+            request_id=req_id,
+            stage="api",
+            timeout_s=settings.agent_timeout_s,
+        )
+        started = time.perf_counter()
         try:
             result = await asyncio.wait_for(
                 run_strategy_agent(
@@ -74,7 +99,22 @@ async def recommend(request: Request, response: Response, body: RecommendRequest
                 ),
                 timeout=settings.agent_timeout_s,
             )
+            logger.info(
+                "strategy_agent_done",
+                request_id=req_id,
+                stage="api",
+                intent=result.intent,
+                decks=len(result.decks),
+                confidence=result.confidence,
+                latency_ms=elapsed_ms(started),
+            )
         except (asyncio.TimeoutError, RecommendationTimeout):
+            logger.warning(
+                "strategy_agent_timeout",
+                request_id=req_id,
+                stage="api",
+                latency_ms=elapsed_ms(started),
+            )
             raise HTTPException(
                 status_code=504,
                 detail=ErrorDetail(
@@ -84,7 +124,13 @@ async def recommend(request: Request, response: Response, body: RecommendRequest
                 ).model_dump(),
             )
         except RecommendationFailed as exc:
-            logger.warning("agent_failed", request_id=req_id, error=str(exc))
+            logger.warning(
+                "agent_failed",
+                request_id=req_id,
+                stage="api",
+                latency_ms=elapsed_ms(started),
+                error=str(exc),
+            )
             raise HTTPException(
                 status_code=502,
                 detail=ErrorDetail(
@@ -94,7 +140,13 @@ async def recommend(request: Request, response: Response, body: RecommendRequest
                 ).model_dump(),
             )
         except RagUnavailableError as exc:
-            logger.warning("rag_unavailable", request_id=req_id, error=str(exc))
+            logger.warning(
+                "rag_unavailable",
+                request_id=req_id,
+                stage="api",
+                latency_ms=elapsed_ms(started),
+                error=str(exc),
+            )
             raise HTTPException(
                 status_code=502,
                 detail=ErrorDetail(
@@ -104,7 +156,14 @@ async def recommend(request: Request, response: Response, body: RecommendRequest
                 ).model_dump(),
             )
         except Exception as exc:
-            logger.error("agent_error", request_id=req_id, error=str(exc), exc_info=True)
+            logger.error(
+                "agent_error",
+                request_id=req_id,
+                stage="api",
+                latency_ms=elapsed_ms(started),
+                error=str(exc),
+                exc_info=True,
+            )
             raise HTTPException(
                 status_code=500,
                 detail=ErrorDetail(
@@ -115,6 +174,7 @@ async def recommend(request: Request, response: Response, body: RecommendRequest
             )
 
     await cache_service.put(key, result.model_dump(mode="json"), patch_version=patch)
+    logger.info("cache_store", request_id=req_id, stage="api", patch_version=patch)
     response.headers["X-Cache"] = "MISS"
     response.headers["X-Patch-Version"] = patch
     return result

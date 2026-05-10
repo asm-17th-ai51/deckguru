@@ -6,13 +6,16 @@ LLM 미사용. 100% 결정적.
 
 from __future__ import annotations
 
-import logging
+import time
+
+import structlog
 
 from app.agents.strategy.state import StrategyState
+from app.observability import elapsed_ms, preview
 from app.rag.service import RagService, get_rag_service
 from app.schemas.shared import IndexName, RagChunk
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 # (index, query 템플릿, k). query 템플릿은 {q}, {kw} placeholder 지원.
 QUERY_PLAN: dict[str, list[tuple[IndexName, str, int]]] = {
@@ -65,10 +68,28 @@ async def rag_retrieve(
     *,
     rag: RagService | None = None,
 ) -> dict:
+    started = time.perf_counter()
     plan = _build_plan(state)
     if not plan:
+        state.node_latencies_ms["rag_retrieve"] = elapsed_ms(started)
+        logger.info(
+            "rag_skip",
+            request_id=state.request_id,
+            stage="rag",
+            reason="no_query_plan",
+            latency_ms=state.node_latencies_ms["rag_retrieve"],
+        )
         return state.model_dump()
 
+    logger.info(
+        "rag_plan",
+        request_id=state.request_id,
+        stage="rag",
+        intent=state.intent,
+        collections=[index for index, _, _ in plan],
+        queries=[preview(query, limit=48) for _, query, _ in plan],
+        patch_version=state.patch_version,
+    )
     active_rag = rag or get_rag_service()
     chunks = active_rag.multi_search(plan, patch_version=state.patch_version)
     state.rag_chunks = chunks
@@ -77,8 +98,15 @@ async def rag_retrieve(
     if state.rag_avg_score < 0.4:
         state.warnings.append("rag_avg_score_low")
 
-    logger.debug(
-        "rag_retrieve intent=%s n_chunks=%d avg=%.3f",
-        state.intent, len(chunks), state.rag_avg_score,
+    state.node_latencies_ms["rag_retrieve"] = elapsed_ms(started)
+    logger.info(
+        "rag_done",
+        request_id=state.request_id,
+        stage="rag",
+        intent=state.intent,
+        chunks=len(chunks),
+        avg_score=round(state.rag_avg_score, 3),
+        warning="rag_avg_score_low" if state.rag_avg_score < 0.4 else None,
+        latency_ms=state.node_latencies_ms["rag_retrieve"],
     )
     return state.model_dump()

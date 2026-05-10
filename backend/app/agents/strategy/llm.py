@@ -11,18 +11,20 @@ tool-calling 기반 schema 강제를 지원한다.
 
 from __future__ import annotations
 
-import logging
 import os
+import time
 from typing import TypeVar
 
 from langchain_core.exceptions import OutputParserException
 from langchain_core.messages import BaseMessage
 from langchain_upstage import ChatUpstage
 from pydantic import BaseModel, ValidationError
+import structlog
 
+from app.observability import elapsed_ms
 from app.settings import settings
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -66,6 +68,16 @@ async def call_structured(
 
     schema 검증 실패 시 retries회까지 재호출. 그래도 실패하면 StrategyLLMError.
     """
+    model = _model_for(role)
+    started = time.perf_counter()
+    logger.info(
+        "llm_call_start",
+        stage="llm",
+        role=role,
+        model=model,
+        schema=schema.__name__,
+        max_attempts=retries + 1,
+    )
     chat = _build_chat(role)
     structured = chat.with_structured_output(schema)
 
@@ -76,14 +88,34 @@ async def call_structured(
             if not isinstance(result, schema):
                 # with_structured_output가 dict를 줄 때 대비
                 result = schema.model_validate(result)
+            logger.info(
+                "llm_call_done",
+                stage="llm",
+                role=role,
+                model=model,
+                attempt=attempt + 1,
+                latency_ms=elapsed_ms(started),
+            )
             return result
         except (ValidationError, OutputParserException, ValueError) as exc:
             last_err = exc
             logger.warning(
-                "llm_structured_fail role=%s attempt=%d err=%s",
-                role, attempt, exc,
+                "llm_structured_fail",
+                stage="llm",
+                role=role,
+                model=model,
+                attempt=attempt + 1,
+                error=str(exc),
             )
 
+    logger.error(
+        "llm_call_failed",
+        stage="llm",
+        role=role,
+        model=model,
+        latency_ms=elapsed_ms(started),
+        error=str(last_err),
+    )
     raise StrategyLLMError(
         f"structured output failed after {retries + 1} attempts: {last_err}"
     )

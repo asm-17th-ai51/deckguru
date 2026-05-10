@@ -12,13 +12,16 @@
 from __future__ import annotations
 
 import asyncio
-import logging
+import time
+
+import structlog
 
 from app.agents.strategy.state import StrategyState
+from app.observability import elapsed_ms
 from app.research.api import run_live_research
 from app.settings import settings
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 
 async def live_research(state: StrategyState) -> dict:
@@ -26,6 +29,14 @@ async def live_research(state: StrategyState) -> dict:
     state.need_live = True
     timeout_s = max(0.5, settings.live_research_timeout_s)
     max_steps = max(1, min(settings.live_research_max_steps, 5))
+    started = time.perf_counter()
+    logger.info(
+        "live_research_start",
+        request_id=state.request_id,
+        stage="research",
+        timeout_s=timeout_s,
+        max_steps=max_steps,
+    )
     try:
         # Research API 내부에도 timeout_s가 있지만, Strategy graph 차원에서도
         # asyncio.wait_for로 한 번 더 감싸 전체 agent timeout을 보호한다.
@@ -41,7 +52,13 @@ async def live_research(state: StrategyState) -> dict:
             timeout=timeout_s,
         )
     except asyncio.TimeoutError:
-        logger.warning("live_research timeout")
+        state.node_latencies_ms["live_research"] = elapsed_ms(started)
+        logger.warning(
+            "live_research_timeout",
+            request_id=state.request_id,
+            stage="research",
+            latency_ms=state.node_latencies_ms["live_research"],
+        )
         state.warnings.append("research_truncated")
         return state.model_dump()
 
@@ -54,4 +71,15 @@ async def live_research(state: StrategyState) -> dict:
     if result.truncated:
         state.warnings.append("research_truncated")
 
+    state.node_latencies_ms["live_research"] = elapsed_ms(started)
+    logger.info(
+        "live_research_done",
+        request_id=state.request_id,
+        stage="research",
+        web_facts=len(state.web_facts),
+        sources=len(state.sources),
+        steps=state.research_steps,
+        warnings=len(result.warnings),
+        latency_ms=state.node_latencies_ms["live_research"],
+    )
     return state.model_dump()

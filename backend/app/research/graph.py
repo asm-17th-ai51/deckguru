@@ -16,7 +16,9 @@ import os
 import time
 
 import httpx
+import structlog
 
+from app.observability import elapsed_ms, preview
 from app.research.cache import get_cached_json, set_cached_json
 from app.research.nodes.extract_facts import extract_facts, fallback_extract
 from app.research.nodes.plan import fallback_plan, plan_next_action
@@ -32,6 +34,8 @@ from app.research.tools.base import ResearchToolError
 from app.research.tools.fetch_page import fetch_page
 from app.research.tools.web_search import web_search
 from app.research.whitelist import domain_from_url
+
+logger = structlog.get_logger()
 
 
 def _timeout_cap(env_key: str, default: float) -> float:
@@ -187,8 +191,16 @@ async def run_research_loop(
     timeout_s: float = 15.0,
 ) -> ResearchState:
     """bounded ReAct loop의 메인 함수."""
+    started = time.perf_counter()
     deadline = time.monotonic() + timeout_s
     max_steps = min(max(max_steps, 1), 5)
+    logger.info(
+        "research_loop_start",
+        request_id=state.request_id,
+        stage="research",
+        max_steps=max_steps,
+        timeout_s=timeout_s,
+    )
 
     for step_no in range(1, max_steps + 1):
         if time.monotonic() >= deadline:
@@ -210,6 +222,14 @@ async def run_research_loop(
             plan = fallback_plan(state)
 
         plan = _normalize_plan(plan, state)
+        logger.info(
+            "research_step_plan",
+            request_id=state.request_id,
+            stage="research",
+            step=step_no,
+            tool=plan.tool,
+            tool_input=preview(plan.tool_input, limit=120),
+        )
         try:
             # 2. act/observe: 도구를 실행하고 결과를 Observation으로 표준화한다.
             observations, summary = await _with_deadline(
@@ -224,6 +244,15 @@ async def run_research_loop(
 
         state.raw_observations.extend(observations)
         _track_domains(state, observations)
+        logger.info(
+            "research_step_observe",
+            request_id=state.request_id,
+            stage="research",
+            step=step_no,
+            tool=plan.tool,
+            observations=len(observations),
+            summary=preview(summary, limit=120),
+        )
         # 사용자가 DEMO_MODE에서 react_steps를 볼 수 있고, 개발자는 어느 도구가
         # 어떤 입력으로 실행됐는지 추적할 수 있다.
         state.react_log.append(
@@ -243,6 +272,12 @@ async def run_research_loop(
     if time.monotonic() >= deadline:
         state.truncated = True
     else:
+        logger.info(
+            "research_extract_start",
+            request_id=state.request_id,
+            stage="research",
+            observations=len(state.raw_observations),
+        )
         try:
             # 4. extract: 누적된 관찰에서 최종 WebFact를 만든다.
             state.extracted_facts = await _with_deadline(
@@ -258,4 +293,13 @@ async def run_research_loop(
                 state.truncated = True
                 state.warnings.append("research_truncated")
 
+    logger.info(
+        "research_loop_done",
+        request_id=state.request_id,
+        stage="research",
+        facts=len(state.extracted_facts),
+        truncated=state.truncated,
+        warnings=len(state.warnings),
+        latency_ms=elapsed_ms(started),
+    )
     return state

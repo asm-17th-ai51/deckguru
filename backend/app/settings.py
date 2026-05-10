@@ -1,4 +1,6 @@
 from pathlib import Path
+
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -24,6 +26,14 @@ class Settings(BaseSettings):
     demo_mode: bool = False
     mock_strategy_agent: bool = False
     log_level: str = "INFO"
+    app_log_format: str = Field(
+        default="console",
+        validation_alias=AliasChoices("APP_LOG_FORMAT", "DECKGURU_LOG_FORMAT"),
+    )
+    app_log_colors: bool = Field(
+        default=True,
+        validation_alias=AliasChoices("APP_LOG_COLORS", "DECKGURU_LOG_COLORS"),
+    )
     admin_token: str = "dev-admin"
     tavily_api_key: str = ""
 

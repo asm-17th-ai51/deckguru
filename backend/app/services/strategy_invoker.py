@@ -6,6 +6,8 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+import structlog
+
 from app.agents.strategy.api import (
     RecommendationFailed,
     RecommendationTimeout,
@@ -14,6 +16,8 @@ from app.agents.strategy.api import (
 from app.schemas.api import RecommendationResponse
 from app.schemas.shared import PlayStyle, Tier
 from app.settings import settings
+
+logger = structlog.get_logger()
 
 _MOCK_PATH = (
     Path(__file__).resolve().parents[2]
@@ -34,6 +38,12 @@ async def run_strategy_agent(
     timeout_s: float = 25.0,
 ) -> RecommendationResponse:
     if settings.mock_strategy_agent:
+        logger.info(
+            "strategy_mock_response",
+            request_id=request_id,
+            stage="strategy",
+            fixture=_MOCK_PATH.name,
+        )
         return _load_mock_response(request_id=request_id, patch_version=patch_version)
 
     return await run_real_strategy_agent(

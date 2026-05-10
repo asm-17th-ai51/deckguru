@@ -7,17 +7,19 @@ verify_grounding이 후처리로 화이트리스트/수치/금지어 필터링.
 from __future__ import annotations
 
 import json
-import logging
+import time
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
+import structlog
 
 from app.agents.strategy.llm import call_structured
 from app.agents.strategy.prompts import load_text
 from app.agents.strategy.state import StrategyState
+from app.observability import elapsed_ms
 from app.schemas.shared import DeckDraft, DeckRecommendation, RagChunk, WebFact
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 
 class RecommendOut(BaseModel):
@@ -59,9 +61,26 @@ def _serialize_drafts(drafts: list[DeckDraft]) -> str:
 
 
 async def recommend(state: StrategyState) -> dict:
+    started = time.perf_counter()
     if state.intent in (None, "other"):
+        state.node_latencies_ms["recommend"] = elapsed_ms(started)
+        logger.info(
+            "recommend_skip",
+            request_id=state.request_id,
+            stage="recommend",
+            reason="unsupported_intent",
+            latency_ms=state.node_latencies_ms["recommend"],
+        )
         return state.model_dump()
 
+    logger.info(
+        "recommend_start",
+        request_id=state.request_id,
+        stage="recommend",
+        candidates=len(state.candidate_decks),
+        rag_chunks=len(state.rag_chunks),
+        web_facts=len(state.web_facts),
+    )
     system = load_text("recommend").format(
         patch_version=state.patch_version,
         tier=state.tier,
@@ -86,4 +105,12 @@ async def recommend(state: StrategyState) -> dict:
         retries=1,
     )
     state.final_decks = result.decks
+    state.node_latencies_ms["recommend"] = elapsed_ms(started)
+    logger.info(
+        "recommend_done",
+        request_id=state.request_id,
+        stage="recommend",
+        decks=len(state.final_decks),
+        latency_ms=state.node_latencies_ms["recommend"],
+    )
     return state.model_dump()

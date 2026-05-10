@@ -7,17 +7,19 @@ schema fail → 1회 retry → fallback intent=other.
 from __future__ import annotations
 
 import json
-import logging
+import time
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
+import structlog
 
 from app.agents.strategy.llm import StrategyLLMError, call_structured
 from app.agents.strategy.prompts import load_json
 from app.agents.strategy.state import StrategyState
+from app.observability import elapsed_ms
 from app.schemas.shared import Intent
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 _DECK_TERMS = ("덱", "추천", "티어", "메타", "deck", "recommend", "tier", "meta")
 _PLAYSTYLE_TERMS = ("운영법", "빌드업", "초반", "중반", "후반", "play", "phase", "guide")
@@ -68,6 +70,8 @@ def _rule_based_intent(question: str) -> IntentOut | None:
 
 
 async def analyze_intent(state: StrategyState) -> dict:
+    started = time.perf_counter()
+    logger.info("intent_start", request_id=state.request_id, stage="intent")
     try:
         result = await call_structured(
             role="intent",
@@ -78,9 +82,10 @@ async def analyze_intent(state: StrategyState) -> dict:
         fallback = _rule_based_intent(state.question)
         if result.intent == "other" and fallback is not None:
             logger.info(
-                "intent_other_overridden request_id=%s fallback=%s",
-                state.request_id,
-                fallback.intent,
+                "intent_other_overridden",
+                request_id=state.request_id,
+                stage="intent",
+                fallback=fallback.intent,
             )
             result = fallback
         state.intent = result.intent
@@ -88,13 +93,32 @@ async def analyze_intent(state: StrategyState) -> dict:
     except StrategyLLMError as exc:
         fallback = _rule_based_intent(state.question)
         if fallback is not None:
-            logger.warning("analyze_intent LLM failed; using rule fallback: %s", exc)
+            logger.warning(
+                "intent_llm_failed_using_rule_fallback",
+                request_id=state.request_id,
+                stage="intent",
+                error=str(exc),
+            )
             state.intent = fallback.intent
             state.extracted_keywords = fallback.extracted_keywords
             state.warnings.append("intent_classification_fallback")
         else:
-            logger.warning("analyze_intent fallback to 'other': %s", exc)
+            logger.warning(
+                "intent_failed_using_other",
+                request_id=state.request_id,
+                stage="intent",
+                error=str(exc),
+            )
             state.intent = "other"
             state.warnings.append("intent_classification_failed")
 
+    state.node_latencies_ms["analyze_intent"] = elapsed_ms(started)
+    logger.info(
+        "intent_done",
+        request_id=state.request_id,
+        stage="intent",
+        intent=state.intent,
+        keywords=state.extracted_keywords,
+        latency_ms=state.node_latencies_ms["analyze_intent"],
+    )
     return state.model_dump()

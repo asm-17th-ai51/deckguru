@@ -1,12 +1,16 @@
 import json
+import time
 from datetime import datetime, timezone
 
+import structlog
 from fastapi import APIRouter
 
+from app.observability import elapsed_ms
 from app.rag.chroma_service import resolve_chroma_path
 from app.settings import settings
 
 router = APIRouter()
+logger = structlog.get_logger()
 
 _PATCH_MANIFEST_CANDIDATES = [
     "deck_templates/current_patch.json",
@@ -14,7 +18,7 @@ _PATCH_MANIFEST_CANDIDATES = [
 ]
 
 
-def _load_last_updated() -> datetime | None:
+def _load_last_updated() -> tuple[datetime | None, str | None]:
     processed_dir = resolve_chroma_path(settings.chroma_path).parent.parent / "processed"
     for candidate in _PATCH_MANIFEST_CANDIDATES:
         manifest = processed_dir / candidate
@@ -23,10 +27,16 @@ def _load_last_updated() -> datetime | None:
                 data = json.loads(manifest.read_text(encoding="utf-8"))
                 raw = data.get("fetched_at") or data.get("last_updated")
                 if raw:
-                    return datetime.fromisoformat(raw.replace("Z", "+00:00"))
-            except Exception:
-                pass
-    return None
+                    return datetime.fromisoformat(raw.replace("Z", "+00:00")), candidate
+                return None, candidate
+            except Exception as exc:
+                logger.warning(
+                    "patch_info_manifest_read_failed",
+                    stage="patch_info",
+                    manifest=candidate,
+                    error=str(exc),
+                )
+    return None, None
 
 
 @router.get(
@@ -41,7 +51,14 @@ def _load_last_updated() -> datetime | None:
 """,
 )
 async def patch_info():
-    last_updated = _load_last_updated()
+    started = time.perf_counter()
+    logger.info(
+        "patch_info_start",
+        stage="patch_info",
+        patch_version=settings.patch_version,
+        chroma_path=str(resolve_chroma_path(settings.chroma_path)),
+    )
+    last_updated, manifest = _load_last_updated()
     warnings: list[str] = []
 
     if last_updated:
@@ -54,6 +71,15 @@ async def patch_info():
         last_updated_str = None
         warnings.append("data_may_be_insufficient_after_patch")
 
+    logger.info(
+        "patch_info_done",
+        stage="patch_info",
+        patch_version=settings.patch_version,
+        manifest=manifest or "-",
+        has_last_updated=last_updated is not None,
+        warnings=warnings,
+        latency_ms=elapsed_ms(started),
+    )
     return {
         "patch_version": settings.patch_version,
         "last_updated": last_updated_str,

@@ -14,7 +14,11 @@ from __future__ import annotations
 import os
 from datetime import datetime, timezone
 
+import structlog
+
 from app.agents.strategy.state import StrategyState
+
+logger = structlog.get_logger()
 
 # 사용자가 "현재 상황"을 묻는 신호. 한/영 키워드를 함께 둔다.
 FRESHNESS_KEYWORDS = (
@@ -29,6 +33,7 @@ FRESHNESS_KEYWORDS = (
     "recent",
     "current meta",
 )
+LIVE_RESEARCH_REASONS = {"low_rag_score", "freshness_keyword", "recent_patch_summary"}
 
 
 def _patch_age_days(patch_version: str) -> int:
@@ -48,26 +53,40 @@ def _patch_age_days(patch_version: str) -> int:
         return 99
 
 
-def need_live(state: StrategyState) -> bool:
-    """StrategyState를 보고 Live Research 필요 여부를 반환한다."""
+def _need_live_reason(state: StrategyState) -> str:
     if state.intent in (None, "other"):
-        return False
+        return "unsupported_intent"
     if os.getenv("LIVE_RESEARCH_ENABLED", "true").lower() != "true":
-        return False
+        return "disabled_by_env"
 
     if state.rag_avg_score < 0.4:
         # 정적 RAG 검색 점수가 낮으면 외부 검색으로 근거를 보강한다.
-        return True
+        return "low_rag_score"
     question = state.question.lower()
     if any(k in question for k in FRESHNESS_KEYWORDS):
         # 최신성 질문은 RAG가 높은 점수를 줘도 live source 확인을 시도한다.
-        return True
+        return "freshness_keyword"
     if state.intent == "patch_summary" and _patch_age_days(state.patch_version) <= 3:
         # 패치 직후에는 정적 RAG가 아직 덜 쌓였을 가능성이 높다.
-        return True
-    return False
+        return "recent_patch_summary"
+    return "static_rag_sufficient"
+
+
+def need_live(state: StrategyState) -> bool:
+    """StrategyState를 보고 Live Research 필요 여부를 반환한다."""
+    return _need_live_reason(state) in LIVE_RESEARCH_REASONS
 
 
 def need_live_branch(state: StrategyState) -> str:
     """LangGraph conditional edge용 라우팅 키."""
-    return "live" if need_live(state) else "skip"
+    reason = _need_live_reason(state)
+    route = "live" if reason in LIVE_RESEARCH_REASONS else "skip"
+    logger.info(
+        "live_research_route",
+        request_id=state.request_id,
+        stage="research",
+        route=route,
+        reason=reason,
+        rag_avg_score=round(state.rag_avg_score, 3),
+    )
+    return route
