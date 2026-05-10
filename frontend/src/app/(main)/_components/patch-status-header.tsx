@@ -1,6 +1,7 @@
 'use client';
 
 import { usePatchInfoQuery } from '@/api/get-patch-info/query';
+import { formatDateTime } from '@/app/recommendations/[requestId]/_lib/recommendation-result-formatters';
 import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
@@ -26,20 +27,6 @@ const STATUS_BADGE_CLASS =
   'h-9 border-2 px-3 py-2 text-[10px] whitespace-nowrap';
 const PATCH_INFO_BADGE_CLASS = `${STATUS_BADGE_CLASS} backdrop-blur`;
 
-const formatLastUpdated = (value: string | null | undefined) => {
-  if (!value) {
-    return 'unknown';
-  }
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return date.toISOString().slice(0, 10);
-};
-
 export function PatchStatusHeader() {
   const { data, isError } = usePatchInfoQuery();
   const patchInfo = data ?? FALLBACK_PATCH_INFO;
@@ -51,7 +38,7 @@ export function PatchStatusHeader() {
     },
     {
       label: 'LAST UPDATED',
-      value: formatLastUpdated(patchInfo.last_updated),
+      value: formatDateTime(patchInfo.last_updated),
     },
   ];
 

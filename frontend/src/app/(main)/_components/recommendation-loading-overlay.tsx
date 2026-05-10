@@ -15,7 +15,7 @@ export function RecommendationLoadingOverlay() {
       aria-live="polite"
       aria-atomic="true"
       aria-busy="true"
-      className="fixed inset-0 z-50 flex items-start justify-center bg-background/45 px-4 pt-[max(4.5rem,env(safe-area-inset-top))] text-foreground backdrop-blur-md sm:pt-24"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background/45 px-4 py-[max(1rem,env(safe-area-inset-top))] text-foreground backdrop-blur-md"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.18, ease: 'easeOut' }}>
