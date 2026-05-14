@@ -1,0 +1,14 @@
+{
+  "current_patch": "all",
+  "index": "playbook",
+  "record_count": 6,
+  "sources": [
+    "playbook_damage",
+    "playbook_exp",
+    "playbook_hotkeys",
+    "playbook_reroll",
+    "playbook_role",
+    "playbook_rounds"
+  ],
+  "jsonl_path": "all.jsonl"
+}

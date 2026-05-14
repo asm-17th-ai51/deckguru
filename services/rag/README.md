@@ -139,7 +139,17 @@ results = rag_search.search(
 
 ```bash
 services/rag/.venv/Scripts/python.exe services/rag/scripts/fetch_lolchess_meta.py
+services/rag/.venv/Scripts/python.exe services/rag/scripts/fetch_lolchess_champions.py
+services/rag/.venv/Scripts/python.exe services/rag/scripts/fetch_lolchess_items.py
+services/rag/.venv/Scripts/python.exe services/rag/scripts/fetch_lolchess_traits.py
+services/rag/.venv/Scripts/python.exe services/rag/scripts/fetch_lolchess_augments.py
+services/rag/.venv/Scripts/python.exe services/rag/scripts/fetch_lolchess_playbook.py
 services/rag/.venv/Scripts/python.exe services/rag/scripts/build_deck_templates.py
+services/rag/.venv/Scripts/python.exe services/rag/scripts/build_units.py
+services/rag/.venv/Scripts/python.exe services/rag/scripts/build_items.py
+services/rag/.venv/Scripts/python.exe services/rag/scripts/build_traits.py
+services/rag/.venv/Scripts/python.exe services/rag/scripts/build_augments.py
+services/rag/.venv/Scripts/python.exe services/rag/scripts/build_playbook.py
 services/rag/.venv/Scripts/python.exe services/rag/scripts/build_chroma.py
 ```
 
@@ -148,6 +158,11 @@ Raw data:
 ```text
 data/rag/raw/lolchess/lolchess_meta.json
 data/rag/raw/lolchess/lolchess_decks.json
+data/rag/raw/lolchess/lolchess_champions.json
+data/rag/raw/lolchess/lolchess_items.json
+data/rag/raw/lolchess/lolchess_traits.json
+data/rag/raw/lolchess/lolchess_augments.json
+data/rag/raw/lolchess/lolchess_playbook_*.json
 ```
 
 Processed data:
@@ -155,4 +170,14 @@ Processed data:
 ```text
 data/rag/processed/deck_templates/{patch_version}.jsonl
 data/rag/processed/deck_templates/current_patch.json
+data/rag/processed/units/{patch_version}.jsonl
+data/rag/processed/units/current_patch.json
+data/rag/processed/items/{patch_version}.jsonl
+data/rag/processed/items/current_patch.json
+data/rag/processed/traits/{patch_version}.jsonl
+data/rag/processed/traits/current_patch.json
+data/rag/processed/augments/{patch_version}.jsonl
+data/rag/processed/augments/current_patch.json
+data/rag/processed/playbook/all.jsonl
+data/rag/processed/playbook/current_patch.json
 ```

@@ -47,7 +47,9 @@ class ChromaPatchSummarySearch:
             where=chroma_where,
             include=["documents", "metadatas", "distances"],
         )
-        return _rerank(_format_results(result), query)[:k]
+        vector_results = _format_results(result)
+        lexical_results = _lexical_candidates(collection, query, chroma_where)
+        return _rerank(_dedupe_results([*vector_results, *lexical_results]), query)[:k]
 
     def _available_patch_versions(self, index: str) -> list[str]:
         index_dir = self.data_dir if index == "patch_summary" else self.data_dir.parent / index
@@ -62,12 +64,17 @@ class ChromaPatchSummarySearch:
 
 def _patch_where(*, patch_version: str, available_versions: list[str]) -> dict[str, Any]:
     if not PATCH_FAMILY_RE.match(patch_version):
-        return {"patch_version": patch_version}
+        versions = [patch_version]
+        if "all" in available_versions:
+            versions.append("all")
+        return {"patch_version": {"$in": versions}} if len(versions) > 1 else {"patch_version": patch_version}
 
     family_re = re.compile(rf"^{re.escape(patch_version)}[a-z]?$", flags=re.IGNORECASE)
     family_versions = [version for version in available_versions if family_re.match(version)]
     if not family_versions:
         family_versions = [patch_version]
+    if "all" in available_versions:
+        family_versions.append("all")
     return {"patch_version": {"$in": family_versions}}
 
 
@@ -104,17 +111,60 @@ def _format_results(result: dict[str, Any]) -> list[dict[str, Any]]:
     return formatted
 
 
+def _lexical_candidates(collection: Any, query: str, where: dict[str, Any]) -> list[dict[str, Any]]:
+    query_tokens = set(_tokens(query))
+    if not query_tokens:
+        return []
+
+    result = collection.get(where=where, include=["documents", "metadatas"])
+    ids = result.get("ids", [])
+    documents = result.get("documents", [])
+    metadatas = result.get("metadatas", [])
+
+    matches: list[dict[str, Any]] = []
+    for item_id, document, metadata in zip(ids, documents, metadatas, strict=True):
+        metadata = metadata or {}
+        searchable = " ".join(
+            str(metadata.get(field) or "")
+            for field in ("target_name", "name", "title", "key", "target_kind", "change_type")
+        )
+        searchable = f"{searchable} {document or ''}".lower()
+        overlap = len(query_tokens & set(_tokens(searchable)))
+        exact_query = query.lower() in searchable
+        if not overlap and not exact_query:
+            continue
+        matches.append(
+            {
+                "id": item_id,
+                "text": document,
+                "score": 0.45 + (0.04 * overlap) + (0.08 if exact_query else 0.0),
+                **metadata,
+            }
+        )
+    return matches
+
+
+def _dedupe_results(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    deduped: dict[str, dict[str, Any]] = {}
+    for result in results:
+        item_id = str(result.get("id") or "")
+        if item_id not in deduped or float(result.get("score", 0.0)) > float(deduped[item_id].get("score", 0.0)):
+            deduped[item_id] = result
+    return list(deduped.values())
+
+
 def _rerank(results: list[dict[str, Any]], query: str) -> list[dict[str, Any]]:
     query_tokens = set(_tokens(query))
     reranked: list[dict[str, Any]] = []
     for result in results:
         searchable = " ".join(
             str(result.get(field) or "")
-            for field in ("target_name", "target_kind", "change_type", "text")
+            for field in ("target_name", "name", "title", "target_kind", "change_type", "text")
         )
         result_tokens = set(_tokens(searchable))
         overlap = len(query_tokens & result_tokens)
-        exact_name_bonus = 0.15 if str(result.get("target_name") or "") in query else 0.0
+        exact_name = str(result.get("target_name") or result.get("name") or result.get("title") or "")
+        exact_name_bonus = 0.15 if exact_name and exact_name in query else 0.0
         nerf_bonus = 0.08 if "너프" in query and result.get("change_type") == "nerf" else 0.0
         buff_bonus = 0.08 if "버프" in query and result.get("change_type") == "buff" else 0.0
         score = float(result["score"]) + (0.08 * overlap) + exact_name_bonus + nerf_bonus + buff_bonus

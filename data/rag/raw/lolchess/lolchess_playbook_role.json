@@ -1,0 +1,54 @@
+{
+  "source": "playbook_role",
+  "url": "https://lolchess.gg/guide/role?hl=ko",
+  "fetched_at": "2026-05-14T05:53:36Z",
+  "next_data": {
+    "props": {
+      "initialProps": {
+        "locale": "ko",
+        "notifications": [],
+        "viewOriginalSkin": false,
+        "isDakggMobile": false,
+        "isNoBannerToShow": true,
+        "desktopScale": 100,
+        "hasCookieBannerNoticeBarKey": false,
+        "isLegacyMobile": false,
+        "isDakggDesktop": false,
+        "isMobile": false,
+        "onReleaseTime": true,
+        "serverTime": "2026-05-14T05:53:36.617Z",
+        "notificationKey": "",
+        "bannerKey": "",
+        "isVenatusV4": true,
+        "theme": "light",
+        "showAdOnMobile": false,
+        "isRnMobileApp": false,
+        "seasonReleaseInfo": {
+          "season": "set18",
+          "isReleased": true
+        }
+      },
+      "pageProps": {
+        "dehydratedState": {
+          "mutations": [],
+          "queries": []
+        },
+        "category": "role",
+        "theme": "dark"
+      },
+      "__N_SSP": true
+    },
+    "page": "/guide/[category]",
+    "query": {
+      "hl": "ko",
+      "category": "role"
+    },
+    "buildId": "95OGfIjDH-MxGQFi59Gcz",
+    "assetPrefix": "//cdn.dak.gg/tft",
+    "isFallback": false,
+    "gssp": true,
+    "appGip": true,
+    "scriptLoader": []
+  },
+  "page_text": "챔피언 역할군 가이드 - 롤체지지 - 전략적 팀 전투 TFT - 롤토체스 전적검색 롤체지지 리그오브레전드 롤체지지 발로란트 배틀그라운드 이터널 리턴 메이플스토리 원신 데드락 KR 한국어 English 日本語 Tiếng Việt Deutsch 추천 메타 순위표 배불뚝이 시즌 15 시즌 17 챔피언 시너지 아이템 증강체 보상표 오버레이 배치툴/도구 게임 가이드 게시판/듀오찾기 추천 메타 순위표 배불뚝이 시즌 15 시즌 17 챔피언 시너지 아이템 증강체 보상표 오버레이 배치툴/도구 게임 가이드 게시판/듀오찾기 패치노트 PBE 패치노트 역할군 라운드 골드/경험치 리롤 확률 피해량 공식 단축키 꼬마 전설이 패치노트 PBE 패치노트 역할군 리롤 확률 라운드 정보 경험치/골드 피해량 공식 단축키 역할군 공격력 마법사 기본 공격 시 마나를 7 얻습니다. 마나 재생을 2 얻습니다. 추천 아이템 공격력 암살자 기본 공격 시 마나를 10 얻습니다. 현재 대상을 제외한 모든 적으로부터 받는 피해량이 15% 감소합니다. 추천 아이템 공격력 원거리 딜러 기본 공격 시 마나를 10 얻습니다. 추천 아이템 공격력 전문가 전문가가 특별한 방식으로 자원을 생성합니다. 추천 아이템 공격력 전사 기본 공격 시 마나를 10 얻습니다. 공격 속도를 5~30% 얻습니다. (스테이지에 비례) 추천 아이템 공격력 탱커 기본 공격 시 마나를 5 얻습니다. 피해를 입으면 마나를 얻습니다. 대상으로 지정될 확률이 높습니다. 추천 아이템 주문력 마법사 기본 공격 시 마나를 7 얻습니다. 마나 재생을 2 얻습니다. 추천 아이템 주문력 암살자 기본 공격 시 마나를 10 얻습니다. 현재 대상을 제외한 모든 적으로부터 받는 피해량이 15% 감소합니다. 추천 아이템 주문력 원거리 딜러 기본 공격 시 마나를 10 얻습니다. 추천 아이템 주문력 전문가 전문가가 특별한 방식으로 자원을 생성합니다. 추천 아이템 주문력 전사 기본 공격 시 마나를 10 얻습니다. 공격 속도를 5~30% 얻습니다. (스테이지에 비례) 추천 아이템 주문력 탱커 기본 공격 시 마나를 5 얻습니다. 피해를 입으면 마나를 얻습니다. 대상으로 지정될 확률이 높습니다. 추천 아이템 혼합 전사 기본 공격 시 마나를 10 얻습니다. 공격 속도를 5~30% 얻습니다. (스테이지에 비례) 추천 아이템 © LoLCHESS.GG. All Rights Reserved. TFT@LoLCHESS.GG lolchess.gg is hosted by PlayXP Inc. lolchess.gg isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc. 개인정보 처리방침 / 이용약관 / 채용"
+}

@@ -1,0 +1,54 @@
+{
+  "source": "playbook_hotkeys",
+  "url": "https://lolchess.gg/guide/hotkeys?hl=ko",
+  "fetched_at": "2026-05-14T05:53:37Z",
+  "next_data": {
+    "props": {
+      "initialProps": {
+        "locale": "ko",
+        "notifications": [],
+        "viewOriginalSkin": false,
+        "isDakggMobile": false,
+        "isNoBannerToShow": true,
+        "desktopScale": 100,
+        "hasCookieBannerNoticeBarKey": false,
+        "isLegacyMobile": false,
+        "isDakggDesktop": false,
+        "isMobile": false,
+        "onReleaseTime": true,
+        "serverTime": "2026-05-14T05:53:37.191Z",
+        "notificationKey": "",
+        "bannerKey": "",
+        "isVenatusV4": true,
+        "theme": "light",
+        "showAdOnMobile": false,
+        "isRnMobileApp": false,
+        "seasonReleaseInfo": {
+          "season": "set18",
+          "isReleased": true
+        }
+      },
+      "pageProps": {
+        "dehydratedState": {
+          "mutations": [],
+          "queries": []
+        },
+        "category": "hot_keys",
+        "theme": "dark"
+      },
+      "__N_SSP": true
+    },
+    "page": "/guide/[category]",
+    "query": {
+      "hl": "ko",
+      "category": "hotkeys"
+    },
+    "buildId": "95OGfIjDH-MxGQFi59Gcz",
+    "assetPrefix": "//cdn.dak.gg/tft",
+    "isFallback": false,
+    "gssp": true,
+    "appGip": true,
+    "scriptLoader": []
+  },
+  "page_text": "단축키 - 롤체지지 - 전략적 팀 전투 TFT - 롤토체스 전적검색 롤체지지 리그오브레전드 롤체지지 발로란트 배틀그라운드 이터널 리턴 메이플스토리 원신 데드락 KR 한국어 English 日本語 Tiếng Việt Deutsch 추천 메타 순위표 배불뚝이 시즌 15 시즌 17 챔피언 시너지 아이템 증강체 보상표 오버레이 배치툴/도구 게임 가이드 게시판/듀오찾기 추천 메타 순위표 배불뚝이 시즌 15 시즌 17 챔피언 시너지 아이템 증강체 보상표 오버레이 배치툴/도구 게임 가이드 게시판/듀오찾기 패치노트 PBE 패치노트 역할군 라운드 골드/경험치 리롤 확률 피해량 공식 단축키 꼬마 전설이 패치노트 PBE 패치노트 역할군 리롤 확률 라운드 정보 경험치/골드 피해량 공식 단축키 기본 단축키 W 결투장에 배치 / 대기석으로 복귀 E 챔피언 판매 D 상점 새로고침 F XP 구매 1 Q 플레이어 전력 분석 (시계 방향) 3 R 플레이어 전력 분석 (반시계 방향) 2 Space 꼬마 전설이를 중심으로 카메라 시야 설정 © LoLCHESS.GG. All Rights Reserved. TFT@LoLCHESS.GG lolchess.gg is hosted by PlayXP Inc. lolchess.gg isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc. 개인정보 처리방침 / 이용약관 / 채용"
+}

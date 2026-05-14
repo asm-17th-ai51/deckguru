@@ -16,7 +16,16 @@ def main() -> None:
     index = "patch_summary"
     patch_version = None
     args = sys.argv[1:]
-    if args[0] in {"patch_summary", "deck_templates"}:
+    if args[0] in {
+        "patch_summary",
+        "deck_templates",
+        "units",
+        "items",
+        "traits",
+        "augments",
+        "playbook",
+        "glossary",
+    }:
         index = args.pop(0)
     if len(args) >= 2 and args[0] == "--patch":
         patch_version = args[1]
