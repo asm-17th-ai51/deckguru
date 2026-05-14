@@ -5,7 +5,7 @@ from typing import Any
 from deckguru_rag.embeddings import BGEM3Embedding
 
 
-INDEX_NAMES = ["patch_summary", "deck_templates"]
+INDEX_NAMES = ["patch_summary", "deck_templates", "units", "items", "traits", "augments", "playbook"]
 
 
 def build_chroma_indices(
@@ -81,10 +81,37 @@ def _metadata(record: dict[str, Any], index_name: str) -> dict[str, str | int | 
         "source_title": str(record.get("source_title") or ""),
         "section": str(record.get("section") or ""),
         "name": str(record.get("name") or ""),
+        "cost": _metadata_scalar(record.get("cost")),
+        "traits": _metadata_list(record.get("traits")),
+        "role": str(record.get("role") or ""),
+        "skill_name": str(record.get("skill_name") or ""),
+        "image_url": str(record.get("image_url") or ""),
+        "recipe": str(record.get("recipe") or ""),
+        "effect": str(record.get("effect") or ""),
+        "tags": _metadata_list(record.get("tags")),
+        "tiers": _metadata_list(record.get("tiers")),
+        "champions": _metadata_list(record.get("champions")),
+        "tier": str(record.get("tier") or ""),
+        "topic": str(record.get("topic") or ""),
+        "phase": str(record.get("phase") or ""),
+        "title": str(record.get("title") or ""),
+        "term": str(record.get("term") or ""),
         "target_kind": str(record.get("target_kind") or "unknown"),
         "target_name": str(record.get("target_name") or ""),
         "change_type": str(record.get("change_type") or "unknown"),
     }
+
+
+def _metadata_scalar(value: Any) -> str | int | float | bool:
+    if isinstance(value, (str, int, float, bool)):
+        return value
+    return ""
+
+
+def _metadata_list(value: Any) -> str:
+    if isinstance(value, list):
+        return ", ".join(str(item) for item in value if item)
+    return str(value or "")
 
 
 def _import_chromadb() -> Any:

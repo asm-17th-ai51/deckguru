@@ -1,0 +1,2158 @@
+{
+  "source": "traits",
+  "url": "https://lolchess.gg/synergies/set17?hl=ko",
+  "fetched_at": "2026-05-14T05:53:38Z",
+  "next_data": {
+    "props": {
+      "initialProps": {
+        "locale": "ko",
+        "notifications": [],
+        "viewOriginalSkin": false,
+        "isDakggMobile": false,
+        "isNoBannerToShow": true,
+        "desktopScale": 100,
+        "hasCookieBannerNoticeBarKey": false,
+        "isLegacyMobile": false,
+        "isDakggDesktop": false,
+        "isMobile": false,
+        "onReleaseTime": true,
+        "serverTime": "2026-05-14T05:53:38.606Z",
+        "notificationKey": "",
+        "bannerKey": "",
+        "isVenatusV4": true,
+        "theme": "light",
+        "showAdOnMobile": false,
+        "isRnMobileApp": false,
+        "seasonReleaseInfo": {
+          "season": "set18",
+          "isReleased": true
+        }
+      },
+      "pageProps": {
+        "set": "set17",
+        "originalSet": "set17",
+        "isRevival": false,
+        "isChoncc": false,
+        "scale": 100,
+        "dehydratedState": {
+          "mutations": [],
+          "queries": [
+            {
+              "state": {
+                "data": {
+                  "season": "set17",
+                  "traits": [
+                    {
+                      "key": "Anima",
+                      "ingameKey": "TFT17_AnimaSquad",
+                      "name": "동물특공대",
+                      "desc": "플레이어 대상 전투에서 패배하면 기술을 20 얻으며, 연패 횟수의 5배만큼 더 많이 얻습니다. 또한 동물특공대 처치 관여마다 기술을 2 획득합니다.<br><br>동물특공대가 기술을 100 얻을 때마다 새로운 동물특공대 무기를 제작합니다. 해당 무기를 획득하거나, 기술을 모아 다음에 더 강력한 무기를 획득할 수 있습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Anima_normal_1774318681-Anima.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Anima_black_1774318681-Anima.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Anima_white_1774318681-Anima.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "3": "연구 시작!",
+                        "6": "플레이어 대상 전투 후 전리품 획득!"
+                      }
+                    },
+                    {
+                      "key": "Arbiter",
+                      "ingameKey": "TFT17_ADMIN",
+                      "name": "중재자",
+                      "desc": "고유 신성 법률을 기록하여 선택된 원인이 발생했을 때 중재자에게 적용할 결과를 선택합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Arbiter_normal_1774318884-Arbiter.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Arbiter_black_1774318884-Arbiter.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Arbiter_white_1774318884-Arbiter.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "gold",
+                          "min": 3
+                        }
+                      ],
+                      "stats": {
+                        "2": "법률의 원인과 결과 선택",
+                        "3": "결과가 더 강력해짐"
+                      }
+                    },
+                    {
+                      "key": "Arcana",
+                      "ingameKey": "TFT17_TahmKenchUniqueTrait",
+                      "name": "예언자",
+                      "desc": "3라운드마다 탐 켄치가 보상을 제공합니다!<br><br>남은 라운드: ?<br>마지막 보상:",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Arcana_normal_1774318783-Arcana.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Arcana_black_1774318783-Arcana.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Arcana_white_1774318783-Arcana.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "Bastion",
+                      "ingameKey": "TFT17_ResistTank",
+                      "name": "요새",
+                      "desc": "아군이 방어력 및 마법 저항력을 15 얻습니다.<br><br>요새는 능력치를 더 얻습니다. 전투 시작 후 10초 동안, 요새는 추가 수치를 2배로 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Bastion_normal_1774319124-Bastion.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Bastion_black_1774319124-Bastion.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Bastion_white_1774319124-Bastion.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "16 %i:scaleArmor%%i:scaleMR%",
+                        "4": "40 %i:scaleArmor%%i:scaleMR%",
+                        "6": "60 %i:scaleArmor%%i:scaleMR%, 요새가 아닌 유닛이 20 %i:scaleArmor%%i:scaleMR% 추가 획득"
+                      }
+                    },
+                    {
+                      "key": "Brawler",
+                      "ingameKey": "TFT17_HPTank",
+                      "name": "싸움꾼",
+                      "desc": "아군이 체력을 5% 얻습니다. 싸움꾼은 능력치를 더 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Brawler_normal_1774319111-Brawler.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Brawler_black_1774319111-Brawler.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Brawler_white_1774319111-Brawler.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "최대 체력 +25%",
+                        "4": "최대 체력 +45%",
+                        "6": "최대 체력 +65%"
+                      }
+                    },
+                    {
+                      "key": "Bulwark",
+                      "ingameKey": "TFT17_ShenUniqueTrait",
+                      "name": "보루",
+                      "desc": "배치할 수 있는 유물을 소환합니다. 전투 시작 시 유물은 인접한 아군에게 최대 체력의 10%에 해당하는 보호막과 10%의 공격 속도를 부여합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Bulwark_normal_1774318757-Bulwark.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Bulwark_black_1774318757-Bulwark.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Bulwark_white_1774318757-Bulwark.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "Challenger",
+                      "ingameKey": "TFT17_ASTrait",
+                      "name": "도전자",
+                      "desc": "아군이 공격 속도를 10% 얻습니다. 도전자는 추가 공격 속도를 얻습니다. 대상이 사망하면 새로운 대상에게 돌진하며 2.5초 동안 공격 속도 상승 효과가 50% 증가합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Challenger_normal_1774319013-Challenger.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Challenger_black_1774319013-Challenger.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Challenger_white_1774319013-Challenger.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5
+                        }
+                      ],
+                      "stats": {
+                        "2": "15% %i:scaleAS%",
+                        "3": "22% %i:scaleAS%",
+                        "4": "40% %i:scaleAS%",
+                        "5": "55% %i:scaleAS%"
+                      }
+                    },
+                    {
+                      "key": "Channeler",
+                      "ingameKey": "TFT17_ManaTrait",
+                      "name": "전달자",
+                      "desc": "고유: 전달자가 모든 요소로부터 얻는 마나가 20% 증가합니다.<br><br>아군이 마나 재생을 얻습니다. 전달자는 능력치를 더 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Channeler_normal_1774319181-Channeler.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Channeler_black_1774319181-Channeler.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Channeler_white_1774319181-Channeler.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5
+                        }
+                      ],
+                      "stats": {
+                        "2": "1 %i:TFTManaRegen% | 3 %i:TFTManaRegen%",
+                        "3": "1 %i:TFTManaRegen% | 5 %i:TFTManaRegen%",
+                        "4": "2 %i:TFTManaRegen% | 7 %i:TFTManaRegen%",
+                        "5": "3 %i:TFTManaRegen% | 9 %i:TFTManaRegen%"
+                      }
+                    },
+                    {
+                      "key": "Commander",
+                      "ingameKey": "TFT17_SonaUniqueTrait",
+                      "name": "지휘관",
+                      "desc": "소나가 2라운드마다 아군의 전투 시 행동 방식을 변경할 수 있는 무작위 지휘 모드를 제공합니다. 지휘 모드는 장착하지 않았더라도 플레이어 대상 전투 2회 동안 지속됩니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Commander_normal_1774319058-Commander.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Commander_black_1774319058-Commander.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Commander_white_1774319058-Commander.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "DarkLady",
+                      "ingameKey": "TFT17_MorganaUniqueTrait",
+                      "name": "어둠의 여인",
+                      "desc": "아군이 내구력을 4% 얻으며, 모르가나가 어둠의 형상일 때는 10%까지 증가합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/DarkLady_normal_1774318826-DarkLady.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/DarkLady_black_1774318826-DarkLady.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/DarkLady_white_1774318826-DarkLady.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "DarkStar",
+                      "ingameKey": "TFT17_DarkStar",
+                      "name": "암흑의 별",
+                      "desc": "",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/DarkStar_normal_1774318813-DarkStar.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/DarkStar_black_1774318813-DarkStar.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/DarkStar_white_1774318838-DarkStar.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6,
+                          "max": 8
+                        },
+                        {
+                          "style": "chromatic",
+                          "min": 9
+                        }
+                      ],
+                      "stats": {
+                        "2": "암흑의 별이 최대 체력이 8% 이하인 적을 집어삼키는 블랙홀 생성",
+                        "4": "또한 45% %i:scaleAD%%i:scaleAP% 획득",
+                        "6": "또한 가장 강한 암흑의 별 유닛이 초대질량 상태가 되어 암흑의 별 효과 85% 증가 및 소형 블랙홀 2개 생성",
+                        "9": "모든 암흑의 별이 초대질량 상태가 됨. 10레벨 달성 시 모두를 빨아들임"
+                      }
+                    },
+                    {
+                      "key": "DivineDuelist",
+                      "ingameKey": "TFT17_FioraUniqueTrait",
+                      "name": "신성 결투가",
+                      "desc": "전투 승리 시 입힌 플레이어 피해량의 15%만큼 전략가 체력을 회복합니다.<br><br>피오라는 1대1 대결에서 항상 승리합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/DivineDuelist_normal_1774319099-DivineDuelist.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/DivineDuelist_black_1774319099-DivineDuelist.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/DivineDuelist_white_1774319099-DivineDuelist.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "Doomer",
+                      "ingameKey": "TFT17_VexUniqueTrait",
+                      "name": "파멸자",
+                      "desc": "전투 시작: 모든 적에게 파멸 표식을 남깁니다.<br><br>각 전투에서 적이 처음으로 피해를 입으면 파멸 표식이 소모되고 해당 적의 공격력과 주문력을 12%만큼 강탈해 가장 강한 아군 벡스에게 부여합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Doomer_normal_1774318972-Doomer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Doomer_black_1774318972-Doomer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Doomer_white_1774318972-Doomer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "Eradicator",
+                      "ingameKey": "TFT17_JhinUniqueTrait",
+                      "name": "말살자",
+                      "desc": "적의 방어력 및 마법 저항력이 10% 감소합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Eradicator_normal_1774708939-Singularity_normal_1774318951-Singularity.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Eradicator_black_1774708939-Singularity_black_1774318951-Singularity.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Eradicator_white_1774708939-Singularity_white_1774318951-Singularity.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "FactoryNew",
+                      "ingameKey": "TFT17_GravesTrait",
+                      "name": "최신상",
+                      "desc": "전투에 참여한 후 무기고를 열어 가장 강한 아군 그레이브즈를 위한 영구적인 업그레이드를 구매합니다.<br><br>업그레이드 3회마다 다음 업그레이드에 필요한 라운드 수가 하나씩 증가합니다.<br><br>다음 업그레이드: ?라운드 후",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/FactoryNew_normal_1774318923-FactoryNew.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/FactoryNew_black_1774318923-FactoryNew.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/FactoryNew_white_1774318923-FactoryNew.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "Fateweaver",
+                      "ingameKey": "TFT17_Fateweaver",
+                      "name": "운명술사",
+                      "desc": "고유: 운명술사는 정밀을 가집니다.<br><br>정밀: 스킬 피해에 치명타가 적용될 수 있습니다. 추가 정밀 획득 시 치명타 피해량이 10% 증가합니다.<br>행운: 두 번 시도하고 더 나은 결과를 선택합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Fateweaver_normal_1774319142-Fateweaver.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Fateweaver_black_1774319142-Fateweaver.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Fateweaver_white_1774319142-Fateweaver.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "gold",
+                          "min": 4
+                        }
+                      ],
+                      "stats": {
+                        "2": "스킬의 확률 효과에 행운 적용",
+                        "4": "치명타 확률 20%, 치명타 피해량 20% 획득. 치명타 또한 행운 적용"
+                      }
+                    },
+                    {
+                      "key": "GalaxyHunter",
+                      "ingameKey": "TFT17_ZedUniqueTrait",
+                      "name": "은하계 사냥꾼",
+                      "desc": "제드는 침략자 제드 증강으로 획득할 수 있습니다.<br><br>분신이 하나 이상 살아있는 동안 제드가 추가 공격력을 40% 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/GalaxyHunter_normal_1774319155-GalaxyHunter.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/GalaxyHunter_black_1774319155-GalaxyHunter.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/GalaxyHunter_white_1774319155-GalaxyHunter.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "GunGoddess",
+                      "ingameKey": "TFT17_MissFortuneUniqueTrait",
+                      "name": "기동총격여신",
+                      "desc": "미스 포츈을 배치하면 전달자 모드, 도전자 모드, 복제자 모드 중 하나를 선택합니다. 미스 포츈은 모드에 따라 고유 스킬을 가지며 그에 맞는 특성을 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/GunGoddess_normal_1774318987-GunGoddess.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/GunGoddess_black_1774318987-GunGoddess.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/GunGoddess_white_1774318987-GunGoddess.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "Marauder",
+                      "ingameKey": "TFT17_MeleeTrait",
+                      "name": "습격자",
+                      "desc": "아군이 모든 피해 흡혈을 5% 얻습니다. 습격자가 모든 피해 흡혈, 공격력을 더 얻고 모든 피해 흡혈 초과 회복량이 보호막으로 전환됩니다. (최대 체력의 25%까지)",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Marauder_normal_1777465718-Slayer_normal_1762918274-Slayer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Marauder_black_1777465719-Slayer_black_1762918274-Slayer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Marauder_white_1777465719-Slayer_white_1762918274-Slayer.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "5% %i:scaleSV%, 18% %i:scaleAD%",
+                        "4": "7% %i:scaleSV%, 35% %i:scaleAD%",
+                        "6": "10% %i:scaleSV%, 55% %i:scaleAD%."
+                      }
+                    },
+                    {
+                      "key": "Mecha",
+                      "ingameKey": "TFT17_Mecha",
+                      "name": "메카",
+                      "desc": "고유: 메카 유닛은 궁극의 형태로 변신할 수 있으며, 변신 시 스킬이 업그레이드되고 체력을 40% 얻습니다. 변신한 메카는 2개의 팀 슬롯을 차지하며 메카 특성 중첩 2개로 간주됩니다.<br><br>메카 변신기를 사용해 메카 유닛의 형태를 전환하세요.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Mecha_normal_1774318728-Mecha.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Mecha_black_1774318729-Mecha.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Mecha_white_1774318729-Mecha.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "3": "에너지 전지: 메카가 %i:scaleAD%%i:scaleAP% 25% 획득",
+                        "4": "과출력 전지: %i:scaleAD%%i:scaleAP% 45%로 증가",
+                        "6": "정밀 엔지니어링: 최대 팀 규모 +1"
+                      }
+                    },
+                    {
+                      "key": "Meeple",
+                      "ingameKey": "TFT17_Astronaut",
+                      "name": "정령족",
+                      "desc": "정령족은 정령을 끌어들여 정령다운 방식으로 정령족 스킬을 강화합니다. 또한 추가 체력을 얻습니다.<br><br>복제 시간 = 챔피언 단계",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Meeple_normal_1774318871-Meeple.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Meeple_black_1774318871-Meeple.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Meeple_white_1774318871-Meeple.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 6
+                        },
+                        {
+                          "style": "gold",
+                          "min": 7,
+                          "max": 9
+                        },
+                        {
+                          "style": "chromatic",
+                          "min": 10
+                        }
+                      ],
+                      "stats": {
+                        "3": "2 %i:set14AmpIcon%, 100 %i:scaleHealth%",
+                        "5": "3 %i:set14AmpIcon%, 400 %i:scaleHealth%",
+                        "7": "4 %i:set14AmpIcon%, 400 %i:scaleHealth%. 대기석에 복제 슬롯을 생성합니다. 복제 슬롯에 배치한 챔피언의 복제가 완료되면 골드와 1성 복사본을 획득합니다.",
+                        "10": "6 %i:set14AmpIcon%, 500 %i:scaleHealth% 정령군주 넷 소환!"
+                      }
+                    },
+                    {
+                      "key": "NOVA",
+                      "ingameKey": "TFT17_DRX",
+                      "name": "N.O.V.A.",
+                      "desc": "아트록스: 아군이 입히는 피해가 적에게 30% 파쇄 및 파열 적용<br>케이틀린: 아군 공격 속도 20% 증가<br>아칼리: 아군 정밀 획득<br>마오카이: 아군 최대 체력 12% 회복<br>킨드레드: 가장 강한 탱커에게 800의 보호막 부여<br>상징: 아군이 중첩되는 10% 추가 고정 피해 입힘",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/NOVA_normal_1774318702-NOVA.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/NOVA_black_1774318702-NOVA.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/NOVA_white_1774318702-NOVA.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5
+                        }
+                      ],
+                      "stats": {
+                        "2": "전투 시작 6초 후 N.O.V.A. 유닛이 챔피언에 따라 아군에게 힘의 고조 부여",
+                        "5": "타격 선택기 획득. 힘의 고조 시 선택한 N.O.V.A. 유닛 타격 발동"
+                      }
+                    },
+                    {
+                      "key": "PartyAnimal",
+                      "ingameKey": "TFT17_BlitzcrankUniqueTrait",
+                      "name": "파티광",
+                      "desc": "전투당 1회 체력이 45% 아래로 떨어지면 대상으로 지정할 수 없는 상태가 되고 수리를 시작해 매초 최대 체력의 15%만큼 체력을 회복합니다. 체력을 모두 회복하거나 다른 아군이 없을 경우 전투에 복귀합니다. 체력이 모두 회복된 경우, 전투가 끝날 때까지 블리츠크랭크가 그루브 상태가 되며 불청객 기본 지속 효과 번개 발사 속도가 네 배 빨라집니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PartyAnimal_normal_1774319196-PartyAnimal.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PartyAnimal_black_1774319196-PartyAnimal.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PartyAnimal_white_1774319196-PartyAnimal.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "Primordian",
+                      "ingameKey": "TFT17_Primordian",
+                      "name": "태고족",
+                      "desc": "받은 피해량의 8%가 입히는 피해량에 기여합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Primordian_normal_1774318936-Primordian.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Primordian_black_1774318936-Primordian.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Primordian_white_1774318936-Primordian.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "gold",
+                          "min": 3
+                        }
+                      ],
+                      "stats": {
+                        "2": "피해를 입히면 서로 다른 태고족 별 레벨에 따라 군체 유충 생성",
+                        "3": "군체 유충 45% 추가 생성! 플레이어 대상 전투를 마칠 때마다 무작위 1단계 또는 2단계 챔피언 1명을 획득합니다."
+                      }
+                    },
+                    {
+                      "key": "Psionic",
+                      "ingameKey": "TFT17_PsyOps",
+                      "name": "초능력",
+                      "desc": "모든 아군에게 장착시킬 수 있는 초능력 아이템을 획득합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Psionic_normal_1774318910-Psionic.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Psionic_black_1774318910-Psionic.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Psionic_white_1774318910-Psionic.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "gold",
+                          "min": 4
+                        }
+                      ],
+                      "stats": {
+                        "2": "? 획득",
+                        "4": "? 획득, 초능력 유닛이 초능력 아이템 장착 시 추가 효과 획득"
+                      }
+                    },
+                    {
+                      "key": "Redeemer",
+                      "ingameKey": "TFT17_RhaastUniqueTrait",
+                      "name": "구원자",
+                      "desc": "아군 전체 공격 속도: ?% %i:scaleAS%<br>아군 전체 방어력 및 마법 저항력: ? %i:scaleArmor%%i:scaleMR%",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Redeemer_normal_1774318714-Redeemer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Redeemer_black_1774318714-Redeemer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Redeemer_white_1774318714-Redeemer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {
+                        "1": "활성화된 고유 특성이 아닌 특성 하나당 아군이 공격 속도 2%/2.5%/3%, 방어력 및 마법 저항력 2/2.5/3 획득"
+                      }
+                    },
+                    {
+                      "key": "Replicator",
+                      "ingameKey": "TFT17_APTrait",
+                      "name": "복제자",
+                      "desc": "복제자 스킬은 감소된 효과로 한 번 더 발동됩니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Replicator_normal_1774319028-Replicator.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Replicator_black_1774319028-Replicator.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Replicator_white_1774319028-Replicator.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "gold",
+                          "min": 4
+                        }
+                      ],
+                      "stats": {
+                        "2": "22% 위력",
+                        "4": "45% 위력"
+                      }
+                    },
+                    {
+                      "key": "Rogue",
+                      "ingameKey": "TFT17_AssassinTrait",
+                      "name": "불한당",
+                      "desc": "불한당이 공격력 및 주문력을 얻습니다. 체력이 처음 50% 아래로 떨어지면 그림자 속으로 숨어듭니다. 해당 불한당을 대상으로 지정하던 적은 주변 다른 유닛으로 대상을 변경하며, 탱커를 우선합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Rogue_normal_1774319042-Rogue.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Rogue_black_1774319042-Rogue.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Rogue_white_1774319042-Rogue.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5
+                        }
+                      ],
+                      "stats": {
+                        "2": "12% %i:scaleAD% %i:scaleAP%",
+                        "3": "25% %i:scaleAD% %i:scaleAP%",
+                        "4": "40% %i:scaleAD% %i:scaleAP%",
+                        "5": "55% %i:scaleAD% %i:scaleAP%"
+                      }
+                    },
+                    {
+                      "key": "Set15Bastion",
+                      "ingameKey": "TFT15_Bastion",
+                      "name": "요새",
+                      "desc": "아군이 방어력 및 마법 저항력을 10 얻습니다.<br><br>요새는 능력치를 더 얻습니다. 전투 시작 후 10초 동안, 요새는 추가 수치를 2배로 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEBastion_normal_1752196575-Bastion.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEBastion_black_1752196575-Bastion.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEBastion_white_1752196575-Bastion.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "18 %i:scaleArmor%%i:scaleMR%",
+                        "4": "40 %i:scaleArmor%%i:scaleMR%",
+                        "6": "75 %i:scaleArmor%%i:scaleMR%, 요새가 아닌 유닛이 추가로 25 %i:scaleArmor%%i:scaleMR% 획득"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15BattleAcademia",
+                      "ingameKey": "TFT15_BattleAcademia",
+                      "name": "전투사관학교",
+                      "desc": "전투사관학교 챔피언이 스킬을 업그레이드하고 잠재력%i:set14AmpIcon%을 얻습니다. 잠재력은 전투사관학교 챔피언의 스킬을 강화합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEBattleAcademia_normal_1752196661-Battle%20Academia.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEBattleAcademia_black_1752196661-Battle%20Academia.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEBattleAcademia_white_1752196661-Battle%20Academia.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 6
+                        },
+                        {
+                          "style": "gold",
+                          "min": 7,
+                          "max": 9
+                        },
+                        {
+                          "style": "chromatic",
+                          "min": 10
+                        }
+                      ],
+                      "stats": {
+                        "3": "3 %i:set14AmpIcon%",
+                        "5": "5 %i:set14AmpIcon%",
+                        "7": "7 %i:set14AmpIcon%",
+                        "10": "진정한 잠재력 해방"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15CrystalGambit",
+                      "ingameKey": "TFT15_GemForce",
+                      "name": "수정 갬빗",
+                      "desc": "플레이어 대상 전투에서 처치 및 패배 시 보석의 힘을 얻습니다. 플레이어 대상 전투 3회마다 보석의 힘을 보상으로 전환하거나 '묻고 두 배로 가'를 활성화할 수 있습니다.<br>'묻고 두 배로 가'를 활성화하면 패배 시 보석의 힘을 100% 더 얻지만, 승리 시 보석의 힘 50%를 잃고 즉시 이익을 실현합니다.<br>보석의 힘 획득량은 스테이지 3 및 4에서 증가합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBECrystalGambit_normal_1752195958-Crystal%20Gambit.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBECrystalGambit_black_1752195958-Crystal%20Gambit.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBECrystalGambit_white_1752195958-Crystal%20Gambit.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5,
+                          "max": 6
+                        },
+                        {
+                          "style": "gold",
+                          "min": 7,
+                          "max": 9
+                        },
+                        {
+                          "style": "chromatic",
+                          "min": 10
+                        }
+                      ],
+                      "stats": {
+                        "3": "처치당 ?, 패배당 ?",
+                        "5": "또한 ?명 처치할 때마다 추가 전리품을 획득하고 새 처치 횟수로 새로고침 (처치: ?)",
+                        "7": "보상 130%. 수정 갬빗 유닛이 300 %i:scaleHealth% 및 15% %i:scaleDA% 획득"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Duelist",
+                      "ingameKey": "TFT15_Duelist",
+                      "name": "결투가",
+                      "desc": "결투가는 기본 공격 시 공격 속도를 얻습니다. 최대 12회까지 중첩됩니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEDuelist_normal_1752196366-Duelist.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEDuelist_black_1752196367-Duelist.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEDuelist_white_1752196367-Duelist.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "4% %i:scaleAS%",
+                        "4": "7% %i:scaleAS%",
+                        "6": "10% %i:scaleAS%, 결투가가 12% %i:scaleDR% 획득"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Edgelord",
+                      "ingameKey": "TFT15_Edgelord",
+                      "name": "이단아",
+                      "desc": "이단아가 모든 피해 흡혈과 공격력을 얻습니다. 체력이 50% 아래인 적을 공격할 때 공격 속도를 40% 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEEdgelord_normal_1752196603-Edgelord.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEEdgelord_black_1752196603-Edgelord.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEEdgelord_white_1752196603-Edgelord.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "10% %i:scaleSV%, 15% %i:scaleAD%",
+                        "4": "12% %i:scaleSV%, 30% %i:scaleAD%",
+                        "6": "15% %i:scaleSV%, 60% %i:scaleAD%"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Executioner",
+                      "ingameKey": "TFT15_Destroyer",
+                      "name": "처형자",
+                      "desc": "처형자가 치명타 확률 및 치명타 피해량을 얻습니다. 스킬에 치명타가 적용될 수 있습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEExecutioner_normal_1752196692-Executioner.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEExecutioner_black_1752196692-Executioner.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEExecutioner_white_1752196692-Executioner.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5
+                        }
+                      ],
+                      "stats": {
+                        "2": "25% %i:scaleCrit%, 10% %i:scaleCritMult%",
+                        "3": "35% %i:scaleCrit%, 12% %i:scaleCritMult%",
+                        "4": "50% %i:scaleCrit%, 18% %i:scaleCritMult%",
+                        "5": "55% %i:scaleCrit%, 28% %i:scaleCritMult%"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Heavyweight",
+                      "ingameKey": "TFT15_Heavyweight",
+                      "name": "헤비급",
+                      "desc": "아군이 체력을 100 얻습니다.<br><br>헤비급은 추가 체력을 얻고 체력의 일정 비율만큼 공격력을 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEHeavyweight_normal_1752195976-Heavyweight.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEHeavyweight_black_1752195976-Heavyweight.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEHeavyweight_white_1752195976-Heavyweight.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "20% %i:scaleHealth% | %i:scaleHealth%의 0.2%만큼 %i:scaleAD% 획득",
+                        "4": "40% %i:scaleHealth% | %i:scaleHealth%의 0.4%만큼 %i:scaleAD% 획득",
+                        "6": "65% %i:scaleHealth% | %i:scaleHealth%의 0.6%만큼 %i:scaleAD% 획득"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Juggernaut",
+                      "ingameKey": "TFT15_Juggernaut",
+                      "name": "전쟁기계",
+                      "desc": "전쟁기계가 내구력을 얻습니다. 체력이 50% 이상일 경우 수치가 증가합니다. 전쟁기계가 사망하면 다른 전쟁기계가 최대 체력의 10%만큼 체력을 회복합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEJuggernaut_normal_1752196649-Juggernaut.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEJuggernaut_black_1752196649-Juggernaut.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEJuggernaut_white_1752196649-Juggernaut.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "15% 또는 25% %i:scaleDR%",
+                        "4": "20% 또는 30% %i:scaleDR%",
+                        "6": "25% 또는 35% %i:scaleDR%"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Luchador",
+                      "ingameKey": "TFT15_Luchador",
+                      "name": "프로레슬러",
+                      "desc": "프로레슬러가 추가 공격력을 얻습니다.<br><br>체력이 50%일 때, 프로레슬러가 해로운 효과를 제거하고 체력을 회복한 다음, 전투에 다시 뛰어들어 반경 1칸 내 적을 1초 동안 기절시킵니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBELuchador_normal_1752196405-Luchador.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBELuchador_black_1752196406-Luchador.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBELuchador_white_1752196406-Luchador.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "gold",
+                          "min": 4
+                        }
+                      ],
+                      "stats": {
+                        "2": "15% %i:scaleAD%, 25% %i:scaleHealth% 회복",
+                        "4": "40% %i:scaleAD%, 50% %i:scaleHealth% 회복"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Mentor",
+                      "ingameKey": "TFT15_OldMentor",
+                      "name": "멘토",
+                      "desc": "이 특성은 멘토가 정확히 하나 또는 각기 다른 멘토가 넷 있을 때 활성화됩니다.<br><br>코부코: 피해량 감소 6%<br>우디르: 공격력 및 주문력 8%<br>야스오: 공격 속도 10%<br>라이즈: 기본 공격 시 추가 마나 2 획득",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEMentor_normal_1752196456-Mentor.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEMentor_black_1752196457-Mentor.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEMentor_white_1752196457-Mentor.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 1,
+                          "max": 1
+                        },
+                        {
+                          "style": "silver",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "gold",
+                          "min": 4,
+                          "max": 4
+                        }
+                      ],
+                      "stats": {
+                        "1": "아군이 추가 효과 획득",
+                        "2": "멘토가 모든 추가 효과를 획득하고 멘토의 스킬이 업그레이드되지만, 다른 아군에게는 아무 효과 없음"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15MightyMech",
+                      "ingameKey": "TFT15_SentaiRanger",
+                      "name": "거대 메크",
+                      "desc": "거대 메크 로봇을 획득합니다. 거대 메크가 입힌 피해량의 12%만큼 체력을 회복합니다.<br><br>각 거대 메크 챔피언의 별 레벨당 거대 메크 로봇의 위력이 증가합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEMightyMech_normal_1752196347-Mighty%20Mech.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEMightyMech_black_1752196347-Mighty%20Mech.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEMightyMech_white_1752196347-Mighty%20Mech.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 6
+                        },
+                        {
+                          "style": "gold",
+                          "min": 7
+                        },
+                        {
+                          "style": "chromatic",
+                          "min": 7
+                        }
+                      ],
+                      "stats": {
+                        "3": "거대 메크 로봇 등장",
+                        "5": "칼날 프로토콜: 1레벨",
+                        "7": "칼날 프로토콜: 2레벨"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15MonsterTrainer",
+                      "ingameKey": "TFT15_MonsterTrainer",
+                      "name": "괴물 트레이너",
+                      "desc": "룰루가 소환해 전투에 대신 내보낼 괴물을 선택하세요!",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEMonsterTrainer_normal_1752196388-Monster%20Trainer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEMonsterTrainer_black_1752196389-Monster%20Trainer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEMonsterTrainer_white_1752196389-Monster%20Trainer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {},
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Prodigy",
+                      "ingameKey": "TFT15_Prodigy",
+                      "name": "신동",
+                      "desc": "아군이 마나 재생을 얻습니다. 신동은 능력치를 더 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEProdigy_normal_1752196556-Prodigy.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEProdigy_black_1752196556-Prodigy.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEProdigy_white_1752196556-Prodigy.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5
+                        }
+                      ],
+                      "stats": {
+                        "2": "1 %i:TFTManaRegen% | 3 %i:TFTManaRegen%",
+                        "3": "1 %i:TFTManaRegen% | 4 %i:TFTManaRegen%",
+                        "4": "1 %i:TFTManaRegen% | 6 %i:TFTManaRegen%",
+                        "5": "1 %i:TFTManaRegen% | 7 %i:TFTManaRegen% | 신동이 스킬로 입힌 피해량의 12%만큼 아군 1명의 체력을 회복시킴"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Protector",
+                      "ingameKey": "TFT15_Protector",
+                      "name": "봉쇄자",
+                      "desc": "유닛이 보호막이 씌워졌을 때 내구력을 5% 얻습니다.<br><br>전투당 1회 체력이 50%일 때 봉쇄자가 가장 가까운 아군과 자신에게 최대 체력의 일정 비율만큼 피해를 흡수하는 보호막을 씌웁니다. 보호막은 중첩됩니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEProtector_normal_1752196525-Protector.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEProtector_black_1752196525-Protector.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEProtector_white_1752196525-Protector.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "%i:scaleHealth%의 18%에 해당하는 보호막",
+                        "4": "%i:scaleHealth%의 36%에 해당하는 보호막",
+                        "6": "%i:scaleHealth%의 55%에 해당하는 보호막"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15RogueCaptain",
+                      "ingameKey": "TFT15_Captain",
+                      "name": "해적선장",
+                      "desc": "트위스티드 페이트가 크루 함선을 업그레이드해 피해량의 15%를 고정 피해로 입히도록 하며, 라운드마다 무작위 보상을 제공하는 현상금 카드를 뽑습니다.<br><br>현상금 카드는 플레이어 대상 전투마다 더 좋아집니다. (배치한 라운드: ?)<br><br>현재 현상금 카드:<br>현상금이 없습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBERogueCaptain_normal_1752196037-Rogue%20Captain.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBERogueCaptain_black_1752196037-Rogue%20Captain.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBERogueCaptain_white_1752196037-Rogue%20Captain.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {},
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Rosemother",
+                      "ingameKey": "TFT15_Rosemother",
+                      "name": "장미 어머니",
+                      "desc": "자이라의 별 레벨에 따라 배치할 수 있는 식물을 1/1/8개 획득합니다. 전방 가로 2열에 배치한 식물은 튼튼한 휘감는 뿌리로 자라며, 후방 가로 2열에 배치한 식물은 치명적인 가시로 자랍니다.<br><br>장미 어머니의 식물은 자이라 주문력 및 공격 속도의 효과를 받습니다.<br><br>자이라가 스킬을 사용하면 자이라의 식물이 체력을 35% 회복하고 전투가 끝날 때까지 공격 속도를 35% 얻습니다. 식물이 사망한 상태라면, 대신 부활시킵니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBERosemother_normal_1752196135-Rosemother.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBERosemother_black_1752196135-Rosemother.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBERosemother_white_1752196135-Rosemother.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {},
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Sniper",
+                      "ingameKey": "TFT15_Sniper",
+                      "name": "저격수",
+                      "desc": "저격수가 피해 증폭을 얻습니다. 멀리 떨어진 적을 대상으로 수치가 증가합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESniper_normal_1752196621-Sniper.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESniper_black_1752196621-Sniper.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESniper_white_1752196621-Sniper.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5
+                        }
+                      ],
+                      "stats": {
+                        "2": "13% %i:scaleDA%, 칸당 +3% %i:scaleDA%",
+                        "3": "18% %i:scaleDA%, 칸당 +5% %i:scaleDA%",
+                        "4": "25% %i:scaleDA%, 칸당 +7% %i:scaleDA%",
+                        "5": "25% %i:scaleDA%, 칸당 +10% %i:scaleDA%"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Sorcerer",
+                      "ingameKey": "TFT15_Spellslinger",
+                      "name": "마법사",
+                      "desc": "마법사가 추가 주문력을 얻습니다.<br><br>적이 마법사에게 피해를 입은 뒤 사망하면 자신의 최대 체력에 비례한 피해를 다른 적에게 입힙니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESorcerer_normal_1752196437-Sorcerer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESorcerer_black_1752196438-Sorcerer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESorcerer_white_1752196438-Sorcerer.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "20% %i:scaleAP%, 최대 %i:scaleHealth%의 8%",
+                        "4": "55% %i:scaleAP%, 최대 %i:scaleHealth%의 10%",
+                        "6": "80% %i:scaleAP%, 적 2명에게 최대 %i:scaleHealth%의 12%만큼 피해를 입힘"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15SoulFighter",
+                      "ingameKey": "TFT15_SoulFighter",
+                      "name": "소울 파이터",
+                      "desc": "소울 파이터가 추가 체력을 얻고 매초 공격력과 주문력을 얻습니다. 최대 8회까지 중첩됩니다. 최대 중첩 시 추가 고정 피해를 입힙니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESoulFighter_normal_1752196501-Soul%20Fighter.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESoulFighter_black_1752196501-Soul%20Fighter.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESoulFighter_white_1752196501-Soul%20Fighter.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "silver",
+                          "min": 6,
+                          "max": 7
+                        },
+                        {
+                          "style": "gold",
+                          "min": 8,
+                          "max": 9
+                        },
+                        {
+                          "style": "chromatic",
+                          "min": 10
+                        }
+                      ],
+                      "stats": {
+                        "2": "120 %i:scaleHealth%, 1% %i:scaleAD%%i:scaleAP%, 피해량 +10%",
+                        "4": "240 %i:scaleHealth%, 2.5% %i:scaleAD%%i:scaleAP%, 피해량 +16%",
+                        "6": "425 %i:scaleHealth%, 4% %i:scaleAD%%i:scaleAP%, 피해량 +22%",
+                        "8": "600 %i:scaleHealth%, 4% %i:scaleAD%%i:scaleAP%, 피해량 +28%",
+                        "10": "최대 소울 파워"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15StanceMaster",
+                      "ingameKey": "TFT15_DragonFist",
+                      "name": "태세의 대가",
+                      "desc": "리 신을 배치할 때 결투가 태세, 처형자 태세, 전쟁기계 태세 중 하나를 선택해야 합니다! 각 태세는 고유 스킬이 있으며, 리 신에게 해당 특성을 부여합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEStanceMaster_normal_1752196170-Stance%20Master.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEStanceMaster_black_1752196170-Stance%20Master.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEStanceMaster_white_1752196170-Stance%20Master.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {},
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15StarGuardian",
+                      "ingameKey": "TFT15_StarGuardian",
+                      "name": "별 수호자",
+                      "desc": "별 수호자는 모든 별 수호자에게 부여되는 고유 팀워크 추가 효과를 갖습니다. 배치된 별 수호자마다 추가 효과를 강화합니다!<br>프리즘: 별 수호자 10명을 배치하고 별을 깨우세요!<br>렐: 보호막 획득<br>신드라: 주문력 획득<br>자야: 기본 공격 시 마법 피해를 입힘<br>아리: 스킬 사용 시 마나 획득<br>니코: 체력 회복량 및 보호막 흡수량 증가<br>뽀삐: 체력이 낮을 때 체력 회복<br>징크스: 공격 속도 획득<br>세라핀: 모든 능력치 획득<br>상징: 다른 추가 효과 증가",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEStarGuardian_normal_1752196479-Star%20Guardian.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEStarGuardian_black_1752196479-Star%20Guardian.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEStarGuardian_white_1752196479-Star%20Guardian.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6,
+                          "max": 6
+                        },
+                        {
+                          "style": "gold",
+                          "min": 7,
+                          "max": 7
+                        },
+                        {
+                          "style": "gold",
+                          "min": 8,
+                          "max": 8
+                        },
+                        {
+                          "style": "gold",
+                          "min": 9,
+                          "max": 9
+                        },
+                        {
+                          "style": "chromatic",
+                          "min": 10
+                        }
+                      ],
+                      "stats": {},
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Strategist",
+                      "ingameKey": "TFT15_Strategist",
+                      "name": "책략가",
+                      "desc": "전투 시작: 전방 가로 2열에 있는 아군이 15초 동안 보호막을 얻습니다. 후방 가로 2열에 있는 아군이 피해 증폭을 얻습니다. 책략가는 능력치를 세 배로 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEStrategist_normal_1752196677-Strategist.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEStrategist_black_1752196677-Strategist.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEStrategist_white_1752196677-Strategist.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "gold",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5
+                        }
+                      ],
+                      "stats": {
+                        "2": "150 보호막, 4% %i:scaleDA%",
+                        "3": "200 보호막, 6% %i:scaleDA%",
+                        "4": "300 보호막, 10% %i:scaleDA%",
+                        "5": "400 보호막, 14% %i:scaleDA%"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15SupremeCells",
+                      "ingameKey": "TFT15_SupremeCells",
+                      "name": "슈프림 셀",
+                      "desc": "지난 전투에서 가장 많은 피해를 입힌 셀이 슈프림이 됩니다. 슈프림 셀이 사망하면, 현재 가장 많은 피해를 입힌 셀이 슈프림이 됩니다.<br><br>셀이 피해 증폭을 얻습니다. 슈프림 셀은 능력치를 더 얻으며 체력이 10% 아래인 적을 처형합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESupremeCells_normal_1752196234-Supreme%20Cells.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESupremeCells_black_1752196234-Supreme%20Cells.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBESupremeCells_white_1752196234-Supreme%20Cells.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "gold",
+                          "min": 4
+                        }
+                      ],
+                      "stats": {
+                        "2": "8% %i:scaleDA% | 12% %i:scaleDA%",
+                        "3": "18% %i:scaleDA% | 30% %i:scaleDA%",
+                        "4": "28% %i:scaleDA% | 50% %i:scaleDA%, 두 번째 슈프림 획득"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15TheChamp",
+                      "ingameKey": "TFT15_ElTigre",
+                      "name": "레슬링 챔피언",
+                      "desc": "레슬링 챔피언이 플레이어를 대상으로 승리하면 레슬링 챔피언의 별 레벨만큼 포로 팬이 추가됩니다. 패배 시 포로 팬 하나당 전략가 피해량이 1 감소합니다. 이후 포로 팬을 모두 잃습니다.<br><br>포로 팬: ?",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBETheChamp_normal_1752196253-The%20Champ.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBETheChamp_black_1752196254-The%20Champ.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBETheChamp_white_1752196254-The%20Champ.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {},
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15TheCrew",
+                      "ingameKey": "TFT15_TheCrew",
+                      "name": "크루",
+                      "desc": "크루 챔피언이 배치한 크루 멤버 1명당 체력 및 공격 속도를 10% 얻습니다.<br><br>3성 크루 챔피언 1명당 추가 효과를 얻습니다.<br><br>(1x ☆☆☆): 유료 새로고침당 경험치 +1, 플레이어 레벨에 의해 크루 유닛 확률이 감소하지 않음<br>(2x ☆☆☆): 라운드당 무료 새로고침 +1회<br>(3x ☆☆☆): 280의 피해를 입히면 로켓을 발사해 75의 피해를 입힘<br>(4x ☆☆☆): 플레이어 레벨당 로켓을 2.5% 더 자주 발사<br>(5x ☆☆☆): 행성 파괴자 발사",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBETheCrew_normal_1752196271-The%20Crew.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBETheCrew_black_1752196272-The%20Crew.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBETheCrew_white_1752196272-The%20Crew.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "gold",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5
+                        }
+                      ],
+                      "stats": {},
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Set15Wraith",
+                      "ingameKey": "TFT15_Empyrean",
+                      "name": "악령",
+                      "desc": "4초마다 그림자 세계가 가장 가까운 적 3명을 공격해 마지막 발동 이후 악령이 입힌 피해량의 일정 비율만큼 마법 피해를 입힙니다.<br><br>체력이 가장 낮은 아군 악령이 악령과 그림자 세계가 입힌 피해량의 18%만큼 체력을 회복합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEWraith_normal_1752196331-Wraith.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEWraith_black_1752196331-Wraith.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/PBEWraith_white_1752196331-Wraith.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "피해량의 20%",
+                        "4": "피해량의 45%",
+                        "6": "피해량의 60%"
+                      },
+                      "isRevival": true,
+                      "isRevivalOnly": true,
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Shepherd",
+                      "ingameKey": "TFT17_SummonTrait",
+                      "name": "길잡이",
+                      "desc": "길잡이는 전투를 돕는 별의 결속을 소환합니다.<br><br>비아와 바이엔의 위력은 모든 길잡이 별 레벨 총합에 따라 증가합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Shepherd_normal_1774319001-Shepherd.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Shepherd_black_1774319001-Shepherd.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Shepherd_white_1774319001-Shepherd.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 6
+                        },
+                        {
+                          "style": "gold",
+                          "min": 7
+                        }
+                      ],
+                      "stats": {
+                        "3": "비아 소환",
+                        "5": "바이엔 소환",
+                        "7": "비아와 바이엔의 결속 강화"
+                      }
+                    },
+                    {
+                      "key": "Singularity",
+                      "ingameKey": "TFT17_Singularity",
+                      "name": "특이점",
+                      "desc": "",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Singularity_normal_1774318951-Singularity.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Singularity_black_1774318951-Singularity.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Singularity_white_1774318951-Singularity.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 1
+                        }
+                      ],
+                      "stats": {},
+                      "isHidden": true
+                    },
+                    {
+                      "key": "Sniper",
+                      "ingameKey": "TFT17_RangedTrait",
+                      "name": "저격수",
+                      "desc": "저격수가 피해 증폭을 얻습니다. 멀리 떨어진 적을 대상으로 수치가 증가합니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Sniper_normal_1774319167-Sniper.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Sniper_black_1774319167-Sniper.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Sniper_white_1774319167-Sniper.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "gold",
+                          "min": 4
+                        }
+                      ],
+                      "stats": {
+                        "2": "18% %i:scaleDA%, 칸 하나당 +2% %i:scaleDA%",
+                        "3": "24% %i:scaleDA%, 칸 하나당 +3% %i:scaleDA%",
+                        "4": "28% %i:scaleDA%, 칸 하나당 +4% %i:scaleDA%"
+                      }
+                    },
+                    {
+                      "key": "SpaceGroove",
+                      "ingameKey": "TFT17_SpaceGroove",
+                      "name": "우주 그루브",
+                      "desc": "그루브: ?% %i:scaleAS%, ?% %i:scaleHPRegen%",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/SpaceGroove_normal_1774318853-SpaceGroove.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/SpaceGroove_black_1774318853-SpaceGroove.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/SpaceGroove_white_1774318854-SpaceGroove.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 1,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 6
+                        },
+                        {
+                          "style": "gold",
+                          "min": 7,
+                          "max": 9
+                        },
+                        {
+                          "style": "chromatic",
+                          "min": 10
+                        }
+                      ],
+                      "stats": {
+                        "1": "그루비안은 그루브 상태 진입 가능. 그루브 상태인 동안 아군 그루비안 1명당 공격 속도 및 최대 체력 재생 증가",
+                        "3": "모든 그루비안이 전투 시작 시 3초 동안 그루브 상태가 됨",
+                        "5": "그루브 상태인 동안 매초 중첩되는 공격력 및 주문력 5% 획득",
+                        "7": "이 모든 효과가 10% 증가!",
+                        "10": "그루브에 몸을 맡기고 춤을 추세요!"
+                      }
+                    },
+                    {
+                      "key": "Stargazer",
+                      "ingameKey": "TFT17_Stargazer",
+                      "name": "별돌보미",
+                      "desc": "별돌보미는 게임마다 다른 별자리를 그립니다.<br><br>강화된 칸에 있는 별돌보미는 다양한 추가 효과를 얻으며, (3) 별돌보미부터 활성화됩니다.<br><br>플레이어 레벨이 오를 때마다 더 많은 칸이 드러납니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_normal_1774318739-Stargazer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_black_1774318739-Stargazer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_white_1774318739-Stargazer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 6
+                        },
+                        {
+                          "style": "gold",
+                          "min": 7
+                        },
+                        {
+                          "style": "gold",
+                          "min": 8
+                        },
+                        {
+                          "style": "gold",
+                          "min": 9
+                        },
+                        {
+                          "style": "gold",
+                          "min": 10
+                        }
+                      ],
+                      "stats": {}
+                    },
+                    {
+                      "key": "StargazerAltar",
+                      "ingameKey": "TFT17_Stargazer_Shield",
+                      "name": "별돌보미 (제단)",
+                      "desc": "별돌보미는 게임마다 다른 별자리를 그립니다. 이번 게임: 제단<br><br>플레이어 레벨이 오를 때마다 더 많은 칸이 드러납니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_normal_1774318739-Stargazer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_black_1774318739-Stargazer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_white_1774318739-Stargazer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 3
+                        }
+                      ],
+                      "stats": {
+                        "3": "챔피언이 사망하면 제단의 제물이 됩니다. 강화된 칸에 있는 아군이 체력을 8%, 공격 속도를 8% 얻습니다.<br>제물을 60회 바치면 강화된 칸에 있는 별돌보미가 추가로 %i:scaleHealth%을 20%, %i:scaleAS%를 18% 얻습니다.<br>제물: (? / 60)"
+                      }
+                    },
+                    {
+                      "key": "StargazerBoar",
+                      "ingameKey": "TFT17_Stargazer_Wolf",
+                      "name": "별돌보미 (멧돼지)",
+                      "desc": "별돌보미는 게임마다 다른 별자리를 그립니다. 이번 게임: 멧돼지<br>플레이어 대상 전투 승리 후 골드를 획득합니다. 강화된 칸에 있는 아군이 체력, 공격력, 주문력을 8% 얻습니다. 별돌보미는 능력치를 더 얻습니다.<br>(획득한 골드: ?)<br><br>플레이어 레벨이 오를 때마다 더 많은 칸이 드러납니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_normal_1774318739-Stargazer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_black_1774318739-Stargazer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_white_1774318739-Stargazer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "3": "1골드, 2% %i:scaleHealth%, 10% %i:scaleAD%%i:scaleAP%",
+                        "4": "2골드, 8% %i:scaleHealth%, 15% %i:scaleAD%%i:scaleAP%",
+                        "5": "4골드, 15% %i:scaleHealth%, 25% %i:scaleAD%%i:scaleAP%",
+                        "6": "6골드, 22% %i:scaleHealth%, 30% %i:scaleAD%%i:scaleAP%"
+                      }
+                    },
+                    {
+                      "key": "StargazerFountain",
+                      "ingameKey": "TFT17_Stargazer_Fountain",
+                      "name": "별돌보미 (우물)",
+                      "desc": "별돌보미는 게임마다 다른 별자리를 그립니다. 이번 게임: 우물<br><br>강화된 칸에 있는 아군이 2초마다 최대 체력의 1%만큼 체력을 회복합니다. 강화된 칸에 있는 별돌보미는 체력을 2.5% 더 회복하고 2초마다 중첩되는 공격력 및 주문력을 얻습니다.<br><br>플레이어 레벨이 오를 때마다 더 많은 칸이 드러납니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_normal_1774318739-Stargazer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_black_1774318739-Stargazer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_white_1774318739-Stargazer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 4
+                        },
+                        {
+                          "style": "gold",
+                          "min": 5
+                        }
+                      ],
+                      "stats": {
+                        "3": "4% %i:scaleAD% %i:scaleAP%",
+                        "5": "7% %i:scaleAD% %i:scaleAP%"
+                      },
+                      "isHidden": true
+                    },
+                    {
+                      "key": "StargazerHuntress",
+                      "ingameKey": "TFT17_Stargazer_Huntress",
+                      "name": "별돌보미 (여사냥꾼)",
+                      "desc": "별돌보미는 게임마다 다른 별자리를 그립니다. 이번 게임: 여사냥꾼<br>전투 시작: 체력이 가장 높은 적에게 표식을 남깁니다.<br>강화된 칸에 있는 아군이 공격 속도를 15% 얻습니다. 강화된 칸에 있는 별돌보미는 능력치를 더 얻고 표식이 남은 적 사망 시 최대 체력의 15%만큼 체력을 회복합니다.<br><br>플레이어 레벨이 오를 때마다 더 많은 칸이 드러납니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_normal_1774318739-Stargazer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_black_1774318739-Stargazer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_white_1774318739-Stargazer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 6
+                        },
+                        {
+                          "style": "gold",
+                          "min": 7
+                        }
+                      ],
+                      "stats": {
+                        "3": "12% %i:scaleAS%, 표식 3개",
+                        "5": "35% %i:scaleAS%, 표식 5개",
+                        "7": "55% %i:scaleAS%, 표식 7개"
+                      }
+                    },
+                    {
+                      "key": "StargazerMedallion",
+                      "ingameKey": "TFT17_Stargazer_Medallion",
+                      "name": "별돌보미 (메달)",
+                      "desc": "별돌보미는 게임마다 다른 별자리를 그립니다. 이번 게임: 메달<br><br>(현재 추가 효과: ?% %i:scaleDA%)<br><br>플레이어 레벨이 오를 때마다 더 많은 칸이 드러납니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_normal_1774318739-Stargazer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_black_1774318739-Stargazer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_white_1774318739-Stargazer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "gold",
+                          "min": 3
+                        }
+                      ],
+                      "stats": {
+                        "3": "강화된 칸에 있는 아군이 피해 증폭을 12% 얻습니다. 이 효과는 아군 3성 유닛 하나당 5% 증가합니다."
+                      }
+                    },
+                    {
+                      "key": "StargazerMountain",
+                      "ingameKey": "TFT17_Stargazer_Mountain",
+                      "name": "별돌보미 (산)",
+                      "desc": "별돌보미는 게임마다 다른 별자리를 그립니다. 이번 게임: 산<br>플레이어 대상 전투 5회마다 별돌보미 상징을 획득합니다. 강화된 칸에 있는 별돌보미는 다양한 추가 효과를 얻습니다.<br>(남은 전투: 5)<br><br>플레이어 레벨이 오를 때마다 더 많은 칸이 드러납니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_normal_1774318739-Stargazer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_black_1774318739-Stargazer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_white_1774318739-Stargazer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 5
+                        },
+                        {
+                          "style": "silver",
+                          "min": 6,
+                          "max": 6
+                        },
+                        {
+                          "style": "silver",
+                          "min": 7,
+                          "max": 7
+                        },
+                        {
+                          "style": "gold",
+                          "min": 8,
+                          "max": 8
+                        },
+                        {
+                          "style": "gold",
+                          "min": 9,
+                          "max": 9
+                        },
+                        {
+                          "style": "gold",
+                          "min": 10,
+                          "max": 10
+                        },
+                        {
+                          "style": "chromatic",
+                          "min": 11
+                        }
+                      ],
+                      "stats": {
+                        "3": "체력 15% 획득",
+                        "4": "또한 공격력 및 주문력 15% 획득",
+                        "5": "또한 방어력 및 마법 저항력 10 획득",
+                        "6": "또한 공격 속도 10% 획득",
+                        "7": "또한 내구력 6% 획득",
+                        "8": "또한 그 외 모든 추가 효과 10%증가",
+                        "9": "정상이 보인다...",
+                        "10": "...거의 다 왔어...",
+                        "11": "별들이 모든 적 초대"
+                      }
+                    },
+                    {
+                      "key": "StargazerSerpent",
+                      "ingameKey": "TFT17_Stargazer_Serpent",
+                      "name": "별돌보미 (뱀)",
+                      "desc": "별돌보미는 게임마다 다른 별자리를 그립니다. 이번 게임: 뱀<br>강화된 칸에 있는 아군이 내구력을 5% 얻습니다. 강화된 칸에 있는 별돌보미는 능력치를 더 얻고, 적을 중독시켜 적에게 입힌 피해량의 일부를 3초에 걸쳐 마법 피해로 다시 입힙니다.<br><br>플레이어 레벨이 오를 때마다 더 많은 칸이 드러납니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_normal_1774318739-Stargazer.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_black_1774318739-Stargazer.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Stargazer_white_1774318739-Stargazer.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 3,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 6
+                        },
+                        {
+                          "style": "gold",
+                          "min": 7
+                        }
+                      ],
+                      "stats": {
+                        "3": "5% %i:scaleDR%, 중독 피해량 25%",
+                        "5": "10% %i:scaleDR%, 중독 피해량 40%",
+                        "7": "15% %i:scaleDR%, 중독 피해량 60%"
+                      }
+                    },
+                    {
+                      "key": "Timebreaker",
+                      "ingameKey": "TFT17_Timebreaker",
+                      "name": "시간 균열자",
+                      "desc": "패배 시 새로고침: 1<br>승리 시 XP: 1",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Timebreaker_normal_1774318770-Timebreaker.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Timebreaker_black_1774318770-Timebreaker.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Timebreaker_white_1774318770-Timebreaker.svg",
+                      "type": "ORIGIN",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "gold",
+                          "min": 4
+                        }
+                      ],
+                      "stats": {
+                        "2": "아군이 공격 속도 15% 획득",
+                        "3": "또한 패배 시 무료 새로고침 획득. 승리 시 시간 코어에 경험치 저장 (스테이지에 비례)",
+                        "4": "또한 시간 균열자가 추가로 공격 속도 50% 획득"
+                      }
+                    },
+                    {
+                      "key": "Vanguard",
+                      "ingameKey": "TFT17_ShieldTank",
+                      "name": "선봉대",
+                      "desc": "선봉대가 보호막이 씌워진 동안 내구력을 5% 얻습니다.<br><br>전투 시작 시 및 체력 50%: 10초 동안 최대 체력 비례 보호막을 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Vanguard_normal_1774319070-Vanguard.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Vanguard_black_1774319070-Vanguard.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Vanguard_white_1774319070-Vanguard.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "최대 체력의 16%",
+                        "4": "최대 체력의 30%",
+                        "6": "최대 체력의 40%<br>보호막이 씌워진 동안 8% %i:scaleDR%"
+                      }
+                    },
+                    {
+                      "key": "Voyager",
+                      "ingameKey": "TFT17_FlexTrait",
+                      "name": "여행자",
+                      "desc": "전투 시작: 아군 탱커가 15초 동안 보호막을 얻습니다. 그 외 아군이 피해 증폭을 얻습니다.<br><br>여행자는 능력치를 두 배로 얻습니다.",
+                      "imageUrl": "https://cdn.lolchess.gg/upload/images/traits/Voyager_normal_1774319208-Voyager.svg",
+                      "blackImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Voyager_black_1774319209-Voyager.svg",
+                      "whiteImageUrl": "https://cdn.lolchess.gg/upload/images/traits/Voyager_white_1774319209-Voyager.svg",
+                      "type": "CLASS",
+                      "styles": [
+                        {
+                          "style": "bronze",
+                          "min": 2,
+                          "max": 2
+                        },
+                        {
+                          "style": "silver",
+                          "min": 3,
+                          "max": 3
+                        },
+                        {
+                          "style": "silver",
+                          "min": 4,
+                          "max": 4
+                        },
+                        {
+                          "style": "silver",
+                          "min": 5,
+                          "max": 5
+                        },
+                        {
+                          "style": "gold",
+                          "min": 6
+                        }
+                      ],
+                      "stats": {
+                        "2": "보호막 175, 9% %i:scaleDA%",
+                        "3": "보호막 250, 15% %i:scaleDA%",
+                        "4": "보호막 350, 18% %i:scaleDA%",
+                        "5": "보호막 500, 22% %i:scaleDA%",
+                        "6": "보호막 700, 27% %i:scaleDA%"
+                      }
+                    }
+                  ]
+                },
+                "dataUpdateCount": 1,
+                "dataUpdatedAt": 1778738018610,
+                "error": null,
+                "errorUpdateCount": 0,
+                "errorUpdatedAt": 0,
+                "fetchFailureCount": 0,
+                "fetchFailureReason": null,
+                "fetchMeta": null,
+                "isInvalidated": false,
+                "status": "success",
+                "fetchStatus": "idle"
+              },
+              "queryKey": [
+                "traitRefs",
+                "ko",
+                "set17"
+              ],
+              "queryHash": "[\"traitRefs\",\"ko\",\"set17\"]"
+            }
+          ]
+        },
+        "revivalSetPrefix": null
+      },
+      "__N_SSP": true
+    },
+    "page": "/synergies/[set]/[[...tab]]",
+    "query": {
+      "hl": "ko",
+      "set": "set17"
+    },
+    "buildId": "95OGfIjDH-MxGQFi59Gcz",
+    "assetPrefix": "//cdn.dak.gg/tft",
+    "isFallback": false,
+    "gssp": true,
+    "appGip": true,
+    "scriptLoader": []
+  },
+  "page_text": "시즌 17 (세트 17) 시너지 가이드 - 롤체지지 - 전략적 팀 전투 TFT - 롤토체스 전적검색 롤체지지 리그오브레전드 롤체지지 발로란트 배틀그라운드 이터널 리턴 메이플스토리 원신 데드락 KR 한국어 English 日本語 Tiếng Việt Deutsch 추천 메타 순위표 배불뚝이 시즌 15 시즌 17 챔피언 시너지 아이템 증강체 보상표 오버레이 배치툴/도구 게임 가이드 게시판/듀오찾기 추천 메타 순위표 배불뚝이 시즌 15 시즌 17 챔피언 시너지 아이템 증강체 보상표 오버레이 배치툴/도구 게임 가이드 게시판/듀오찾기 DAK.GG 시즌 17 시너지 배치툴 추천 메타 챔피언 시너지 아이템 증강체 보상표 시너지 통계 시너지 통계 시너지 가이드 시너지 표 랭크 더블 업 마스터+ - 최종 업데이트: - 전체 프리즘 골드/고유 실버 브론즈 # 시너지 평균 등수 TOP4 승률 픽률 게임 수 챔피언 TOP3 ‌ © LoLCHESS.GG. All Rights Reserved. TFT@LoLCHESS.GG lolchess.gg is hosted by PlayXP Inc. lolchess.gg isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc. 개인정보 처리방침 / 이용약관 / 채용"
+}

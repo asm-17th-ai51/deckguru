@@ -1,0 +1,9 @@
+{
+  "current_patch": "17.2",
+  "index": "units",
+  "record_count": 63,
+  "sources": [
+    "champions"
+  ],
+  "jsonl_path": "17.2.jsonl"
+}
