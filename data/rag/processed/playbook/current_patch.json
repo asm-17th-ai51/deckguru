@@ -1,6 +1,8 @@
 {
   "current_patch": "all",
   "index": "playbook",
+  "last_updated": "2026-05-14T05:53:37Z",
+  "fetched_at": "2026-05-14T05:53:37Z",
   "record_count": 6,
   "sources": [
     "playbook_damage",
@@ -9,6 +11,14 @@
     "playbook_reroll",
     "playbook_role",
     "playbook_rounds"
+  ],
+  "source_urls": [
+    "https://lolchess.gg/guide/damage?hl=ko",
+    "https://lolchess.gg/guide/exp?hl=ko",
+    "https://lolchess.gg/guide/hotkeys?hl=ko",
+    "https://lolchess.gg/guide/reroll?hl=ko",
+    "https://lolchess.gg/guide/role?hl=ko",
+    "https://lolchess.gg/guide/rounds?hl=ko"
   ],
   "jsonl_path": "all.jsonl"
 }

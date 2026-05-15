@@ -1,9 +1,14 @@
 {
   "current_patch": "17.2",
   "index": "items",
+  "last_updated": "2026-05-12T06:06:05Z",
+  "fetched_at": "2026-05-12T06:06:05Z",
   "record_count": 188,
   "sources": [
     "items"
+  ],
+  "source_urls": [
+    "https://lolchess.gg/items/set17?hl=ko"
   ],
   "jsonl_path": "17.2.jsonl"
 }

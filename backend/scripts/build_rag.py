@@ -19,7 +19,15 @@ from app.rag.filters import patch_family_versions, patch_where  # noqa: E402
 from app.rag.service import RagUnavailableError  # noqa: E402
 from app.settings import settings  # noqa: E402
 
-SUPPORTED_BUILD_INDICES = ("patch_summary", "deck_templates")
+SUPPORTED_BUILD_INDICES = (
+    "patch_summary",
+    "deck_templates",
+    "units",
+    "items",
+    "traits",
+    "augments",
+    "playbook",
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -136,6 +144,10 @@ def _jsonl_paths_for_patch(index: str, patch: str) -> list[Path]:
         for path in sorted(index_dir.glob("*.jsonl"))
         if path.stem in family and path.stem != "all"
     ]
+    if not paths:
+        all_path = index_dir / "all.jsonl"
+        if all_path.exists():
+            return [all_path]
     if not paths:
         raise FileNotFoundError(f"no processed JSONL found for index={index} patch={patch}")
     return paths
