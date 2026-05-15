@@ -11,6 +11,7 @@ from slowapi.errors import RateLimitExceeded
 from app.api import examples, feedback, health, internal, patch_info, recommend
 from app.middleware.logging_mw import LoggingMiddleware
 from app.middleware.request_id import RequestIdMiddleware
+from app.observability import console_log_renderer
 from app.services.cache import cache_service
 from app.services.feedback_store import feedback_store
 from app.services.limiter import limiter
@@ -25,6 +26,8 @@ def _log_level() -> int:
 def _configure_logging() -> None:
     log_format = settings.app_log_format.lower()
     timestamp_format = "iso" if log_format == "json" else "%H:%M:%S"
+    for logger_name in ("sentence_transformers", "transformers", "torch"):
+        logging.getLogger(logger_name).setLevel(logging.WARNING)
     processors = [
         structlog.contextvars.merge_contextvars,
         structlog.processors.add_log_level,
@@ -34,7 +37,7 @@ def _configure_logging() -> None:
     renderer = (
         structlog.processors.JSONRenderer()
         if log_format == "json"
-        else structlog.dev.ConsoleRenderer(colors=settings.app_log_colors)
+        else console_log_renderer(colors=settings.app_log_colors)
     )
     if log_format == "json":
         processors.append(structlog.processors.format_exc_info)

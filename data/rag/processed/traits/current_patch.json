@@ -1,9 +1,14 @@
 {
   "current_patch": "17.2",
   "index": "traits",
+  "last_updated": "2026-05-14T05:53:38Z",
+  "fetched_at": "2026-05-14T05:53:38Z",
   "record_count": 69,
   "sources": [
     "traits"
+  ],
+  "source_urls": [
+    "https://lolchess.gg/synergies/set17?hl=ko"
   ],
   "jsonl_path": "17.2.jsonl"
 }

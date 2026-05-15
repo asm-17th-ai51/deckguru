@@ -47,6 +47,7 @@ out/
 backend/data/chroma/
 backend/data/raw/
 backend/data/processed/
+backend/data/promotion_queue.jsonl
 data/rag/vectorstore/chroma/
 
 # --- Logs / temporary outputs ---

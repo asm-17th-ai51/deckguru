@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import sys
+from types import SimpleNamespace
 from pathlib import Path
 
 import pytest
 
-from app.rag.chroma_service import ChromaRagService, count_chroma_collections
+from app.rag.chroma_service import BGEM3Embedding, ChromaRagService, count_chroma_collections
 from app.rag.service import RagUnavailableError
 
 
@@ -177,3 +179,54 @@ def test_missing_search_collection_is_unavailable():
 
 def test_count_chroma_collections_returns_zero_without_path(tmp_path):
     assert all(count == 0 for count in count_chroma_collections(tmp_path / "missing").values())
+
+
+def test_embedding_model_uses_explicit_configured_device(monkeypatch):
+    created = {}
+
+    class FakeSentenceTransformer:
+        def __init__(self, model_name, *, device):
+            created["model_name"] = model_name
+            created["device"] = device
+            self.max_seq_length = None
+
+    monkeypatch.setitem(
+        sys.modules,
+        "sentence_transformers",
+        SimpleNamespace(SentenceTransformer=FakeSentenceTransformer),
+    )
+
+    embedder = BGEM3Embedding("local-model", device="cpu")
+
+    assert embedder._load_model().max_seq_length == 8192
+    assert created == {"model_name": "local-model", "device": "cpu"}
+
+
+def test_embedding_model_resolves_auto_device_to_concrete_device(monkeypatch):
+    created = {}
+
+    class FakeSentenceTransformer:
+        def __init__(self, model_name, *, device):
+            created["device"] = device
+            self.max_seq_length = None
+
+    class FakeMPS:
+        @staticmethod
+        def is_available():
+            return True
+
+    fake_torch = SimpleNamespace(
+        backends=SimpleNamespace(mps=FakeMPS()),
+        cuda=SimpleNamespace(is_available=lambda: False),
+    )
+
+    monkeypatch.setitem(
+        sys.modules,
+        "sentence_transformers",
+        SimpleNamespace(SentenceTransformer=FakeSentenceTransformer),
+    )
+    monkeypatch.setitem(sys.modules, "torch", fake_torch)
+
+    BGEM3Embedding("local-model", device="auto")._load_model()
+
+    assert created["device"] == "mps"

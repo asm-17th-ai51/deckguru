@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import time
 from collections import OrderedDict
 from pathlib import Path
@@ -43,11 +44,13 @@ class BGEM3Embedding:
         use_fp16: bool = False,
         batch_size: int = 12,
         max_length: int = 8192,
+        device: str = "auto",
     ) -> None:
         self.model_name = model_name
         self.use_fp16 = use_fp16
         self.batch_size = batch_size
         self.max_length = max_length
+        self.device = device
         self._model: Any | None = None
 
     def embed(self, text: str) -> list[float]:
@@ -67,6 +70,7 @@ class BGEM3Embedding:
     def _load_model(self) -> Any:
         if self._model is None:
             started = time.perf_counter()
+            _quiet_external_ml_loggers()
             logger.info(
                 "embedding_model_load_start",
                 stage="rag",
@@ -80,7 +84,8 @@ class BGEM3Embedding:
                     '`pip install -e ".[backend,dev,rag]"`.'
                 ) from exc
             try:
-                self._model = SentenceTransformer(self.model_name)
+                device = _resolve_embedding_device(self.device)
+                self._model = SentenceTransformer(self.model_name, device=device)
                 self._model.max_seq_length = self.max_length
             except Exception as exc:
                 raise RagUnavailableError(
@@ -110,7 +115,10 @@ class ChromaRagService:
         self.persist_path = resolve_chroma_path(persist_path)
         self.min_score = min_score
         self.client = client or _create_client(self.persist_path)
-        self.embedder = embedder or BGEM3Embedding(settings.embedding_model)
+        self.embedder = embedder or BGEM3Embedding(
+            settings.embedding_model,
+            device=settings.embedding_device,
+        )
         self.whitelist_ttl_s = whitelist_ttl_s
         self.whitelist_max_size = whitelist_max_size
         self._whitelist_cache: OrderedDict[str, tuple[float, dict[str, set[str]]]] = OrderedDict()
@@ -322,6 +330,29 @@ def count_chroma_collections(persist_path: Path) -> dict[str, int]:
 
 def _distance_to_score(distance: float) -> float:
     return max(0.0, min(1.0, 1.0 - distance))
+
+
+def _resolve_embedding_device(device: str) -> str:
+    normalized = device.strip().lower()
+    if normalized and normalized != "auto":
+        return normalized
+    try:
+        import torch
+    except Exception:
+        return "cpu"
+
+    mps = getattr(getattr(torch, "backends", None), "mps", None)
+    if mps is not None and callable(getattr(mps, "is_available", None)) and mps.is_available():
+        return "mps"
+    cuda = getattr(torch, "cuda", None)
+    if cuda is not None and callable(getattr(cuda, "is_available", None)) and cuda.is_available():
+        return "cuda"
+    return "cpu"
+
+
+def _quiet_external_ml_loggers() -> None:
+    for logger_name in ("sentence_transformers", "transformers", "torch"):
+        logging.getLogger(logger_name).setLevel(logging.WARNING)
 
 
 def resolve_chroma_path(path: Path) -> Path:
