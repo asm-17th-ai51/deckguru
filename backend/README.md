@@ -129,6 +129,7 @@ mkdir -p ../models
 ```bash
 cd /Users/dongwoo/Projects/deckguru
 EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3 \
+EMBEDDING_DEVICE=auto \
   backend/.venv/bin/python -m backend.scripts.build_rag build --patch 17.2
 ```
 
@@ -137,6 +138,7 @@ EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3 \
 ```bash
 cd /Users/dongwoo/Projects/deckguru/backend
 EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3 \
+EMBEDDING_DEVICE=auto \
   uvicorn app.main:app --reload --port 8000
 ```
 
@@ -172,6 +174,7 @@ http://localhost:8000/docs
 | `PATCH_VERSION` | `17.2` | **현재 패치 버전** — RAG 검색 필터에 사용 |
 | `CHROMA_PATH` | `../data/rag/vectorstore/chroma` | ChromaDB 경로 (Agent-2 빌드 결과물) |
 | `EMBEDDING_MODEL` | `BAAI/bge-m3` | BGE-M3 모델명 또는 로컬 모델 디렉토리 |
+| `EMBEDDING_DEVICE` | `auto` | 임베딩 모델 실행 장치. `auto`이면 `mps` → `cuda` → `cpu` 순서로 선택 |
 | `RAG_MIN_SCORE` | `0.05` | RAG chunk 유사도 최소 점수 |
 | `UPSTAGE_API_KEY` | _(없음)_ | Strategy Agent LLM 호출에 필요한 Upstage API 키 |
 | `UPSTAGE_MODEL_RECOMMEND` | `solar-pro2` | 추천 생성 모델 |

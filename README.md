@@ -95,6 +95,7 @@ cp .env.example .env
 PATCH_VERSION=17.2
 CHROMA_PATH=../data/rag/vectorstore/chroma
 EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3
+EMBEDDING_DEVICE=auto
 UPSTAGE_API_KEY=
 MOCK_STRATEGY_AGENT=false
 APP_LOG_FORMAT=console
@@ -108,6 +109,7 @@ mkdir -p models
 backend/.venv/bin/hf download BAAI/bge-m3 --local-dir models/bge-m3
 
 EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3 \
+EMBEDDING_DEVICE=auto \
   backend/.venv/bin/python -m backend.scripts.build_rag build --patch 17.2
 ```
 
@@ -116,6 +118,7 @@ EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3 \
 ```bash
 cd backend
 EMBEDDING_MODEL=/Users/dongwoo/Projects/deckguru/models/bge-m3 \
+EMBEDDING_DEVICE=auto \
   uvicorn app.main:app --reload --port 8000 --no-access-log
 ```
 

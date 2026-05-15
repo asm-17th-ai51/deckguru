@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     upstage_model_intent: str = "solar-mini"
 
     embedding_model: str = "BAAI/bge-m3"
+    embedding_device: str = Field(
+        default="auto",
+        validation_alias=AliasChoices("EMBEDDING_DEVICE", "DECKGURU_EMBEDDING_DEVICE"),
+    )
     chroma_path: Path = Path("../data/rag/vectorstore/chroma")
     rag_min_score: float = 0.05
     patch_version: str = "17.2"
