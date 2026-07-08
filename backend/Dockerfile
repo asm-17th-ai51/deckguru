@@ -5,10 +5,7 @@ WORKDIR /app
 RUN pip install uv --no-cache-dir
 
 COPY pyproject.toml .
-RUN uv pip install --system --no-cache -r pyproject.toml 2>/dev/null || \
-    uv pip install --system --no-cache \
-      fastapi uvicorn[standard] pydantic pydantic-settings \
-      structlog slowapi cachetools aiosqlite httpx
+RUN uv pip install --system --no-cache ".[backend,rag]"
 
 COPY . .
 
